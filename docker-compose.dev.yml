@@ -1,0 +1,17 @@
+services:
+  fastify:
+    container_name: fastify-app
+    environment:
+      NODE_ENV: dev
+    restart: on-failure
+    build: 
+        context: ./fastify
+        args:
+          NODE_ENV: dev
+    networks:
+      - router
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /assets/src
