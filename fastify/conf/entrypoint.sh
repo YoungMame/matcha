@@ -2,9 +2,9 @@
 
 if [ "$NODE_ENV" = "dev" ]; then
     exec pnpm dev
-else if [ "$NODE_ENV" = "test" ]
+elif [ "$NODE_ENV" = "test" ]; then
     exec pnpm test
 else
     pnpm build
-    exec pnpm start;
+    exec pnpm start
 fi

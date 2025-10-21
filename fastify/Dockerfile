@@ -2,17 +2,18 @@ FROM node:24-alpine
 
 WORKDIR  /usr/src/app
 
+RUN apk add --no-cache pnpm
+
 ARG NODE_ENV
-COPY ./asset/package.json .
+
+#install dependencies
+COPY assets/package.json .
 COPY ./conf/pnpm_install.sh .
 RUN chmod +x pnpm_install.sh && ./pnpm_install.sh
 
+COPY ./assets/ ./
+
 COPY ./conf/entrypoint.sh .
-COPY ./asset/srcs ./srcs
-COPY ./asset/tsconfig.json .
-
-RUN chmod +x entrypoint.sh 
-
-EXPOSE 3000
+RUN chmod +x entrypoint.sh
 
 ENTRYPOINT ["./entrypoint.sh"]

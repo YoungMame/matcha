@@ -1,3 +1,5 @@
+name: matcha-dev
+
 services:
   fastify:
     container_name: fastify-app
@@ -8,10 +10,29 @@ services:
         context: ./fastify
         args:
           NODE_ENV: dev
+    expose:
+      - 3000
     networks:
       - router
     develop:
       watch:
         - action: sync
-          path: .
-          target: /assets/src
+          path: ./fastify/assets
+          target: /usr/src/app
+          ignore:
+            - node_modules/
+  
+  nginx:
+    container_name: nginx
+    restart: on-failure
+    build:
+        context: ./nginx
+    ports:
+        - 443:443
+        - 80:80
+    networks:
+      - router
+
+networks:
+  router:
+    driver: bridge
