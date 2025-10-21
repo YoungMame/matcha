@@ -30,8 +30,37 @@ services:
           ignore:
             - node_modules/
   
+  nextjs:
+    container_name: nextjs-app
+    depends_on:
+      - fastify
+    environment:
+      NODE_ENV: dev
+      NEXT_PUBLIC_API_URL: https://matcha.fr/api
+      NEXT_PUBLIC_WS_URL: wss://matcha.fr/socket.io
+    restart: on-failure
+    build: 
+        context: ./nextjs
+        args:
+          NODE_ENV: dev
+    expose:
+      - 3000
+    networks:
+      - router
+    develop:
+      watch:
+        - action: sync
+          path: ./nextjs/matcha
+          target: /usr/src/app
+          ignore:
+            - node_modules/
+            - .next/
+  
   nginx:
     container_name: nginx
+    depends_on:
+      - fastify
+      - nextjs
     restart: on-failure
     build:
         context: ./nginx
