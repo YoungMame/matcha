@@ -2,20 +2,16 @@
 
 // ESM
 import Fastify from 'fastify'
-import {Pool} from 'pg';
-
-const pool = new Pool();
-console.log('PostgreSQL Pool created:', pool.options);
-pool.connect().then(client => {
+import { Client } from 'pg'
+const client = new Client()
+client.connect().then(() => {
   console.log('Connected to PostgreSQL database');
   console.log('PostgreSQL Client Info:', client.escapeIdentifier);
-  client.release();
-}).catch(err => {
+}).catch((err: any) => {
   console.error('Error connecting to PostgreSQL database:', err);
 });
 
-// CommonJs
-const fastify = require('fastify')({
+const fastify = Fastify({
   logger: true
 });
 
@@ -30,5 +26,4 @@ fastify.listen({ port: 3000, host: '0.0.0.0' }, function (err: any, address: any
     fastify.log.error(err);
     process.exit(1);
   }
-  // Server is now listening on ${address}
 });

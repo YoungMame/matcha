@@ -7,10 +7,12 @@ services:
       - postgresql
     environment:
       NODE_ENV: dev
-      PG: postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgresql:5432/$(POSTGRES_DB)
-      PG_USER: ${POSTGRES_USER}
-      PG_PASSWORD: ${POSTGRES_PASSWORD}
-      PG_DB: ${POSTGRES_DB}
+      PG: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgresql:5432/${POSTGRES_DB}
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ${POSTGRES_DB}
+      PGHOST: postgresql
+      PGPORT: 5432
     restart: on-failure
     build: 
         context: ./fastify
@@ -48,6 +50,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     # volumes:
     #   - ./postgresql/data:/var/lib/postgresql/data
+    networks:
+      - router
 
   adminer:
     container_name: adminer
