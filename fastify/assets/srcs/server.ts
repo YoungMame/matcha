@@ -2,6 +2,17 @@
 
 // ESM
 import Fastify from 'fastify'
+import {Pool} from 'pg';
+
+const pool = new Pool();
+console.log('PostgreSQL Pool created:', pool.options);
+pool.connect().then(client => {
+  console.log('Connected to PostgreSQL database');
+  console.log('PostgreSQL Client Info:', client.escapeIdentifier);
+  client.release();
+}).catch(err => {
+  console.error('Error connecting to PostgreSQL database:', err);
+});
 
 // CommonJs
 const fastify = require('fastify')({
