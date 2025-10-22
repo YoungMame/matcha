@@ -5,7 +5,9 @@
 	"description": "Fastify server for Matcha application",
 	"dependencies": {
 		"@fastify/postgres": "^6.0.2",
-		"fastify": "^5.6.1"
+		"fastify": "^5.6.1",
+		"pg": "^8.16.3",
+		"postgrator": "^8.0.0"
 	},
 	"devDependencies": {
 		"@types/chai": "^5.2.3",
