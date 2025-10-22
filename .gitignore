@@ -1,1 +1,8 @@
 .env
+
+# next.js
+/nextjs/matcha/.next/
+/nextjs/matcha/out/
+
+# production
+/nextjs/matcha/build

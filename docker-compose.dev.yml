@@ -7,10 +7,12 @@ services:
       - postgresql
     environment:
       NODE_ENV: dev
-      PG: postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgresql:5432/$(POSTGRES_DB)
-      PG_USER: ${POSTGRES_USER}
-      PG_PASSWORD: ${POSTGRES_PASSWORD}
-      PG_DB: ${POSTGRES_DB}
+      PG: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgresql:5432/${POSTGRES_DB}
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ${POSTGRES_DB}
+      PGHOST: postgresql
+      PGPORT: 5432
     restart: on-failure
     build: 
         context: ./fastify
@@ -28,8 +30,37 @@ services:
           ignore:
             - node_modules/
   
+  nextjs:
+    container_name: nextjs-app
+    depends_on:
+      - fastify
+    environment:
+      NODE_ENV: dev
+      NEXT_PUBLIC_API_URL: https://matcha.fr/api
+      NEXT_PUBLIC_WS_URL: wss://matcha.fr/socket.io
+    restart: on-failure
+    build: 
+        context: ./nextjs
+        args:
+          NODE_ENV: dev
+    expose:
+      - 3000
+    networks:
+      - router
+    develop:
+      watch:
+        - action: sync
+          path: ./nextjs/matcha
+          target: /usr/src/app
+          ignore:
+            - node_modules/
+            - .next/
+  
   nginx:
     container_name: nginx
+    depends_on:
+      - fastify
+      - nextjs
     restart: on-failure
     build:
         context: ./nginx
