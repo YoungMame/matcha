@@ -1,12 +1,21 @@
+CREATE TYPE GENDER AS ENUM ('male', 'female');
+CREATE TYPE ORIENTATION AS ENUM ('heterosexual', 'homosexual', 'bisexual');
+
 CREATE TABLE if not exists users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
+    password_salt VARCHAR(255) NOT NULL,
+    username VARCHAR(255) UNIQUE NOT NULL,
     profile_picture_index INTEGER, -- index of selected profile picture
     profile_pictures TEXT[], -- array of image URLs
     gallery TEXT[], -- array of image URLs
     bio TEXT DEFAULT '',
     tags TEXT[] , -- array of tags
+    born_at DATE NOT NULL,
+    gender GENDER NOT NULL,
+    orientation ORIENTATION NOT NULL,
+    fame_rate INTEGER DEFAULT 0,
 
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
