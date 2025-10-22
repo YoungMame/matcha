@@ -4,10 +4,10 @@ services:
   fastify:
     container_name: fastify-app
     depends_on:
-      - postgresql
+      - db
     environment:
       NODE_ENV: dev
-      PG: postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgresql:5432/$(POSTGRES_DB)
+      PG: postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db:5432/$(POSTGRES_DB)
       PG_USER: ${POSTGRES_USER}
       PG_PASSWORD: ${POSTGRES_PASSWORD}
       PG_DB: ${POSTGRES_DB}
@@ -39,8 +39,8 @@ services:
     networks:
       - router
 
-  postgresql:
-    container_name: postgresql
+  db:
+    container_name: db
     image: postgres:18-alpine3.22
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -48,13 +48,17 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
      - pgdata:/var/lib/postgresql/data
+    networks:
+      - router
+    ports:
+      - 5432:5432
 
   adminer:
     container_name: adminer
     image: adminer:5.4.1
     restart: always
     depends_on:
-      - postgresql
+      - db
     ports:
       - 8080:8080
     networks:

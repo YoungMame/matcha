@@ -24,10 +24,6 @@
 		"dev": "ts-node-dev --respawn --transpile-only --watch ./srcs ./srcs/server.ts",
 		"build": "tsc -p tsconfig.json",
 		"start": "node ./srcs/server.js",
-		"test": "mocha --require ts-node/register 'test/unit/**/*.test.ts' --watch",
-		"db:create": "tsx ./scripts/create-database.ts",
-		"db:drop": "tsx ./scripts/drop-database.ts",
-		"db:migrate": "tsx ./scripts/migrate.ts",
-		"db:seed": "tsx ./scripts/seed-database.ts"
+		"test": "mocha --require ts-node/register 'test/unit/**/*.test.ts' --watch"
 	}
 }
