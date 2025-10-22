@@ -16,4 +16,6 @@ COPY ./assets/ ./
 COPY ./conf/entrypoint.sh .
 RUN chmod +x entrypoint.sh
 
+CMD ["pnpm", "db:migrate"]
+
 ENTRYPOINT ["./entrypoint.sh"]
