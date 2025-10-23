@@ -13,6 +13,7 @@ CREATE TABLE if not exists users (
     bio TEXT DEFAULT '',
     tags TEXT[] , -- array of tags
     born_at DATE NOT NULL,
+    is_verified BOOLEAN DEFAULT FALSE,
     gender GENDER NOT NULL,
     orientation ORIENTATION NOT NULL DEFAULT 'bisexual',
     fame_rate INTEGER DEFAULT 0,
