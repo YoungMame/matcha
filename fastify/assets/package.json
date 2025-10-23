@@ -24,6 +24,6 @@
 		"build": "tsc -p tsconfig.json",
 		"start": "node ./srcs/server.js",
 		"test": "mocha --require ts-node/register 'test/unit/**/*.test.ts' --watch",
-		"seed-users": "ts-node ./assets/scripts/waitForDB.ts && ts-node ./assets/scripts/seed-users.ts"
+		"seed": "ts-node ./seed/seed.ts"
 	}
 }

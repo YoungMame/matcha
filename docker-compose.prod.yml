@@ -11,6 +11,7 @@ services:
       PG_USER: ${POSTGRES_USER}
       PG_PASSWORD: ${POSTGRES_PASSWORD}
       PG_DB: ${POSTGRES_DB}
+      RUN_SEED: ${RUN_SEED}
     restart: on-failure
     build: 
         context: ./fastify

@@ -1,4 +1,4 @@
-CREATE TYPE GENDER AS ENUM ('male', 'female');
+CREATE TYPE GENDER AS ENUM ('men', 'women');
 CREATE TYPE ORIENTATION AS ENUM ('heterosexual', 'homosexual', 'bisexual');
 
 CREATE TABLE if not exists users (
@@ -14,7 +14,7 @@ CREATE TABLE if not exists users (
     tags TEXT[] , -- array of tags
     born_at DATE NOT NULL,
     gender GENDER NOT NULL,
-    orientation ORIENTATION NOT NULL,
+    orientation ORIENTATION NOT NULL DEFAULT 'bisexual',
     fame_rate INTEGER DEFAULT 0,
 
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
