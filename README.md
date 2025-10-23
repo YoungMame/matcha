@@ -98,3 +98,8 @@ Evaluation :
 - Your code must not produce any errors, warnings, or notices, either server-side or client-side (in the web console).
 - Anything not explicitly authorized is strictly forbidden.
 - Any security breach will result in a score of 0.
+
+to seed do 
+
+docker exec -it fastify-app sh
+pnpm run seed
