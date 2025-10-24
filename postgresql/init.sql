@@ -5,7 +5,6 @@ CREATE TABLE if not exists users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    password_salt VARCHAR(255) NOT NULL,
     username VARCHAR(255) UNIQUE NOT NULL,
     profile_picture_index INTEGER, -- index of selected profile picture
     profile_pictures TEXT[], -- array of image URLs

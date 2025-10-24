@@ -4,11 +4,17 @@
 	"version": "1.0.0",
 	"description": "Fastify server for Matcha application",
 	"dependencies": {
+		"@fastify/jwt": "^10.0.0",
 		"@fastify/postgres": "^6.0.2",
+		"@fastify/rate-limit": "^10.3.0",
+		"@fastify/websocket": "^11.2.0",
+		"bcrypt": "^6.0.0",
 		"fastify": "^5.6.1",
+		"fastify-plugin": "^5.1.0",
 		"pg": "^8.16.3"
 	},
 	"devDependencies": {
+		"@types/bcrypt": "^6.0.0",
 		"@types/chai": "^5.2.3",
 		"@types/mocha": "^10.0.10",
 		"@types/node": "^24.9.1",

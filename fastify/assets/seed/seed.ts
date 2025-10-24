@@ -17,7 +17,6 @@ type UserEntry = {
   email: string;
   bio: string;
   password_hash: string;
-  password_salt: string;
   created_at: number;
   gender: string;
   orientation: string;
@@ -68,14 +67,13 @@ async function seed() {
             // 1) Insert users (parametrized multi-row) with ON CONFLICT DO NOTHING
             const values: any[] = [];
             const rows = batch.map((u, idx) => {
-                const base = idx * 12; // number of columns per user below
+                const base = idx * 11; // number of columns per user below
                 const pp = `https://randomuser.me/api/portraits/${u.gender}/${Math.floor(Math.random()*100)}.jpg`;
                 values.push(
                 u.username,
                 u.email,
                 u.bio,
                 u.password_hash,
-                u.password_salt,
                 u.gender,
                 u.orientation,
                 parseTags(u.tags),
@@ -84,12 +82,12 @@ async function seed() {
                 0, // profile_pictures_index
                 new Date(u.born_at).toISOString()
                 );
-                return `($${base + 1},$${base + 2},$${base + 3},$${base + 4},$${base + 5},$${base + 6},$${base + 7},$${base + 8},$${base + 9},$${base + 10},$${base + 11},$${base + 12})`;
+                return `($${base + 1},$${base + 2},$${base + 3},$${base + 4},$${base + 5},$${base + 6},$${base + 7},$${base + 8},$${base + 9},$${base + 10},$${base + 11})`;
             }).join(',');
 
             const insertUsersSql = `
                 INSERT INTO users
-                (username, email, bio, password_hash, password_salt, gender, orientation, tags, fame_rate, profile_pictures, profile_picture_index, born_at)
+                (username, email, bio, password_hash, gender, orientation, tags, fame_rate, profile_pictures, profile_picture_index, born_at)
                 VALUES ${rows}
             `;
             console.log("insertUsersSql: " + insertUsersSql);

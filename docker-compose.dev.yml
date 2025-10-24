@@ -15,6 +15,7 @@ services:
       PGHOST: db
       PGPORT: 5432
       RUN_SEED: ${RUN_SEED}
+      JWT_SECRET: ${JWT_SECRET}
     restart: on-failure
     build: 
         context: ./fastify
