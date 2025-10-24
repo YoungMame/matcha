@@ -1,4 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
+import fastify from '../../app';
+
 
 export const signUpHandler = async (
     request: FastifyRequest,

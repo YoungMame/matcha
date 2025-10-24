@@ -7,8 +7,9 @@ const signupRoutes = async (fastify: FastifyInstance) => {
             body: {
                 type: 'object',
                 properties: {
-                    email: { type: 'string', format: 'email' },
-                    password: { type: 'string', minLength: 6 }
+                    email: { type: 'string', pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ },
+                    username: { type: 'string', pattern: /^[a-zA-Z0-9._\- ]+$/ },
+                    password: { type: 'string', pattern: /^(?=.*?\d)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[!@#$%^&*?-])[^\s]{10,}$/ }
                 },
                 required: ['email', 'password'],
                 additionalProperties: false

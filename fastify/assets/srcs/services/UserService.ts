@@ -4,7 +4,11 @@ import User from "../classes/User";
 import { insert, findByEmail, findById } from "../models/User";
 
 export default class UserService {
-    constructor(private pg: any) {}
+    constructor() {}
+
+    static instance: UserService;
+
+    get instance(): UserService { return (this.instance) };
 
     private async sendVerificationEmail(email: string, userId: number): Promise<void> {
         // Implementation for sending verification email
@@ -15,6 +19,7 @@ export default class UserService {
             
         const code = codeArray.map(digit => digit.toString()).join('');
         console.log(`Sending verification email to ${email} for user ID ${userId} with code ${code}`);
+
     }
 
     private async getUser(idOrMail: string | number): Promise<User | null> {
