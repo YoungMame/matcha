@@ -19,7 +19,7 @@ export default class User {
     gallery: string[];
     bio: string;
     tags: string[];
-    born_at: Date;
+    bornAt: Date;
     isVerified: boolean;
     gender: 'men' | 'women';
     orientation: 'heterosexual' | 'homosexual' | 'bisexual';
@@ -38,7 +38,7 @@ export default class User {
         gallery: string[] = [],
         bio: string = '',
         tags: string[] = [],
-        born_at: Date = new Date(),
+        bornAt: Date = new Date(),
         isVerified: boolean = false,
         gender: 'men' | 'women' = 'men',
         orientation: 'heterosexual' | 'homosexual' | 'bisexual' = 'bisexual',
@@ -53,7 +53,7 @@ export default class User {
         this.gallery = gallery;
         this.bio = bio;
         this.tags = tags;
-        this.born_at = born_at;
+        this.bornAt = bornAt;
         this.isVerified = isVerified;
         this.gender = gender;
         this.orientation = orientation;

@@ -21,7 +21,7 @@ const signupRoutes = async (fastify: FastifyInstance) => {
                         jwt: { type: 'string' }
                     }
                 },
-                500: {
+                400: {
                     type: 'object',
                     properties: {
                         message: { type: 'string' }

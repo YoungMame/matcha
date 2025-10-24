@@ -1,5 +1,6 @@
 import Fastify from 'fastify'
 import router from './routes'
+import services from './services'
 import pg from '@fastify/postgres'
 // import routes
 // import plugins
@@ -14,6 +15,8 @@ const buildApp = () => {
     });
 
     app.register(router, { prefix: '/api' });
+
+    app.register(services);
 
     app.register(pg, {
         connectionString: process.env.PG

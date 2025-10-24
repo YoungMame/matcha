@@ -2,14 +2,9 @@ import fastify from '../app';
 import PasswordManager from "../utils/password";
 import User from "../classes/User";
 import { insert, findByEmail, findById } from "../models/User";
+import fp from 'fastify-plugin';
 
-export default class UserService {
-    constructor() {}
-
-    static instance: UserService;
-
-    get instance(): UserService { return (this.instance) };
-
+class UserService {
     private async sendVerificationEmail(email: string, userId: number): Promise<void> {
         // Implementation for sending verification email
         const codeLenght = 6;
@@ -46,3 +41,7 @@ export default class UserService {
         return (user);
     }
 }
+
+export default fp(async (fastify) => {
+    fastify.decorate('userService', UserService);
+});
