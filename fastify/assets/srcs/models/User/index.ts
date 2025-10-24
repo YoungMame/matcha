@@ -1,9 +1,9 @@
 import fastify from "../../app";
 
-export const insert = async (email: string, password_hash: string, password_salt: string, username: string, born_at: Date, gender: string, orientation: string) => {
+export const insert = async (email: string, password_hash: string, username: string, born_at: Date, gender: string, orientation: string) => {
     const result = await fastify.pg.query(
-        'INSERT INTO users (email, password_hash, password_salt, username, born_at, gender, orientation) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id',
-        [email, password_hash, password_salt, username, born_at.toISOString(), gender, orientation]
+        'INSERT INTO users (email, password_hash, username, born_at, gender, orientation) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
+        [email, password_hash, username, born_at.toISOString(), gender, orientation]
     );
     return result.rows[0].id;
 };
