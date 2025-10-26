@@ -13,9 +13,9 @@ export const signUpHandler = async (
         bornAt,
         gender,
         orientation
-    } = request.body as any
+    } = request.body as any;
 
-    const user:User | undefined = await (fastify as any).userService.createUser(
+    const jwt:string | undefined = await (fastify as any).userService.createUser(
         email,
         password,
         username,
@@ -24,13 +24,12 @@ export const signUpHandler = async (
         orientation
     );
 
-    if (user == undefined)
+    if (jwt == undefined)
         return reply.status(400).send({ error: 'User creation failed' });
-    
-    const jwt = fastify.jwt.sign({ 
-        id: user.id,
-        email: user.email,
-        username: user.username,
+
+    return reply.code(201).cookie('jwt', jwt, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
     });
-    return ({ jwt });
 }

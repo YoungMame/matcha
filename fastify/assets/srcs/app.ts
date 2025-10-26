@@ -2,6 +2,7 @@ import Fastify from 'fastify'
 import router from './routes'
 import services from './services'
 import pg from '@fastify/postgres'
+import cookies from '@fastify/cookie'
 // import routes
 // import plugins
 
@@ -21,6 +22,8 @@ const buildApp = () => {
     app.register(pg, {
         connectionString: process.env.PG
     });
+
+    app.register(cookies);
 
     app.setErrorHandler((err, request, reply) => {
     if (err.validation) {

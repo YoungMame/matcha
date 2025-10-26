@@ -1,21 +1,20 @@
 import { FastifyInstance } from "fastify";
-import { signUpHandler } from "../../controllers/auth/signup";
+import { loginHandler } from "../../controllers/auth/login";
 
-const signupRoutes = async (fastify: FastifyInstance) => {
+const loginRoutes = async (fastify: FastifyInstance) => {
     fastify.post('/', {
         schema: {
             body: {
                 type: 'object',
                 properties: {
-                    email: { type: 'string', pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ },
-                    username: { type: 'string', pattern: /^[a-zA-Z0-9._\- ]+$/ },
-                    password: { type: 'string', pattern: /^(?=.*?\d)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[!@#$%^&*?-])[^\s]{10,}$/ }
+                    email: { type: 'string' },
+                    password: { type: 'string' }
                 },
-                required: ['email', 'password', 'username'],
+                required: ['email', 'password'],
                 additionalProperties: false
             },
-            response: {
-                201: {
+            response: { // TODO fix return code
+                203: {
                     type: 'object',
                     cookies: {
                         jwt: { type: 'string' }
@@ -29,8 +28,8 @@ const signupRoutes = async (fastify: FastifyInstance) => {
                 }
             }
         },
-        handler: signUpHandler
+        handler: loginHandler
     });
 }
 
-export default signupRoutes;
+export default loginRoutes;

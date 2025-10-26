@@ -24,9 +24,10 @@ export default class User {
     gender: 'men' | 'women';
     orientation: 'heterosexual' | 'homosexual' | 'bisexual';
     location: Location | undefined;
-    emailValidation: EmailCode | undefined;
-    dfaValidation: EmailCode | undefined;
-    passwordResetValidation: EmailCode | undefined;
+
+    static emailValidations: Map<number, EmailCode> = new Map<number, EmailCode>();
+    static dfaValidations: Map<number, EmailCode> = new Map<number, EmailCode>();
+    static passwordResetValidations: Map<number, EmailCode> = new Map<number, EmailCode>();
 
     constructor(
         id: number,
@@ -98,15 +99,33 @@ export default class User {
             validUntil,
             code: value,
         };
-        (this)[kind] = codeObj;
+        if (kind === "emailValidation")
+            User.emailValidations.set(this.id, codeObj);
+        else if (kind === "dfaValidation")
+            User.dfaValidations.set(this.id, codeObj);
+        else if (kind === "passwordResetValidation")
+            User.passwordResetValidations.set(this.id, codeObj);
     }
 
-    getEmailCode (
-        kind: "emailValidation" | "dfaValidation" | "passwordResetValidation"
-    ) {
-        const obj = (this)[kind];
+    getEmailCode(kind: "emailValidation" | "dfaValidation" | "passwordResetValidation") {
+        let obj: EmailCode | undefined;
+        if (kind === "emailValidation")
+            obj = User.emailValidations.get(this.id);
+        else if (kind === "dfaValidation")
+            obj = User.dfaValidations.get(this.id);
+        else if (kind === "passwordResetValidation")
+            obj = User.passwordResetValidations.get(this.id);
         if (obj != undefined && obj.validUntil > new Date(Date.now()))
             return (obj.code);
         return (undefined);
+    }
+
+    clearEmailCode(kind: "emailValidation" | "dfaValidation" | "passwordResetValidation") {
+        if (kind === "emailValidation")
+            User.emailValidations.delete(this.id);
+        else if (kind === "dfaValidation")
+            User.dfaValidations.delete(this.id);
+        else if (kind === "passwordResetValidation")
+            User.passwordResetValidations.delete(this.id);
     }
 }
