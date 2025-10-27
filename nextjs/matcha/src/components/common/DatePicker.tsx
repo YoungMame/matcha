@@ -65,6 +65,10 @@ export default function DatePicker({
 	useEffect(() => {
 		setSelectedDate(value || null);
 		setInputValue(value ? formatInputDate(value) : "");
+		// Update calendar position when value changes
+		if (value) {
+			setCurrentDate(new Date(value + 'T00:00:00'));
+		}
 	}, [value]);
 
 	// Close calendar when clicking outside

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import TextField from '@/components/common/TextField';
-import Typography from '@/components/common/Typography';
-import { AVAILABLE_INTERESTS, MIN_INTERESTS } from '@/constants/onboarding';
+import { useState } from "react";
+import TextField from "@/components/common/TextField";
+import Typography from "@/components/common/Typography";
+import { AVAILABLE_INTERESTS, MIN_INTERESTS } from "@/constants/onboarding";
 
 interface InterestsStepProps {
 	interests: string[];
@@ -11,9 +11,13 @@ interface InterestsStepProps {
 	showValidation?: boolean;
 }
 
-export default function InterestsStep({ interests, onChange, showValidation = false }: InterestsStepProps) {
-	const [searchQuery, setSearchQuery] = useState('');
-	const [customInterest, setCustomInterest] = useState('');
+export default function InterestsStep({
+	interests,
+	onChange,
+	showValidation = false,
+}: InterestsStepProps) {
+	const [searchQuery, setSearchQuery] = useState("");
+	const [customInterest, setCustomInterest] = useState("");
 
 	const filteredInterests = AVAILABLE_INTERESTS.filter((interest) =>
 		interest.toLowerCase().includes(searchQuery.toLowerCase())
@@ -31,12 +35,12 @@ export default function InterestsStep({ interests, onChange, showValidation = fa
 		const trimmed = customInterest.trim();
 		if (trimmed && !interests.includes(trimmed)) {
 			onChange([...interests, trimmed]);
-			setCustomInterest('');
+			setCustomInterest("");
 		}
 	};
 
 	const handleKeyPress = (e: React.KeyboardEvent) => {
-		if (e.key === 'Enter') {
+		if (e.key === "Enter") {
 			e.preventDefault();
 			addCustomInterest();
 		}
@@ -50,27 +54,21 @@ export default function InterestsStep({ interests, onChange, showValidation = fa
 
 	return (
 		<div className="space-y-6">
-			<div>
-				<Typography variant="body" color="secondary" className="mb-4">
-					Select at least {MIN_INTERESTS} interests that best describe you
-				</Typography>
-				<Typography
-					variant="small"
-					color={hasError ? "error" : "secondary"}
-					bold={hasError}
-				>
-					{hasError
-						? `Please select at least ${MIN_INTERESTS} interests (currently ${interests.length})`
-						: `Selected: ${interests.length} / ${MIN_INTERESTS} minimum`
-					}
-				</Typography>
-			</div>
+			<Typography
+				variant="small"
+				color={hasError ? "error" : "secondary"}
+				bold={hasError}
+			>
+				{hasError
+					? `Veuillez sélectionner au moins ${MIN_INTERESTS} centres d'intérêt (actuellement ${interests.length})`
+					: `Sélectionnés : ${interests.length} / ${MIN_INTERESTS} minimum`}
+			</Typography>
 
 			{/* Selected Interests */}
 			{interests.length > 0 && (
 				<div>
 					<Typography variant="small" bold className="mb-2">
-						Your Interests
+						Vos centres d'intérêt
 					</Typography>
 					<div className="flex flex-wrap gap-2">
 						{interests.map((interest) => (
@@ -107,16 +105,16 @@ export default function InterestsStep({ interests, onChange, showValidation = fa
 
 			{/* Search */}
 			<TextField
-				label="Search Interests"
+				label="Rechercher des centres d'intérêt"
 				value={searchQuery}
 				onChange={(e) => setSearchQuery(e.target.value)}
-				placeholder="Search for interests..."
+				placeholder="Recherchez des centres d'intérêt..."
 			/>
 
 			{/* Available Interests */}
 			<div>
 				<Typography variant="small" bold className="mb-2">
-					Available Interests
+					Centres d'intérêt disponibles
 				</Typography>
 				<div className="flex flex-wrap gap-2 max-h-64 overflow-y-auto p-2 border border-gray-200 dark:border-gray-700 rounded-lg">
 					{filteredInterests.length > 0 ? (
@@ -129,8 +127,8 @@ export default function InterestsStep({ interests, onChange, showValidation = fa
 									px-4 py-2 rounded-full
 									transition-all
 									${interests.includes(interest)
-										? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
-										: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-pink-100 dark:hover:bg-pink-900/30 cursor-pointer'
+										? "bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed"
+										: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-pink-100 dark:hover:bg-pink-900/30 cursor-pointer"
 									}
 								`}
 							>
@@ -139,7 +137,8 @@ export default function InterestsStep({ interests, onChange, showValidation = fa
 						))
 					) : (
 						<Typography variant="small" color="secondary" className="p-4">
-							No interests found. Try a different search or add a custom interest below.
+							Aucun centre d'intérêt trouvé. Essayez une autre recherche ou
+							ajoutez un centre d'intérêt personnalisé ci-dessous.
 						</Typography>
 					)}
 				</div>
@@ -148,14 +147,19 @@ export default function InterestsStep({ interests, onChange, showValidation = fa
 			{/* Add Custom Interest */}
 			<div>
 				<Typography variant="small" bold className="mb-2">
-					Can't find your interest?
+					Vous ne trouvez pas votre centre d'intérêt ?
 				</Typography>
 				<div className="flex gap-2">
 					<TextField
 						value={customInterest}
-						onChange={(e) => setCustomInterest(e.target.value)}
+						onChange={(e) => {
+							const value = e.target.value;
+							if (value.length <= 20) {
+								setCustomInterest(value);
+							}
+						}}
 						onKeyPress={handleKeyPress}
-						placeholder="Add a custom interest..."
+						placeholder="Ajoutez un centre d'intérêt personnalisé..."
 						fullWidth
 					/>
 					<button
@@ -167,12 +171,15 @@ export default function InterestsStep({ interests, onChange, showValidation = fa
 							disabled:opacity-50 disabled:cursor-not-allowed
 							transition-all
 							whitespace-nowrap
-							${customInterest.trim() ? 'hover:bg-pink-600' : ''}
+							${customInterest.trim() ? "hover:bg-pink-600" : ""}
 						`}
 					>
-						Add
+						Ajouter
 					</button>
 				</div>
+				<Typography variant="caption" color="secondary" className="mt-1 ml-1">
+					Maximum 20 caractères ({customInterest.length}/20)
+				</Typography>
 			</div>
 		</div>
 	);
