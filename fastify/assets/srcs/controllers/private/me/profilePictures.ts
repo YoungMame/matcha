@@ -1,4 +1,8 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
+import { AppError, UnauthorizedError, ForbiddenError, NotFoundError, BadRequestError } from '../../../utils/error';
+import path from 'path';
+import fs from 'fs';
+import pump from 'pump';
 
 export const setProfilePictureIndexHandler = async (
     request: FastifyRequest,
@@ -8,14 +12,76 @@ export const setProfilePictureIndexHandler = async (
         index
     } = request.params as any
 
-    const user = request.user;
+    try {
+        const user = request.user;
+        const userId: number = (user as any)?.id; // TODO manage jwt in prehandler
+        if (!userId)
+            throw new UnauthorizedError();
+        await request.server.userService.updateUserProfilePicture(userId, index);
+        return reply.code(200).send({ message: 'User profile picture updated successfully' });
+    } catch (error) {
+        if (error instanceof AppError)
+            return reply.status(error.statusCode).send({ error: error.message });
+        return reply.status(500).send({ error: 'Internal server error' });
+    } 
+}
 
-    if (!user)
-        return reply.status(401).send({ error: 'Unauthorized' });
-    const userId: number = (user as any).id; // TODO manage jwt in prehandler
-    const success: boolean = await request.server.userService.updateUserProfilePicture(userId, index);
+export const addProfilePictureHandler = async (
+    request: FastifyRequest,
+    reply: FastifyReply
+) => {
+    const {
+        index
+    } = request.params as any
 
-    if (!success)
-        return reply.status(500).send({ error: 'User profile picture update failed' });
-    return reply.code(200).send({ message: 'User profile picture updated successfully' });
+    try {
+        const user = request.user;
+        const userId: number = (user as any)?.id; // TODO manage jwt in prehandler
+        if (!userId)
+            throw new UnauthorizedError();
+
+        const file = await request.file();
+        if (!file)
+            throw (new BadRequestError());
+
+        const picturesDir = path.join(__dirname, '..', '..', 'assets', 'uploads', userId.toString());
+        if (!fs.existsSync(picturesDir)) {
+            fs.mkdirSync(picturesDir, { recursive: true });
+        }
+
+        const newFileName = `${new Date(Date.now()).toString()}.${file.mimetype}`;
+        const newFilePath = path.join(picturesDir, newFileName);
+        console.log(newFileName);
+        const dest = fs.createWriteStream(newFilePath);
+        pump(file.file, dest);
+        await request.server.userService.addUserProfilePicture(userId, newFilePath);
+        return reply.code(200).send({ message: 'User profile picture updated successfully' });
+    } catch (error) {
+        if (error instanceof AppError)
+            return reply.status(error.statusCode).send({ error: error.message });
+        return reply.status(500).send({ error: 'Internal server error' });
+    } 
+}
+
+export const removeProfilePictureHandler = async (
+    request: FastifyRequest,
+    reply: FastifyReply
+) => {
+    const {
+        index
+    } = request.params as any   
+
+    try {
+        const user = request.user;
+        const userId: number = (user as any)?.id; // TODO manage jwt in prehandler
+        if (!userId)
+            throw new UnauthorizedError();
+
+        await request.server.userService.removeUserProfilePicture(userId, index);
+        return reply.code(200).send({ message: 'User profile picture removed successfully' });
+    } catch (error) {
+        if (error instanceof AppError)
+            return reply.status(error.statusCode).send({ error: error.message });
+        return reply.status(500).send({ error: 'Internal server error' });
+    } 
 }

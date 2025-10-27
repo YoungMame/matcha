@@ -14,18 +14,19 @@ export default fp(async function(fastify, opts) {
 
     fastify.decorate("authenticate", async function(request: FastifyRequest, reply: FastifyReply) {
         try {
-            const cookies = (request as any).cookies;
-            const token = cookies && cookies['jwt'];
-            console.log('cookies', cookies);
-            if (!token) {
-                console.log('no token');
-                return reply.status(401).send({ error: 'Unauthorized' });
+            const signedToken = request.cookies?.jwt;
+            if (!signedToken)
+                throw new Error('No token provided');
+            const result = reply.unsignCookie(signedToken);
+            if (!result?.value || !result?.valid) {
+                throw new Error('Token invalid');
             }
 
+            const token = result.value;
             const payload = fastify.jwt.verify(token) as { id: string, username?: string, email?: string };
-
+            console.log(payload);
             request.user = {
-                id: String(payload.id),
+                id: Number(payload.id),
                 username: payload.username,
                 email: payload.email
             };

@@ -13,10 +13,10 @@ export const loginHandler = async (
 
     if (jwt == undefined)
         return reply.status(400).send({ error: 'User creation failed' });
-    console.log('jwt', jwt);
-    return reply.code(203).cookie('jwt', jwt, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+    return reply.code(203).setCookie('jwt', jwt, {
+        domain: process.env.DOMAIN || 'localhost',
+        path: '/',
+        signed: true,
+        maxAge: 3600 * 24 * 7
     }).send({ message: 'User logged in successfully' });
 }

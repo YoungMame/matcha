@@ -1,5 +1,6 @@
 import { snakeCase } from "text-case";
 import { FastifyInstance } from "fastify";
+import { ForbiddenError, InternalServerError } from "../../utils/error";
 
 type UserProfile = {
     [key: string]: any;
@@ -8,6 +9,8 @@ type UserProfile = {
     bio?: string;
     tags?: string[];
     profilePictureIndex?: number;
+    profilePictures?: string[];
+    string?: string[];
     gender?: string;
     orientation?: string;
 };
@@ -21,12 +24,21 @@ export default class UserModel {
     constructor(private fastify: FastifyInstance) {}
 
     insert = async (email: string, password_hash: string, username: string, born_at: Date, gender: string, orientation: string) => {
-        const result = await this.fastify.pg.query(
-            'INSERT INTO users (email, password_hash, username, born_at, gender, orientation) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
-            [email, password_hash, username, born_at.toISOString(), gender, orientation]
-        );
-        console.log(result);
-        return result.rows[0].id;
+        try {
+            const result = await this.fastify.pg.query(
+                'INSERT INTO users (email, password_hash, username, born_at, gender, orientation) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
+                [email, password_hash, username, born_at.toISOString(), gender, orientation]
+            );
+            console.log(result);
+            return result.rows[0].id;
+        } catch (error: Error | any) {
+            if (error.code && error.code === '23505') { // Unique violation
+                console.error('Error inserting user:', error);
+                throw new ForbiddenError('Email or username already exists');
+            }
+            throw new InternalServerError('Database error');
+        }
+
     }
 
     findLocationByUserId = async (userId: number): Promise<Object> => {

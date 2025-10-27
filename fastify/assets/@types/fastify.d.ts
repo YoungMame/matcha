@@ -9,7 +9,8 @@ declare module 'fastify' {
       updateUserLocation(id: number, latitude: number, longitude: number): Promise<void>;
       updateUserProfile(id: number, profile: { bio?: string, tags?: string[], gender?: string, orientation?: string, bornAt?: Date }): Promise<void>;
       updateUserProfilePicture(id: number, pictureIndex: number): Promise<boolean>;
-      addUserProfilePicture(id: number, pictureFile: File, pictureMimeType: string): Promise<void>;
+      addUserProfilePicture(id: number, pictureName: string): Promise<void>;
+      removeUserProfilePicture(id: number, pictureIndex: number): Promise<void>;          
     };
     authenticate(request: any, reply: any): Promise<void>;
   }

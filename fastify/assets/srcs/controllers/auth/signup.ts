@@ -37,13 +37,13 @@ export const signUpHandler = async (
             return reply.code(400).send({ error: 'User creation failed' });
         }
 
-        return reply.code(201).cookie('jwt', jwt, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
+        return reply.code(201).setCookie('jwt', jwt, {
+            domain: process.env.DOMAIN || 'localhost',
+            path: '/',
+            signed: true,
+            maxAge: 3600 * 24 * 7
         }).send({ message: 'User created successfully' });
     } catch (error) {
-        console.error('❌ Error in signup:', error);
         return reply.code(500).send({ error: 'Internal server error' });
     }
 }
