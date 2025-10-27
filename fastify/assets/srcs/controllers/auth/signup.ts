@@ -1,6 +1,4 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import fastify from '../../app';
-import User from "../../classes/User";
 
 export const signUpHandler = async (
     request: FastifyRequest,
@@ -15,21 +13,37 @@ export const signUpHandler = async (
         orientation
     } = request.body as any;
 
-    const jwt:string | undefined = await (fastify as any).userService.createUser(
-        email,
-        password,
-        username,
-        bornAt,
-        gender,
-        orientation
-    );
+    console.log('📝 Signup request received:', { email, username, bornAt });
+    const bornAtDate = new Date(bornAt);
 
-    if (jwt == undefined)
-        return reply.status(400).send({ error: 'User creation failed' });
+    try {
+        console.log('🔍 Available on request.server:', Object.keys(request.server));
+        console.log('🔍 userService exists?', !!request.server.userService);
+        
+        if (!request.server.userService) {
+            throw new Error('UserService not available on server instance');
+        }
+        
+        const jwt: string | undefined = await request.server.userService.createUser(
+            email,
+            password,
+            username,
+            bornAtDate,
+            gender,
+            orientation
+        );
 
-    return reply.code(201).cookie('jwt', jwt, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-    });
+        if (jwt == undefined) {
+            return reply.code(400).send({ error: 'User creation failed' });
+        }
+
+        return reply.code(201).cookie('jwt', jwt, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+        }).send({ message: 'User created successfully' });
+    } catch (error) {
+        console.error('❌ Error in signup:', error);
+        return reply.code(500).send({ error: 'Internal server error' });
+    }
 }

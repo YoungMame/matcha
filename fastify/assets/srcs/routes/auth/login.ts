@@ -18,6 +18,9 @@ const loginRoutes = async (fastify: FastifyInstance) => {
                     type: 'object',
                     cookies: {
                         jwt: { type: 'string' }
+                    },
+                    properties: {
+                        message: { type: 'string' }
                     }
                 },
                 400: {
