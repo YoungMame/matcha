@@ -56,11 +56,9 @@ async function waitForDbReady(retries = 60, delayMs = 2000) {
 async function seed() {
     await waitForDbReady();
     console.log("Database is ready, proceeding with seed...");
-    console.log(dataset.length);
     await client.connect();
     try {
         for (let i = 0; i < dataset.length; i += BATCH_SIZE) {
-            console.log("for");
             const batch = (dataset as UserEntry[]).slice(i, i + BATCH_SIZE);
             await client.query('BEGIN');
 
@@ -90,9 +88,7 @@ async function seed() {
                 (username, email, bio, password_hash, gender, orientation, tags, fame_rate, profile_pictures, profile_picture_index, born_at)
                 VALUES ${rows}
             `;
-            console.log("insertUsersSql: " + insertUsersSql);
             await client.query(insertUsersSql, values);
-            console.log("User insertion completed.");
 
             // 2) Ensure we have ids for all emails (existing users also)
             const emails = batch.map(u => u.email);
@@ -121,7 +117,6 @@ async function seed() {
             }
 
             await client.query('COMMIT');
-            console.log(`Seeded users ${i + 1}..${Math.min(i + BATCH_SIZE, dataset.length)}`);
         }
     } catch (err) {
         await client.query('ROLLBACK');

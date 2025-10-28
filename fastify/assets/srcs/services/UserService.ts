@@ -6,6 +6,7 @@ import path from 'path';
 import fs from 'fs';
 import { FastifyInstance } from 'fastify';
 import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError } from "../utils/error";
+import commonPasswords from '../utils/1000-most-common-passwords.json';
 
 class UserService {
     private fastify: FastifyInstance;
@@ -42,11 +43,36 @@ class UserService {
         return (User.fromRow(userdata));
     }
 
+    private isPasswordCommon(password: string): boolean {
+        if (commonPasswords.includes(password))
+            return true;
+
+        const normalizedPassword = password.trim().toLowerCase().replace(/[^a-z]/g, '');
+        if (commonPasswords.includes(normalizedPassword))
+            return true;
+
+        const normalizedPasswordWithNumbers = password.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (commonPasswords.includes(normalizedPasswordWithNumbers))
+            return true;
+
+        const normalizedPasswordWithNumbersAndUpper = password.trim().replace(/[^a-z0-9A-Z]/g, '');
+        if (commonPasswords.includes(normalizedPasswordWithNumbersAndUpper))
+            return true;
+
+        const normalizedPasswordWithUpper = password.trim().replace(/[^a-zA-Z]/g, '');
+        if (commonPasswords.includes(normalizedPasswordWithUpper))
+            return true;
+
+        return false;
+    }
+
     async createUser(email: string, password: string, username: string, bornAt: Date, gender: string, orientation: string): Promise<string | undefined> {
         if (!(email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)))
             throw new BadRequestError('Invalid email format');
         if (!(username.match(/^[a-zA-Z0-9._\- ]+$/)))
             throw new BadRequestError('Invalid username format');
+        if (this.isPasswordCommon(password))
+            throw new BadRequestError('Password is too common');
         const hashedPassword = await PasswordManager.hashPassword(password);
         const userId = await this.userModel.insert(email, hashedPassword, username, bornAt, gender, orientation);
         const user = await this.getUser(userId);

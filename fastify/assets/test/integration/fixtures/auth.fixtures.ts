@@ -15,7 +15,6 @@ export const signUpAndGetToken = async (app: FastifyInstance, userData: UserData
         url: '/auth/signup',
         payload: userData
     });
-    console.log(userData);
     if (signUpResponse.statusCode !== 201) {
         throw new Error(`Failed to sign up user: ${signUpResponse.body}, code: ${signUpResponse.statusCode}`);
     }

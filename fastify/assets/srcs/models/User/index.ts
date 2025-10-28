@@ -1,6 +1,6 @@
 import { snakeCase } from "text-case";
 import { FastifyInstance } from "fastify";
-import { ForbiddenError, InternalServerError } from "../../utils/error";
+import { ForbiddenError, InternalServerError, UnauthorizedError } from "../../utils/error";
 
 type UserProfile = {
     [key: string]: any;
@@ -29,11 +29,9 @@ export default class UserModel {
                 'INSERT INTO users (email, password_hash, username, born_at, gender, orientation) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
                 [email, password_hash, username, born_at.toISOString(), gender, orientation]
             );
-            console.log(result);
             return result.rows[0].id;
         } catch (error: Error | any) {
             if (error.code && error.code === '23505') { // Unique violation
-                console.error('Error inserting user:', error);
                 throw new ForbiddenError('Email or username already exists');
             }
             throw new InternalServerError('Database error');
@@ -56,6 +54,9 @@ export default class UserModel {
         const result = await this.fastify.pg.query(
             'SELECT * FROM users WHERE id=$1', [id]
         );
+        if (result.rows.length === 0) {
+            throw new UnauthorizedError;
+        }
         const location = await this.findLocationByUserId(result.rows[0].id);
         result.rows[0].location = location;
         return result.rows[0];
@@ -65,6 +66,9 @@ export default class UserModel {
         const result = await this.fastify.pg.query(
             'SELECT * FROM users WHERE email=$1', [email]
         );
+        if (result.rows.length === 0) {
+            throw new UnauthorizedError;
+        }
         const location = await this.findLocationByUserId(result.rows[0].id);
         result.rows[0].location = location;
         return result.rows[0];
@@ -74,6 +78,9 @@ export default class UserModel {
         const result = await this.fastify.pg.query(
             'SELECT * FROM users WHERE username=$1', [username]
         );
+        if (result.rows.length === 0) {
+            throw new UnauthorizedError;
+        }
         const location = await this.findLocationByUserId(result.rows[0].id);
         result.rows[0].location = location
         return result.rows[0];

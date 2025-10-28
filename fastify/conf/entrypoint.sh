@@ -10,8 +10,7 @@ if [ "$NODE_ENV" = "dev" ]; then
 elif [ "$NODE_ENV" = "test" ]; then
     echo "Running unit tests"
     # pnpm test:unit
-    echo "Running integration tests"
-    pnpm test:integration
+    exec pnpm test:integration
 else
     exec pnpm start
 fi

@@ -36,21 +36,23 @@ services:
 
   db:
     image: postgres:18-alpine3.22
+    logging:
+      driver: "none"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-     - pgdata:/var/lib/postgresql/data
      - ./postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
+     - type: tmpfs
+       target: /dev/shm
+       tmpfs:
+         size: 134217728 # 128*2^20 bytes = 128Mb
     networks:
       - router
     ports:
       - 5432:5432
 
-volumes:
-  pgdata:
-    driver: local
 
 networks:
   router:

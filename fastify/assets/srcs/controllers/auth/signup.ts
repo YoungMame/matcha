@@ -1,4 +1,5 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
+import { AppError } from '../../utils/error';
 
 export const signUpHandler = async (
     request: FastifyRequest,
@@ -13,13 +14,9 @@ export const signUpHandler = async (
         orientation
     } = request.body as any;
 
-    console.log('📝 Signup request received:', { email, username, bornAt });
     const bornAtDate = new Date(bornAt);
 
-    try {
-        console.log('🔍 Available on request.server:', Object.keys(request.server));
-        console.log('🔍 userService exists?', !!request.server.userService);
-        
+    try {        
         if (!request.server.userService) {
             throw new Error('UserService not available on server instance');
         }
@@ -44,6 +41,9 @@ export const signUpHandler = async (
             maxAge: 3600 * 24 * 7
         }).send({ message: 'User created successfully' });
     } catch (error) {
+        if (error instanceof AppError) {
+            return reply.code(error.statusCode).send({ error: error.message });
+        }
         return reply.code(500).send({ error: 'Internal server error' });
     }
 }

@@ -10,14 +10,13 @@ import multipart from '@fastify/multipart'
 // import routes
 import router from './routes'
 // import services
-// import services from './services'
 import userServicePlugin from './services/UserService'
 // import custom plugins
 import authenticate from './plugins/authenticate'
 
 export const buildApp = () => {
     const app = Fastify({
-        logger: true
+        logger: (process.env.NODE_ENV == 'dev')
     });
 
     app.get('/debug', async () => {
@@ -26,7 +25,6 @@ export const buildApp = () => {
 
     app.register(router);
 
-    // app.register(services); // TODO fix service index
     app.register(userServicePlugin);
 
     app.register(pg, {
