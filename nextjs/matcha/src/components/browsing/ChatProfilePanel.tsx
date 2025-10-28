@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Typography from "@/components/common/Typography";
+import Stack from "@/components/common/Stack";
+import Badge from "@/components/common/Badge";
 
 interface UserProfile {
 	id: string;
@@ -43,7 +45,11 @@ export default function ChatProfilePanel({ user }: ChatProfilePanelProps) {
 	].filter((pic): pic is string => pic !== null);
 
 	return (
-		<div className="w-80 shrink-0 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 overflow-y-auto h-full">
+		<Stack
+			direction="column"
+			spacing="none"
+			className="w-80 shrink-0 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 overflow-y-auto h-full"
+		>
 			{/* Profile Picture */}
 			{allPictures.length > 0 && (
 				<div className="relative aspect-square w-full">
@@ -57,47 +63,44 @@ export default function ChatProfilePanel({ user }: ChatProfilePanelProps) {
 			)}
 
 			{/* Profile Info */}
-			<div className="p-6">
+			<Stack direction="column" spacing="lg" className="p-6">
 				{/* Name and Age */}
-				<Typography variant="h2" className="mb-4">
+				<Typography variant="h2">
 					{user.firstName}, {age}
 				</Typography>
 
 				{/* Biography */}
 				{user.biography && (
-					<div className="mb-6">
-						<Typography variant="body" className="font-semibold mb-2">
+					<Stack direction="column" spacing="sm">
+						<Typography variant="body" className="font-semibold">
 							À propos
 						</Typography>
 						<Typography variant="body" color="secondary">
 							{user.biography}
 						</Typography>
-					</div>
+					</Stack>
 				)}
 
 				{/* Interests */}
 				{user.interests.length > 0 && (
-					<div>
-						<Typography variant="body" className="font-semibold mb-3">
+					<Stack direction="column" spacing="sm">
+						<Typography variant="body" className="font-semibold">
 							Centres d'intérêt
 						</Typography>
-						<div className="flex flex-wrap gap-2">
+						<Stack direction="row" spacing="sm" wrap>
 							{user.interests.map((interest, index) => (
-								<span
-									key={index}
-									className="px-3 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-full text-sm"
-								>
+								<Badge key={index} variant="primary">
 									{interest}
-								</span>
+								</Badge>
 							))}
-						</div>
-					</div>
+						</Stack>
+					</Stack>
 				)}
 
 				{/* Additional Pictures Grid */}
 				{allPictures.length > 1 && (
-					<div className="mt-6">
-						<Typography variant="body" className="font-semibold mb-3">
+					<Stack direction="column" spacing="sm">
+						<Typography variant="body" className="font-semibold">
 							Photos
 						</Typography>
 						<div className="grid grid-cols-2 gap-2">
@@ -112,9 +115,9 @@ export default function ChatProfilePanel({ user }: ChatProfilePanelProps) {
 								</div>
 							))}
 						</div>
-					</div>
+					</Stack>
 				)}
-			</div>
-		</div>
+			</Stack>
+		</Stack>
 	);
 }

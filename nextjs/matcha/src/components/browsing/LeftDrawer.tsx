@@ -5,6 +5,7 @@ import UserHeader from "./UserHeader";
 import MatchCard from "./MatchCard";
 import ConversationItem from "./ConversationItem";
 import Typography from "@/components/common/Typography";
+import Stack from "@/components/common/Stack";
 
 type Tab = "matches" | "messages";
 
@@ -62,7 +63,11 @@ export default function LeftDrawer({
   };
 
   return (
-    <div className="w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col h-full">
+    <Stack
+      direction="column"
+      spacing="none"
+      className="w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 h-full"
+    >
       {/* User Header */}
       <UserHeader
         username={currentUser.username}
@@ -70,7 +75,11 @@ export default function LeftDrawer({
       />
 
       {/* Tabs */}
-      <div className="flex border-b border-gray-200 dark:border-gray-700">
+      <Stack
+        direction="row"
+        spacing="none"
+        className="border-b border-gray-200 dark:border-gray-700"
+      >
         <button
           onClick={() => handleTabChange("matches")}
           className={`flex-1 py-3 text-center font-medium transition-colors ${
@@ -91,18 +100,23 @@ export default function LeftDrawer({
         >
           Messages
         </button>
-      </div>
+      </Stack>
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto">
         {activeTab === "matches" && (
-          <div className="p-2">
+          <Stack direction="column" spacing="sm" className="p-2">
             {matches.length === 0 ? (
-              <div className="text-center py-8">
+              <Stack
+                direction="column"
+                align="center"
+                justify="center"
+                className="py-8"
+              >
                 <Typography color="secondary">
                   Aucun match pour le moment
                 </Typography>
-              </div>
+              </Stack>
             ) : (
               matches.map((match) => (
                 <MatchCard
@@ -114,17 +128,22 @@ export default function LeftDrawer({
                 />
               ))
             )}
-          </div>
+          </Stack>
         )}
 
         {activeTab === "messages" && (
-          <div className="p-2">
+          <Stack direction="column" spacing="sm" className="p-2">
             {conversations.length === 0 ? (
-              <div className="text-center py-8">
+              <Stack
+                direction="column"
+                align="center"
+                justify="center"
+                className="py-8"
+              >
                 <Typography color="secondary">
                   Aucune conversation pour le moment
                 </Typography>
-              </div>
+              </Stack>
             ) : (
               conversations.map((conversation) => (
                 <ConversationItem
@@ -137,9 +156,9 @@ export default function LeftDrawer({
                 />
               ))
             )}
-          </div>
+          </Stack>
         )}
       </div>
-    </div>
+    </Stack>
   );
 }

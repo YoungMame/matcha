@@ -7,6 +7,11 @@ import StepIndicator from "@/components/onboarding/StepIndicator";
 import ProgressBar from "@/components/onboarding/ProgressBar";
 import Typography from "@/components/common/Typography";
 import Button from "@/components/common/Button";
+import Stack from "@/components/common/Stack";
+import Icon from "@/components/common/Icon";
+import Container from "@/components/common/Container";
+import Card from "@/components/common/Card";
+import Grid from "@/components/common/Grid";
 import IdentityStep from "@/components/onboarding/steps/IdentityStep";
 import InterestsStep from "@/components/onboarding/steps/InterestsStep";
 import PreferencesStep from "@/components/onboarding/steps/PreferencesStep";
@@ -130,106 +135,77 @@ export default function OnboardingPage() {
 	};
 
 	return (
-		<div className="bg-gray-50 dark:bg-gray-900 py-8 px-4">
-			<div className="max-w-7xl mx-auto">
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+		<div className="h-full overflow-y-auto bg-gray-50 dark:bg-gray-900 py-8">
+			<Container size="lg">
+				<Grid cols={1} lgCols={3} gap="lg">
 					<div className="lg:col-span-1">
 						<div className="lg:sticky lg:top-8">
-							<div className="mb-6">
+							<Stack spacing="lg" direction="column">
 								<ProgressBar
 									completedSteps={completedStepsCount}
 									totalSteps={STEPS.length}
 								/>
-							</div>
 
-							<StepIndicator
-								steps={STEPS}
-								currentStepIndex={currentStepIndex}
-								isStepCompleted={isStepCompleted}
-								onStepClick={handleStepClick}
-							/>
+								<StepIndicator
+									steps={STEPS}
+									currentStepIndex={currentStepIndex}
+									isStepCompleted={isStepCompleted}
+									onStepClick={handleStepClick}
+								/>
+							</Stack>
 						</div>
 					</div>
 
 					<div className="lg:col-span-2">
-						<div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
-							<div className="mb-8">
-								<Typography variant="h2" className="mb-2">
-									{currentStep.title}
-								</Typography>
-								<Typography variant="body" color="secondary">
-									{currentStep.description}
-								</Typography>
-							</div>
+						<Card padding="lg" variant="elevated">
+							<Stack spacing="lg" direction="column">
+								<Stack spacing="sm" direction="column">
+									<Typography variant="h2">
+										{currentStep.title}
+									</Typography>
+									<Typography variant="body" color="secondary">
+										{currentStep.description}
+									</Typography>
+								</Stack>
 
-							<div className="mb-8">{renderStepContent()}</div>
+								<div>{renderStepContent()}</div>
 
-							<div className="flex justify-between items-center pt-6 border-t border-gray-200 dark:border-gray-700">
-								<Button
-									variant="outline"
-									onClick={previousStep}
-									disabled={currentStepIndex === 0}
+								<Stack
+									direction="row"
+									justify="between"
+									align="center"
+									className="pt-6 border-t border-gray-200 dark:border-gray-700"
 								>
-									<svg
-										className="w-5 h-5 mr-2"
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth={2}
-											d="M15 19l-7-7 7-7"
-										/>
-									</svg>
-									Précédent
-								</Button>
-
-								{currentStepIndex < STEPS.length - 1 ? (
-									<Button variant="gradient" onClick={handleNext}>
-										Suivant
-										<svg
-											className="w-5 h-5 ml-2"
-											fill="none"
-											stroke="currentColor"
-											viewBox="0 0 24 24"
-										>
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth={2}
-												d="M9 5l7 7-7 7"
-											/>
-										</svg>
-									</Button>
-								) : (
 									<Button
-										variant="gradient"
-										onClick={handleSubmit}
-										disabled={!allStepsCompleted}
+										variant="outline"
+										onClick={previousStep}
+										disabled={currentStepIndex === 0}
 									>
-										Terminer l'inscription
-										<svg
-											className="w-5 h-5 ml-2"
-											fill="none"
-											stroke="currentColor"
-											viewBox="0 0 24 24"
-										>
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth={2}
-												d="M5 13l4 4L19 7"
-											/>
-										</svg>
+										<Icon name="chevron-left" className="w-5 h-5 mr-2" />
+										Précédent
 									</Button>
-								)}
-							</div>
-						</div>
+
+									{currentStepIndex < STEPS.length - 1 ? (
+										<Button variant="gradient" onClick={handleNext}>
+											Suivant
+											<Icon name="chevron-right" className="w-5 h-5 ml-2" />
+										</Button>
+									) : (
+										<Button
+											variant="gradient"
+											onClick={handleSubmit}
+											disabled={!allStepsCompleted}
+										>
+											Terminer l'inscription
+											<Icon name="check" className="w-5 h-5 ml-2" />
+										</Button>
+									)}
+								</Stack>
+							</Stack>
+						</Card>
 					</div>
-				</div>
-			</div>
+				</Grid>
+			</Container>
 		</div>
 	);
 }

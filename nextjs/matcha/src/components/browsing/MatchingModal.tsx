@@ -4,6 +4,9 @@ import { useState } from "react";
 import Image from "next/image";
 import Modal from "@/components/common/Modal";
 import Typography from "@/components/common/Typography";
+import Badge from "@/components/common/Badge";
+import Stack from "@/components/common/Stack";
+import IconButton from "@/components/common/IconButton";
 
 interface UserProfile {
 	id: string;
@@ -106,9 +109,11 @@ export default function MatchingModal({
 							{/* Navigation Arrows */}
 							{allPictures.length > 1 && (
 								<>
-									<button
+									<IconButton
 										onClick={handlePrevImage}
-										className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+										variant="ghost"
+										size="small"
+										className="absolute left-4 top-1/2 -translate-y-1/2"
 										aria-label="Photo précédente"
 									>
 										<svg
@@ -124,10 +129,12 @@ export default function MatchingModal({
 												d="M15 19l-7-7 7-7"
 											/>
 										</svg>
-									</button>
-									<button
+									</IconButton>
+									<IconButton
 										onClick={handleNextImage}
-										className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+										variant="ghost"
+										size="small"
+										className="absolute right-4 top-1/2 -translate-y-1/2"
 										aria-label="Photo suivante"
 									>
 										<svg
@@ -143,7 +150,7 @@ export default function MatchingModal({
 												d="M9 5l7 7-7 7"
 											/>
 										</svg>
-									</button>
+									</IconButton>
 								</>
 							)}
 
@@ -163,14 +170,18 @@ export default function MatchingModal({
 							)}
 
 							{/* Action Buttons */}
-							<div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-6">
-								<button
+							<Stack
+								direction="row"
+								spacing="lg"
+								className="absolute bottom-4 left-1/2 -translate-x-1/2"
+							>
+								<IconButton
 									onClick={handlePass}
-									className="w-14 h-14 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+									variant="error"
 									aria-label="Passer"
 								>
 									<svg
-										className="w-8 h-8 text-red-500"
+										className="w-8 h-8"
 										fill="none"
 										stroke="currentColor"
 										viewBox="0 0 24 24"
@@ -182,16 +193,16 @@ export default function MatchingModal({
 											d="M6 18L18 6M6 6l12 12"
 										/>
 									</svg>
-								</button>
-								<button
+								</IconButton>
+								<IconButton
 									onClick={handleLike}
-									className="w-14 h-14 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+									variant="success"
 									aria-label={isFromMatch ? "Envoyer un message" : "Liker"}
 								>
 									{isFromMatch ? (
 										// Chat icon for matches
 										<svg
-											className="w-8 h-8 text-green-500"
+											className="w-8 h-8"
 											fill="none"
 											stroke="currentColor"
 											viewBox="0 0 24 24"
@@ -206,15 +217,15 @@ export default function MatchingModal({
 									) : (
 										// Heart icon for browsing
 										<svg
-											className="w-8 h-8 text-green-500"
+											className="w-8 h-8"
 											fill="currentColor"
 											viewBox="0 0 24 24"
 										>
 											<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
 										</svg>
 									)}
-								</button>
-							</div>
+								</IconButton>
+							</Stack>
 						</>
 					)}
 				</div>
@@ -228,30 +239,27 @@ export default function MatchingModal({
 
 					{/* Biography */}
 					{user.biography && (
-						<div className="mb-6">
+						<Stack spacing="md" className="mb-6">
 							<Typography variant="body" color="secondary">
 								{user.biography}
 							</Typography>
-						</div>
+						</Stack>
 					)}
 
 					{/* Interests */}
 					{user.interests.length > 0 && (
-						<div>
-							<Typography variant="body" className="font-semibold mb-3">
+						<Stack spacing="md">
+							<Typography variant="body" className="font-semibold">
 								Centres d'intérêt
 							</Typography>
-							<div className="flex flex-wrap gap-2">
+							<Stack direction="row" spacing="sm" wrap>
 								{user.interests.map((interest, index) => (
-									<span
-										key={index}
-										className="px-3 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-full text-sm"
-									>
+									<Badge key={index} variant="primary">
 										{interest}
-									</span>
+									</Badge>
 								))}
-							</div>
-						</div>
+							</Stack>
+						</Stack>
 					)}
 				</div>
 			</div>

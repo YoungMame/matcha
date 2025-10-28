@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import TextField from "@/components/common/TextField";
 
 interface SearchBarProps {
 	onSearch?: (query: string) => void;
@@ -23,8 +24,8 @@ export default function SearchBar({
 			onSubmit={handleSubmit}
 			className="relative max-w-2xl mx-auto mb-6"
 		>
-			<div className="relative">
-				<div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+			<div className="relative ">
+				<div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
 					<svg
 						className="h-5 w-5 text-gray-400"
 						fill="none"
@@ -39,12 +40,13 @@ export default function SearchBar({
 						/>
 					</svg>
 				</div>
-				<input
+				<TextField
 					type="text"
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
 					placeholder={placeholder}
-					className="block w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-lg"
+					fullWidth
+					className="pl-12 rounded-full! bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-lg border-gray-300 dark:border-gray-600"
 				/>
 			</div>
 		</form>

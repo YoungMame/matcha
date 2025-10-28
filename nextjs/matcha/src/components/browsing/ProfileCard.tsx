@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Typography from "@/components/common/Typography";
+import Stack from "@/components/common/Stack";
 
 interface ProfileCardProps {
 	id: string;
@@ -31,11 +32,15 @@ export default function ProfileCard({
 			</div>
 
 			{/* Info overlay at bottom */}
-			<div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/70 to-transparent p-4">
+			<Stack
+				direction="column"
+				spacing="none"
+				className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/70 to-transparent p-4"
+			>
 				<Typography variant="body" className="font-semibold text-white">
 					{name}, {age}
 				</Typography>
-			</div>
+			</Stack>
 		</button>
 	);
 }
