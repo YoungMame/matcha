@@ -24,8 +24,8 @@ export default function Header() {
   // Determine which page we're on
   const isHomePage = pathname === "/";
   const isOnboarding = pathname?.startsWith("/onboarding");
-  const isApp = pathname?.startsWith("/app");
-  const showLanguage = isOnboarding || isApp;
+  const isBrowsing = pathname?.startsWith("/browsing");
+  const showLanguage = isOnboarding || isBrowsing;
 
   // Fetch current user data
   const { data: userData } = useQuery<{ user: User }>({

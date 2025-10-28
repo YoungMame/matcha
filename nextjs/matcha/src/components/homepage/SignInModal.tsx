@@ -38,7 +38,7 @@ export default function SignInModal({
     try {
       await axios.post("/api/auth/login", formData);
       handleClose();
-      router.push("/app");
+      router.push("/browsing");
       router.refresh();
     } catch (err: any) {
       setError(err.response?.data?.error || "Login failed. Please try again.");
