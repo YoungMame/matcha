@@ -10,7 +10,29 @@ declare module 'fastify' {
       updateUserProfile(id: number, profile: { bio?: string, tags?: string[], gender?: string, orientation?: string, bornAt?: Date }): Promise<void>;
       updateUserProfilePicture(id: number, pictureIndex: number): Promise<string>;
       addUserProfilePicture(id: number, pictureName: string): Promise<void>;
-      removeUserProfilePicture(id: number, pictureIndex: number): Promise<void>;          
+      removeUserProfilePicture(id: number, pictureIndex: number): Promise<void>;
+      getMe(id: number): Promise<{
+        id: number;
+        email: string;
+        username: string;
+        profilePictureIndex: number;
+        profilePictures: string[];
+        bio: string;
+        tags: string[];
+        bornAt: Date;
+        isVerified: boolean;
+        location: { latitude: number | null; longitude: number | null };
+        createdAt: Date;
+      }>;
+      getUserPublic(id: number): Promise<{
+        id: number;
+        username: string;
+        profilePictureIndex: number | null;
+        profilePictures: string[] | null;
+        bio: string;
+        tags: string[];
+        location: { latitude: number | null; longitude: number | null };
+      }>;
     };
     authenticate(request: any, reply: any): Promise<void>;
   }
