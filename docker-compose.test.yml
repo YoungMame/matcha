@@ -1,0 +1,57 @@
+name: matcha-test
+
+services:
+  fastify:
+    container_name: fastify-app
+    depends_on:
+      - db
+    environment:
+      NODE_ENV: test
+      PG: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      PGDB: ${POSTGRES_DB}
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ${POSTGRES_DB}
+      PGHOST: db
+      PGPORT: 5432
+      RUN_SEED: ${RUN_SEED}
+      JWT_SECRET: ${JWT_SECRET}
+      COOKIE_SECRET: ${COOKIE_SECRET}
+    restart: on-failure
+    build: 
+        context: ./fastify
+        args:
+          NODE_ENV: test
+    expose:
+      - 3000
+    networks:
+      - router
+    # develop:
+    #   watch:
+    #     - action: sync
+    #       path: ./fastify/assets
+    #       target: /usr/src/app
+    #       ignore:
+    #         - node_modules/
+
+  db:
+    image: postgres:18-alpine3.22
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+     - pgdata:/var/lib/postgresql/data
+     - ./postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - router
+    ports:
+      - 5432:5432
+
+volumes:
+  pgdata:
+    driver: local
+
+networks:
+  router:
+    driver: bridge

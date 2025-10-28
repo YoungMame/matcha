@@ -15,7 +15,7 @@ import userServicePlugin from './services/UserService'
 // import custom plugins
 import authenticate from './plugins/authenticate'
 
-const buildApp = () => {
+export const buildApp = () => {
     const app = Fastify({
         logger: true
     });

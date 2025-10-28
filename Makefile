@@ -1,9 +1,12 @@
 compose_file_prod = docker-compose.prod.yml
 compose_file_dev  = docker-compose.dev.yml
+compose_file_test = docker-compose.test.yml
 
 all: build up
 
 dev: build_dev up_dev
+
+test: build_test up_test
 
 build:
 	docker compose -f $(compose_file_prod) build
@@ -17,6 +20,12 @@ build_dev:
 up_dev:
 	docker compose -f $(compose_file_dev) up --watch
 
+build_test:
+	docker compose -f $(compose_file_test) build
+
+up_test:
+	docker compose -f $(compose_file_test) up
+
 stop:
 	docker compose -f $(compose_file_prod) stop
 	docker compose -f $(compose_file_dev) stop
@@ -24,14 +33,18 @@ stop:
 clean down: stop
 	docker compose -f $(compose_file_prod) down
 	docker compose -f $(compose_file_dev) down
+	docker compose -f $(compose_file_test) down
 
 fclean purge: stop
 	docker compose -f $(compose_file_prod) down --volumes
 	docker compose -f $(compose_file_dev) down --volumes
+	docker compose -f $(compose_file_test) down --volumes
 	docker system prune --all --force --volumes
 
 re: stop down all
 
 re_dev: stop build_dev up_dev
 
-.PHONY: build up stop down re purge fclean clean debug re_dev build_dev up_dev
+re_test: stop build_test up_test
+
+.PHONY: build up stop down re purge fclean clean debug re_dev build_dev up_dev re_test build_test up_test test
