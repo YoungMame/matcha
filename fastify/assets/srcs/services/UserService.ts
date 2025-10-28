@@ -78,7 +78,7 @@ class UserService {
         const user = await this.getUser(userId);
         if (!user)
             throw new InternalServerError('User not found');
-        const jwt = await this.fastify.jwt.sign({ id: userId, email: email, username: username });
+        const jwt = await this.fastify.jwt.sign({ id: userId, email: email, username: username, isVerified: false});
         this.sendVerificationEmail(user);
         return (jwt);
     }
@@ -90,7 +90,7 @@ class UserService {
         const isValid = await PasswordManager.compare(password, user.passwordHash);
         if (!isValid)
             throw new UnauthorizedError();
-        const jwt = await this.fastify.jwt.sign({ id: user.id, email: user.email, username: user.username });
+        const jwt = await this.fastify.jwt.sign({ id: user.id, email: user.email, username: user.username, isVerified: user.isVerified });
         return (jwt);
     }
 
@@ -99,6 +99,40 @@ class UserService {
         if (!user)
             throw new NotFoundError();
         user.clearEmailCode("emailValidation");
+    }
+
+    async getMe(id: number): Promise<{
+        id: number;
+        email: string;
+        username: string;
+        profilePictureIndex: number;
+        profilePictures: string[];
+        bio: string;
+        tags: string[];
+        bornAt: Date;
+        isVerified: boolean;
+        location: { latitude: number | null; longitude: number | null };
+        createdAt: Date;
+    }> {
+        const user = await this.getUser(id);
+        if (!user)
+            throw new NotFoundError();
+        return {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            profilePictureIndex: user.profilePictureIndex,
+            profilePictures: user.profilePictures || [],
+            bio: user.bio || '',
+            tags: user.tags || [],
+            bornAt: user.bornAt,
+            isVerified: user.isVerified,
+            location: {
+                latitude: user.location?.latitude || null,
+                longitude: user.location?.longitude || null
+            },
+            createdAt: user.createdAt
+        };
     }
 
     async updateUserLocation(id: number, latitude: number, longitude: number): Promise<void> {
@@ -158,6 +192,32 @@ class UserService {
         await this.userModel.update(user.id, {
            profilePictures: user.profilePictures
         });
+    }
+
+    async getUserPublic(id: number): Promise<{
+        id: number;
+        username: string;
+        profilePictureIndex: number | null;
+        profilePictures: string[] | null;
+        bio: string;
+        tags: string[];
+        location: { latitude: number | null; longitude: number | null };
+    }> {
+        const user = await this.getUser(id);
+        if (!user)
+            throw new NotFoundError();
+        return {
+            id: user.id,
+            username: user.username,
+            profilePictureIndex: user.profilePictureIndex,
+            profilePictures: user.profilePictures || [],
+            bio: user.bio || '',
+            tags: user.tags || [],
+            location: {
+                latitude: user.location?.latitude || null,
+                longitude: user.location?.longitude || null
+            }
+        };
     }
 }
 

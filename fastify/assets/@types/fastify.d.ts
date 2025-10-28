@@ -19,6 +19,7 @@ declare module 'fastify' {
     id: number;
     email: string;
     username: string;
+    isVerified: boolean;
   }
 
   interface FastifyRequest {

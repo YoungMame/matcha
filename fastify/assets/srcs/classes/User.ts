@@ -16,7 +16,6 @@ export default class User {
     username: string;
     profilePictureIndex: number;
     profilePictures: string[];
-    gallery: string[];
     bio: string;
     tags: string[];
     bornAt: Date;
@@ -24,6 +23,7 @@ export default class User {
     gender: 'men' | 'women';
     orientation: 'heterosexual' | 'homosexual' | 'bisexual';
     location: Location | undefined;
+    createdAt: Date;
 
     static emailValidations: Map<number, EmailCode> = new Map<number, EmailCode>();
     static dfaValidations: Map<number, EmailCode> = new Map<number, EmailCode>();
@@ -36,14 +36,14 @@ export default class User {
         username: string, 
         profilePictureIndex: number,
         profilePictures: string[],
-        gallery: string[] = [],
         bio: string = '',
         tags: string[] = [],
-        bornAt: Date = new Date(),
+        bornAt: Date,
         isVerified: boolean = false,
         gender: 'men' | 'women' = 'men',
         orientation: 'heterosexual' | 'homosexual' | 'bisexual' = 'bisexual',
-        location: Location | undefined = undefined
+        location: Location | undefined = undefined,
+        createdAt: Date,
     ) {
         this.id = id;
         this.email = email;
@@ -51,7 +51,6 @@ export default class User {
         this.username = username;
         this.profilePictureIndex = profilePictureIndex;
         this.profilePictures = profilePictures;
-        this.gallery = gallery;
         this.bio = bio;
         this.tags = tags;
         this.bornAt = bornAt;
@@ -59,6 +58,7 @@ export default class User {
         this.gender = gender;
         this.orientation = orientation;
         this.location = location;
+        this.createdAt = createdAt;
     }
 
     static fromRow(row: any): User {
@@ -69,14 +69,14 @@ export default class User {
             row.username,
             row.profile_picture_index,
             row.profile_pictures,
-            row.gallery,
             row.bio,
             row.tags,
             new Date(row.born_at),
             row.is_verified,
             row.gender,
             row.orientation,
-            row.location
+            row.location,
+            new Date(row.created_at)
         );
     }
 

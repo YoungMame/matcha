@@ -8,7 +8,6 @@ CREATE TABLE if not exists users (
     username VARCHAR(255) UNIQUE NOT NULL,
     profile_picture_index INTEGER, -- index of selected profile picture
     profile_pictures TEXT[], -- array of image URLs
-    gallery TEXT[], -- array of image URLs
     bio TEXT DEFAULT '',
     tags TEXT[] , -- array of tags
     born_at DATE NOT NULL,
