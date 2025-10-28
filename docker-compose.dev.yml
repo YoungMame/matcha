@@ -33,6 +33,7 @@ services:
           target: /usr/src/app
           ignore:
             - node_modules/
+            - uploads/
   
   nextjs:
     container_name: nextjs-app

@@ -96,7 +96,7 @@ export default class UserModel {
         const fixedObj: UserProfile = {};
         for (const [key, value] of Object.entries(obj)) {
             fixedObj[snakeCase(key as string)] = value;
-            fixedObj[key] = undefined;
+            delete obj[key];
         }
         return fixedObj;
     }
@@ -104,12 +104,13 @@ export default class UserModel {
     update = async (id: number, user: UserProfile, location?: UserLocation) => {
         user = this.fixPropertiesCase(user);
         await this.fastify.pg.query(
-            `UPDATE users SET ${Object.entries(user).map(([key, value]) => `${key}=${value}`).join(', ')} WHERE id=${id}`,
+            `UPDATE users SET ${Object.entries(user).map(([key, _], index) => `${key}=$${index + 1}`).join(', ')} WHERE id=${id};`,
+            Object.values(user)
         );
         if (location)
         {
             await this.fastify.pg.query(
-                `UPDATE locations SET latitude=${location.latitude}, longitude=${location.longitude} WHERE user_id=${id}`,
+                `UPDATE locations SET latitude=${location.latitude}, longitude=${location.longitude} WHERE user_id=${id};`,
             );
         }
     }

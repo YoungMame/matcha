@@ -120,22 +120,22 @@ class UserService {
         await this.userModel.update(id, profile);
     }
 
-    async updateUserProfilePicture(id: number, pictureIndex: number): Promise<boolean> {
+    async updateUserProfilePicture(id: number, pictureIndex: number): Promise<string> {
         const user = await this.getUser(id);
         if (!user)
             throw new NotFoundError();
-        if (!user.profilePictures || user.profilePictures.length <= pictureIndex)
+        if (!user.profilePictures || !user.profilePictures[pictureIndex])
             throw new NotFoundError();
         user.profilePictureIndex = pictureIndex;
         await this.userModel.update(id, { profilePictureIndex: pictureIndex });
-        return (true);
+        return user.profilePictures[pictureIndex];
     }
 
     async addUserProfilePicture(id: number, pictureName: string): Promise<void> {
         const user = await this.getUser(id);
         if (!user)
             throw new NotFoundError();
-        user.profilePictures.push(pictureName);
+        user.profilePicture ? user.profilePictures.push(pictureName) : user.profilePictures = [pictureName];
         try {
             await this.userModel.update(user.id, {
                 profilePictures: user.profilePictures
@@ -144,7 +144,6 @@ class UserService {
             fs.unlinkSync(pictureName);
             throw error;
         }
-
     }
 
     async removeUserProfilePicture(id: number, pictureIndex: number): Promise<void> {

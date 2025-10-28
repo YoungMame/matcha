@@ -1,8 +1,9 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { FastifyRequest, FastifyReply, FastifyRequestUser } from 'fastify';
 import { AppError, UnauthorizedError, ForbiddenError, NotFoundError, BadRequestError } from '../../../utils/error';
 import path from 'path';
 import fs from 'fs';
 import pump from 'pump';
+import { url } from 'inspector';
 
 export const setProfilePictureIndexHandler = async (
     request: FastifyRequest,
@@ -13,12 +14,12 @@ export const setProfilePictureIndexHandler = async (
     } = request.params as any
 
     try {
-        const user = request.user;
-        const userId: number = (user as any)?.id; // TODO manage jwt in prehandler
+        const user = request.user as FastifyRequestUser | undefined;
+        const userId = user?.id;
         if (!userId)
             throw new UnauthorizedError();
-        await request.server.userService.updateUserProfilePicture(userId, index);
-        return reply.code(200).send({ message: 'User profile picture updated successfully' });
+        const url = await request.server.userService.updateUserProfilePicture(userId, index);
+        return reply.code(200).send({ message: 'User profile picture updated successfully', url });
     } catch (error) {
         if (error instanceof AppError)
             return reply.status(error.statusCode).send({ error: error.message });
@@ -44,19 +45,22 @@ export const addProfilePictureHandler = async (
         if (!file)
             throw (new BadRequestError());
 
-        const picturesDir = path.join(__dirname, '..', '..', 'assets', 'uploads', userId.toString());
+        const picturesDir = path.join(__dirname, '..', '..', '..', '..', 'uploads', userId.toString());
+        console.log("PICTURE DIR: ", picturesDir);
         if (!fs.existsSync(picturesDir)) {
             fs.mkdirSync(picturesDir, { recursive: true });
         }
 
-        const newFileName = `${new Date(Date.now()).toString()}.${file.mimetype}`;
+        const newFileName = `${new Date(Date.now()).valueOf()}_${(Math.random() * 100000).toFixed(0)}.${file.mimetype.split('/')[1]}`;
         const newFilePath = path.join(picturesDir, newFileName);
+        const newFileURL = `https://${process.env.DOMAIN || 'localhost'}/api/private/uploads/${userId}/${newFileName}`;
         console.log(newFileName);
         const dest = fs.createWriteStream(newFilePath);
         pump(file.file, dest);
-        await request.server.userService.addUserProfilePicture(userId, newFilePath);
-        return reply.code(200).send({ message: 'User profile picture updated successfully' });
+        await request.server.userService.addUserProfilePicture(userId, newFileURL);
+        return reply.code(200).send({ message: 'User profile picture updated successfully', url: newFileURL });
     } catch (error) {
+        console.error(error);
         if (error instanceof AppError)
             return reply.status(error.statusCode).send({ error: error.message });
         return reply.status(500).send({ error: 'Internal server error' });

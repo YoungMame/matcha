@@ -8,7 +8,7 @@ declare module 'fastify' {
       verifyEmail(id: number): Promise<void>;
       updateUserLocation(id: number, latitude: number, longitude: number): Promise<void>;
       updateUserProfile(id: number, profile: { bio?: string, tags?: string[], gender?: string, orientation?: string, bornAt?: Date }): Promise<void>;
-      updateUserProfilePicture(id: number, pictureIndex: number): Promise<boolean>;
+      updateUserProfilePicture(id: number, pictureIndex: number): Promise<string>;
       addUserProfilePicture(id: number, pictureName: string): Promise<void>;
       removeUserProfilePicture(id: number, pictureIndex: number): Promise<void>;          
     };

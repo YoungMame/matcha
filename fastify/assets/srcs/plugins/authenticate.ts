@@ -24,7 +24,6 @@ export default fp(async function(fastify, opts) {
 
             const token = result.value;
             const payload = fastify.jwt.verify(token) as { id: string, username: string, email: string };
-            console.log(payload);
             request.user = {
                 id: Number(payload.id),
                 username: payload.username,

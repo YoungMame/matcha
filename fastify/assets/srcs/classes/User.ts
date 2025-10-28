@@ -81,7 +81,7 @@ export default class User {
     }
 
     get profilePicture(): string {
-        if (this.profilePictures.length === 0)
+        if (!this.profilePictures || this.profilePictures.length === 0)
             return '';
         const profilePicture = this.profilePictures[this.profilePictureIndex];
         if (!profilePicture)

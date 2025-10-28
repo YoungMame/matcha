@@ -16,14 +16,15 @@ const profilePictureRoutes = async (fastify: FastifyInstance) => {
                 200: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        message: { type: 'string' },
+                        url: { type: 'string' }
                     },
                     additionalProperties: false
                 },
                 400: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        message: { type: 'string', }
                     },
                     additionalProperties: false
                 },
@@ -80,14 +81,16 @@ const profilePictureRoutes = async (fastify: FastifyInstance) => {
                 200: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        message: { type: 'string' },
+                        url: { type: 'string' }
+
                     },
                     additionalProperties: false
                 },
                 400: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        message: { type: 'string' },
                     },
                     additionalProperties: false
                 },

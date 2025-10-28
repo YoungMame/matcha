@@ -1,8 +1,7 @@
-import Fastify from 'fastify'
+import Fastify, { FastifyRequest } from 'fastify'
 import type { FastifyCookieOptions } from '@fastify/cookie'
 import cookie from '@fastify/cookie'
 import pg from '@fastify/postgres'
-import jwt from '@fastify/jwt'
 import ratelimit from '@fastify/rate-limit'
 import websocket from '@fastify/websocket'
 import multipart from '@fastify/multipart'
@@ -23,6 +22,18 @@ export const buildApp = () => {
         return { message: 'Debug route working' };
     });
 
+    app.register(multipart, {
+        limits: {
+            fieldNameSize: 100,
+            fieldSize: 100,
+            fields: 10,
+            fileSize: 1000000 * 50, // 50MB
+            files: 1,
+            headerPairs: 2000,
+            parts: 1000
+        }
+    });
+
     app.register(router);
 
     app.register(userServicePlugin);
@@ -34,18 +45,6 @@ export const buildApp = () => {
     app.register(ratelimit, {
         max: 200,
         timeWindow: '1 minute'
-    });
-
-    app.register(multipart, {
-        limits: {
-            fieldNameSize: 100,
-            fieldSize: 100,
-            fields: 10,
-            fileSize: 1000000,
-            files: 1,
-            headerPairs: 2000,
-            parts: 1000
-        }
     });
 
     app.register(authenticate);
