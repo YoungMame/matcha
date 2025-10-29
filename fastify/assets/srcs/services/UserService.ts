@@ -3,6 +3,7 @@ import User from "../classes/User";
 import UserModel from "../models/User";
 import fp from 'fastify-plugin';
 import fs from 'fs';
+import path from "path";
 import { FastifyInstance } from 'fastify';
 import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError } from "../utils/error";
 import commonPasswords from '../utils/1000-most-common-passwords.json';
@@ -191,7 +192,11 @@ class UserService {
         const pictureToRemove = user.profilePicture && user.profilePictures[pictureIndex];
         if (!pictureToRemove)
             throw new NotFoundError();
-        fs.unlinkSync(pictureToRemove);
+        const pictureUploadName = pictureToRemove.split('/uploads/')[1];
+        if (!pictureUploadName)
+            throw new NotFoundError();
+        const picturePath = path.join(__dirname, '..', '..', 'uploads', pictureUploadName);
+        fs.unlinkSync(picturePath);
         user.profilePictures = user.profilePictures.filter((_, index) => index !== pictureIndex);
         if (user.profilePictureIndex !== undefined) {
             if (pictureIndex < user.profilePictureIndex) {
