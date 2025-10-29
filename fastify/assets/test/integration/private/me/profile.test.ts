@@ -210,7 +210,7 @@ describe('User me profile integration tests', async () => {
             tags: 'not-an-array',
         };
         const meData = await editProperties(app, token, invalidProperties);
-        expect(meData).to.have.property('bio', 'Updated bio1');
+        expect(meData).to.have.property('bio', 'Updated bio');
         expect(meData).to.have.property('tags').that.includes.members(['newtag1', 'newtag2']);
     });
 
