@@ -45,7 +45,6 @@ export const addProfilePictureHandler = async (
             throw (new BadRequestError());
 
         const picturesDir = path.join(__dirname, '..', '..', '..', '..', 'uploads', userId.toString());
-        console.log("PICTURE DIR: ", picturesDir);
         if (!fs.existsSync(picturesDir)) {
             fs.mkdirSync(picturesDir, { recursive: true });
         }
@@ -53,7 +52,6 @@ export const addProfilePictureHandler = async (
         const newFileName = `${new Date(Date.now()).valueOf()}_${(Math.random() * 100000).toFixed(0)}.${file.mimetype.split('/')[1]}`;
         const newFilePath = path.join(picturesDir, newFileName);
         const newFileURL = `https://${process.env.DOMAIN || 'localhost'}/api/private/uploads/${userId}/${newFileName}`;
-        console.log(newFileName);
         const dest = fs.createWriteStream(newFilePath);
         pump(file.file, dest);
         await request.server.userService.addUserProfilePicture(userId, newFileURL);

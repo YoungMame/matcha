@@ -20,6 +20,8 @@ declare module 'fastify' {
         bio: string;
         tags: string[];
         bornAt: Date;
+        gender: string;
+        orientation: string;
         isVerified: boolean;
         location: { latitude: number | null; longitude: number | null };
         createdAt: Date;
@@ -31,6 +33,9 @@ declare module 'fastify' {
         profilePictures: string[] | undefined;
         bio: string;
         tags: string[];
+        bornAt: Date;
+        gender: string;
+        orientation: string;
         location: { latitude: number | null; longitude: number | null };
       }>;
     };

@@ -37,7 +37,7 @@
 		"build": "tsc -p tsconfig.json",
 		"start": "node ./srcs/server.js",
 		"test:unit": "mocha --require ts-node/register 'test/unit/**/*.test.ts' --watch",
-		"test:integration": "mocha --require ts-node/register 'test/integration/**/*.test.ts' --watch",
+		"test:integration": "mocha --require ts-node/register 'test/integration/**/*.test.ts'",
 		"seed": "ts-node ./seed/seed.ts"
 	}
 }

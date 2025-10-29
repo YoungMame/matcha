@@ -110,6 +110,8 @@ class UserService {
         bio: string;
         tags: string[];
         bornAt: Date;
+        orientation: string;
+        gender: string;
         isVerified: boolean;
         location: { latitude: number | null; longitude: number | null };
         createdAt: Date;
@@ -126,6 +128,8 @@ class UserService {
             bio: user.bio || '',
             tags: user.tags || [],
             bornAt: user.bornAt,
+            orientation: user.orientation,
+            gender: user.gender,
             isVerified: user.isVerified,
             location: {
                 latitude: user.location?.latitude || null,
@@ -218,6 +222,9 @@ class UserService {
         profilePictures: string[] | undefined;
         bio: string;
         tags: string[];
+        bornAt: Date;
+        gender: string;
+        orientation: string;
         location: { latitude: number | null; longitude: number | null };
     }> {
         const user = await this.getUser(id);
@@ -230,6 +237,9 @@ class UserService {
             profilePictures: user.profilePictures || [],
             bio: user.bio || '',
             tags: user.tags || [],
+            bornAt: user.bornAt,
+            gender: user.gender,
+            orientation: user.orientation,
             location: {
                 latitude: user.location?.latitude || null,
                 longitude: user.location?.longitude || null

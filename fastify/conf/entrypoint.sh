@@ -11,6 +11,7 @@ elif [ "$NODE_ENV" = "test" ]; then
     echo "Running unit tests"
     # pnpm test:unit
     exec pnpm test:integration
+    echo $?
 else
     exec pnpm start
 fi

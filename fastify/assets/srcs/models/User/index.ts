@@ -13,6 +13,7 @@ type UserProfile = {
     string?: string[];
     gender?: string;
     orientation?: string;
+    bornAt?: Date | string;
 };
 
 type UserLocation = {
@@ -45,15 +46,16 @@ export default class UserModel {
 
     }
 
-    findLocationByUserId = async (userId: number): Promise<Object> => {
+    findLocationByUserId = async (userId: number): Promise<{ latitude?: number | undefined; longitude?: number | undefined; updatedAt?: Date | undefined }> => {
         const result = await this.fastify.pg.query(
-            'SELECT * FROM locations WHERE user_id=$1', [userId]
+            'SELECT * FROM locations WHERE user_id=$1 ORDER BY updated_at DESC LIMIT 1', [userId]
         );
-        return ({
-            latitude: result.rows[0]?.latitude || undefined,
-            longitude: result.rows[0]?.longitude || undefined,
-            updatedAt: result.rows[0] ? new Date(result.rows[0].updated_at) : undefined 
-        });
+        const row = result.rows[0];
+        return {
+            latitude: row ? row.latitude : undefined,
+            longitude: row ? row.longitude : undefined,
+            updatedAt: row && row.updated_at ? new Date(row.updated_at) : undefined
+        };
     }
 
     findById = async (id: number) => {
@@ -104,23 +106,48 @@ export default class UserModel {
     private fixPropertiesCase = (obj: UserProfile): UserProfile => {
         const fixedObj: UserProfile = {};
         for (const [key, value] of Object.entries(obj)) {
-            fixedObj[snakeCase(key as string)] = value;
-            delete obj[key];
+            const newKey = snakeCase(key as string);
+            if (newKey !== key) {
+                fixedObj[newKey] = value;
+                delete obj[key];
+            } else {
+                fixedObj[key] = value;
+            }
         }
         return fixedObj;
     }
 
     update = async (id: number, user: UserProfile, location?: UserLocation) => {
         user = this.fixPropertiesCase(user);
-        await this.fastify.pg.query(
-            `UPDATE users SET ${Object.entries(user).map(([key, _], index) => `${key}=$${index + 1}`).join(', ')} WHERE id=${id};`,
-            Object.values(user)
-        );
-        if (location)
+        if (user.bornAt instanceof Date) {
+            user.bornAt = user.bornAt.toISOString();
+        }
+        const userKeysCount = Object.keys(user).length;
+        if (userKeysCount > 0)
         {
             await this.fastify.pg.query(
-                `UPDATE locations SET latitude=${location.latitude}, longitude=${location.longitude} WHERE user_id=${id};`,
+                `UPDATE users SET ${Object.entries(user).map(([key, _], index) => `${key}=$${index + 1}`).join(', ')} WHERE id=${id};`,
+                Object.values(user)
             );
+        }
+        if (location)
+        {
+            const rows = await this.fastify.pg.query(
+                `SELECT * FROM locations WHERE user_id=${id};`,
+            );
+            if (rows.rows.length === 0)
+            {
+                await this.fastify.pg.query(
+                    `INSERT INTO locations (user_id, latitude, longitude) VALUES (${id}, ${location.latitude}, ${location.longitude});`,
+                );
+                return;
+            }
+            else
+            {
+                await this.fastify.pg.query(
+                    `UPDATE locations SET latitude=${location.latitude}, longitude=${location.longitude} WHERE user_id=${id};`,
+                );
+            }
         }
     }
 
@@ -128,5 +155,5 @@ export default class UserModel {
         await this.fastify.pg.query(
             `DELETE FROM users WHERE id=${id}`
         );
-    }   
+    }  
 }

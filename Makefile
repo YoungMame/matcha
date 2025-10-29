@@ -24,7 +24,7 @@ build_test:
 	docker compose -f $(compose_file_test) build
 
 up_test:
-	docker compose -f $(compose_file_test) up
+	docker compose -f $(compose_file_test) up --watch
 
 stop:
 	docker compose -f $(compose_file_prod) stop

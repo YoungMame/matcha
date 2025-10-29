@@ -1,7 +1,7 @@
 import chai from 'chai';
 const expect = chai.expect;
 import { buildApp } from '../../../../srcs/app';
-import { FastifyInstance, FastifyReply } from 'fastify';
+import { FastifyInstance } from 'fastify';
 
 import FormData from 'form-data'
 import path from 'path'
@@ -87,7 +87,6 @@ describe('User picture integration tests', async () => {
         });
         expect(meResponseBefore.statusCode).to.equal(200);
         const meResponseBeforeBody = JSON.parse(meResponseBefore.body);
-        console.log(meResponseBeforeBody);
         expect(meResponseBeforeBody.profilePictureIndex).to.equal(undefined);
 
         const addPictureResponse = await addPicture(app, token as string);
@@ -102,7 +101,6 @@ describe('User picture integration tests', async () => {
         });
         expect(meResponse.statusCode).to.equal(200);
         const meResponseBody = JSON.parse(meResponse.body);
-        console.log(meResponseBody);
         expect(meResponseBody.profilePictureIndex).to.equal(0);
     });
 
