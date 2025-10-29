@@ -15,7 +15,7 @@ declare module 'fastify' {
         id: number;
         email: string;
         username: string;
-        profilePictureIndex: number;
+        profilePictureIndex: number | undefined;
         profilePictures: string[];
         bio: string;
         tags: string[];
@@ -27,8 +27,8 @@ declare module 'fastify' {
       getUserPublic(id: number): Promise<{
         id: number;
         username: string;
-        profilePictureIndex: number | null;
-        profilePictures: string[] | null;
+        profilePictureIndex: number | undefined;
+        profilePictures: string[] | undefined;
         bio: string;
         tags: string[];
         location: { latitude: number | null; longitude: number | null };

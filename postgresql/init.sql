@@ -9,7 +9,7 @@ CREATE TABLE if not exists users (
     profile_picture_index INTEGER, -- index of selected profile picture
     profile_pictures TEXT[], -- array of image URLs
     bio TEXT DEFAULT '',
-    tags TEXT[] , -- array of tags
+    tags TEXT[], -- array of tags
     born_at DATE NOT NULL,
     is_verified BOOLEAN DEFAULT FALSE,
     gender GENDER NOT NULL,

@@ -2,7 +2,6 @@ import PasswordManager from "../utils/password";
 import User from "../classes/User";
 import UserModel from "../models/User";
 import fp from 'fastify-plugin';
-import path from 'path';
 import fs from 'fs';
 import { FastifyInstance } from 'fastify';
 import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError } from "../utils/error";
@@ -105,7 +104,7 @@ class UserService {
         id: number;
         email: string;
         username: string;
-        profilePictureIndex: number;
+        profilePictureIndex: number | undefined;
         profilePictures: string[];
         bio: string;
         tags: string[];
@@ -169,12 +168,17 @@ class UserService {
         const user = await this.getUser(id);
         if (!user)
             throw new NotFoundError();
+        if (user.profilePictureIndex === undefined)
+            user.profilePictureIndex = 0;
         user.profilePicture ? user.profilePictures.push(pictureName) : user.profilePictures = [pictureName];
         try {
             await this.userModel.update(user.id, {
-                profilePictures: user.profilePictures
+                profilePictures: user.profilePictures,
+                profilePictureIndex: user.profilePictureIndex
             });
         } catch (error) {
+            user.profilePictures.pop();
+            user.profilePictureIndex = (user.profilePictures.length === 0) ? undefined : 0;
             fs.unlinkSync(pictureName);
             throw error;
         }
@@ -189,16 +193,24 @@ class UserService {
             throw new NotFoundError();
         fs.unlinkSync(pictureToRemove);
         user.profilePictures = user.profilePictures.filter((_, index) => index !== pictureIndex);
+        if (user.profilePictureIndex !== undefined) {
+            if (pictureIndex < user.profilePictureIndex) {
+                user.profilePictureIndex -= 1;
+            } else if (pictureIndex === user.profilePictureIndex) {
+                user.profilePictureIndex = user.profilePictures.length > 0 ? 0 : undefined;
+            }
+        }
         await this.userModel.update(user.id, {
-           profilePictures: user.profilePictures
+           profilePictures: user.profilePictures,
+           profilePictureIndex: (user.profilePictureIndex == undefined ? null : user.profilePictureIndex)
         });
     }
 
     async getUserPublic(id: number): Promise<{
         id: number;
         username: string;
-        profilePictureIndex: number | null;
-        profilePictures: string[] | null;
+        profilePictureIndex: number | undefined;
+        profilePictures: string[] | undefined;
         bio: string;
         tags: string[];
         location: { latitude: number | null; longitude: number | null };

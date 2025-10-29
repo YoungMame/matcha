@@ -76,12 +76,26 @@ describe('User picture integration tests', () => {
         };
         const token = await signUpAndGetToken(app, userData);
         expect(token).to.be.a('string');
+
+        // Get undefined index before adding picture
+        const meResponseBefore = await app.inject({
+            method: 'GET',
+            url: '/private/user/me/profile',
+            headers: {
+                'Cookie': `jwt=${token}`
+            }
+        });
+        expect(meResponseBefore.statusCode).to.equal(200);
+        const meResponseBeforeBody = JSON.parse(meResponseBefore.body);
+        console.log(meResponseBeforeBody);
+        expect(meResponseBeforeBody.profilePictureIndex).to.equal(undefined);
+
         const addPictureResponse = await addPicture(app, token as string);
         expect(addPictureResponse.statusCode).to.equal(200);
 
         const meResponse = await app.inject({
             method: 'GET',
-            url: '/private/user/me',
+            url: '/private/user/me/profile',
             headers: {
                 'Cookie': `jwt=${token}`
             }

@@ -14,7 +14,7 @@ export default class User {
     email: string;
     passwordHash: string;
     username: string;
-    profilePictureIndex: number;
+    profilePictureIndex: number | undefined;
     profilePictures: string[];
     bio: string;
     tags: string[];
@@ -33,8 +33,8 @@ export default class User {
         id: number,
         email: string,
         passwordHash: string,
-        username: string, 
-        profilePictureIndex: number,
+        username: string,
+        profilePictureIndex: number | undefined,
         profilePictures: string[],
         bio: string = '',
         tags: string[] = [],
@@ -81,7 +81,7 @@ export default class User {
     }
 
     get profilePicture(): string {
-        if (!this.profilePictures || this.profilePictures.length === 0)
+        if (!this.profilePictures || this.profilePictures.length === 0 || this.profilePictureIndex === undefined)
             return '';
         const profilePicture = this.profilePictures[this.profilePictureIndex];
         if (!profilePicture)

@@ -3,7 +3,6 @@ import { AppError, UnauthorizedError, ForbiddenError, NotFoundError, BadRequestE
 import path from 'path';
 import fs from 'fs';
 import pump from 'pump';
-import { url } from 'inspector';
 
 export const setProfilePictureIndexHandler = async (
     request: FastifyRequest,

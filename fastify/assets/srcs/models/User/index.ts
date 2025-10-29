@@ -8,7 +8,7 @@ type UserProfile = {
     email?: string;
     bio?: string;
     tags?: string[];
-    profilePictureIndex?: number;
+    profilePictureIndex?: number | null;
     profilePictures?: string[];
     string?: string[];
     gender?: string;
@@ -22,6 +22,12 @@ type UserLocation = {
 
 export default class UserModel {
     constructor(private fastify: FastifyInstance) {}
+
+    private nullToUndefined = (row: any) => {
+        if (!row) return;
+        if (row.profile_picture_index === null) row.profile_picture_index = undefined;
+        if (row.profilePictureIndex === null) row.profilePictureIndex = undefined;
+    }
 
     insert = async (email: string, password_hash: string, username: string, born_at: Date, gender: string, orientation: string) => {
         try {
@@ -57,6 +63,7 @@ export default class UserModel {
         if (result.rows.length === 0) {
             throw new UnauthorizedError;
         }
+        this.nullToUndefined(result.rows[0]);
         const location = await this.findLocationByUserId(result.rows[0].id);
         result.rows[0].location = location;
         return result.rows[0];
@@ -69,6 +76,7 @@ export default class UserModel {
         if (result.rows.length === 0) {
             throw new UnauthorizedError;
         }
+        this.nullToUndefined(result.rows[0]);
         const location = await this.findLocationByUserId(result.rows[0].id);
         result.rows[0].location = location;
         return result.rows[0];
@@ -81,6 +89,7 @@ export default class UserModel {
         if (result.rows.length === 0) {
             throw new UnauthorizedError;
         }
+        this.nullToUndefined(result.rows[0]);
         const location = await this.findLocationByUserId(result.rows[0].id);
         result.rows[0].location = location
         return result.rows[0];
