@@ -17,7 +17,6 @@ type UserEntry = {
   email: string;
   bio: string;
   password_hash: string;
-  password_salt: string;
   created_at: number;
   gender: string;
   orientation: string;
@@ -57,25 +56,22 @@ async function waitForDbReady(retries = 60, delayMs = 2000) {
 async function seed() {
     await waitForDbReady();
     console.log("Database is ready, proceeding with seed...");
-    console.log(dataset.length);
     await client.connect();
     try {
         for (let i = 0; i < dataset.length; i += BATCH_SIZE) {
-            console.log("for");
             const batch = (dataset as UserEntry[]).slice(i, i + BATCH_SIZE);
             await client.query('BEGIN');
 
             // 1) Insert users (parametrized multi-row) with ON CONFLICT DO NOTHING
             const values: any[] = [];
             const rows = batch.map((u, idx) => {
-                const base = idx * 12; // number of columns per user below
+                const base = idx * 11; // number of columns per user below
                 const pp = `https://randomuser.me/api/portraits/${u.gender}/${Math.floor(Math.random()*100)}.jpg`;
                 values.push(
                 u.username,
                 u.email,
                 u.bio,
                 u.password_hash,
-                u.password_salt,
                 u.gender,
                 u.orientation,
                 parseTags(u.tags),
@@ -84,17 +80,15 @@ async function seed() {
                 0, // profile_pictures_index
                 new Date(u.born_at).toISOString()
                 );
-                return `($${base + 1},$${base + 2},$${base + 3},$${base + 4},$${base + 5},$${base + 6},$${base + 7},$${base + 8},$${base + 9},$${base + 10},$${base + 11},$${base + 12})`;
+                return `($${base + 1},$${base + 2},$${base + 3},$${base + 4},$${base + 5},$${base + 6},$${base + 7},$${base + 8},$${base + 9},$${base + 10},$${base + 11})`;
             }).join(',');
 
             const insertUsersSql = `
                 INSERT INTO users
-                (username, email, bio, password_hash, password_salt, gender, orientation, tags, fame_rate, profile_pictures, profile_picture_index, born_at)
+                (username, email, bio, password_hash, gender, orientation, tags, fame_rate, profile_pictures, profile_picture_index, born_at)
                 VALUES ${rows}
             `;
-            console.log("insertUsersSql: " + insertUsersSql);
             await client.query(insertUsersSql, values);
-            console.log("User insertion completed.");
 
             // 2) Ensure we have ids for all emails (existing users also)
             const emails = batch.map(u => u.email);
@@ -123,7 +117,6 @@ async function seed() {
             }
 
             await client.query('COMMIT');
-            console.log(`Seeded users ${i + 1}..${Math.min(i + BATCH_SIZE, dataset.length)}`);
         }
     } catch (err) {
         await client.query('ROLLBACK');
