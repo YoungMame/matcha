@@ -1,4 +1,5 @@
 import 'fastify';
+import ws from 'ws';
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -41,7 +42,7 @@ declare module 'fastify' {
     };
     webSocketService: {
       handleClientMessage(id: number, message: string): void;
-      addConnection(id: number, ws: WebSocket): void;
+      addConnection(id: number, ws: WebSocket.WebSocket): void;
       removeConnection(id: number): void;
       closeConnection(id: number): void;
       sendMessage(id: number, data: DataTypes[types.MESSAGE]): void;
@@ -49,7 +50,7 @@ declare module 'fastify' {
       sendLikeBack(id: number, data: DataTypes[types.LIKE_BACK]): void;
       sendUnlike(id: number, data: DataTypes[types.UNLIKE]): void;
       sendProfileViewed(id: number, data: DataTypes[types.VIEWED]): void;
-      findUserBySocket(ws: WebSocket): number | undefined;
+      findUserBySocket(ws: WebSocket.WebSocket): number | undefined;
     };
     authenticate(request: any, reply: any): Promise<void>;
   }

@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError } from "../utils/error";
 import fp from 'fastify-plugin';
+import ws from 'ws';
 
 type id = number;
 
@@ -46,11 +47,11 @@ export type WebSocketMessageDataType = WebSocketMessageDataTypes[keyof WebSocket
 
 class WebSocketService {
     private fastify: FastifyInstance;
-    private activeConns: Map<id, WebSocket>;
+    private activeConns: Map<id, ws.WebSocket>;
 
     constructor(fastify: FastifyInstance) {
         this.fastify = fastify;
-        this.activeConns = new Map<id, WebSocket>();
+        this.activeConns = new Map<id, ws.WebSocket>();
     }
 
     public handleClientMessage(id: id, message: string) {
@@ -77,7 +78,7 @@ class WebSocketService {
         }
     }
 
-    public addConnection(id: id, ws: WebSocket) {
+    public addConnection(id: id, ws: ws.WebSocket) {
         this.activeConns.set(id, ws);
         this.fastify.log.info(`WebSocket connection ${id} added.`);
     }
@@ -86,7 +87,7 @@ class WebSocketService {
         this.activeConns.delete(id);
     }
 
-    public findUserBySocket(socket: WebSocket): id | undefined {
+    public findUserBySocket(socket: ws.WebSocket): id | undefined {
         for (const [id, ws] of this.activeConns.entries()) {
             if (ws === socket) {
                 return id;

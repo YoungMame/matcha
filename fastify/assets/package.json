@@ -16,7 +16,8 @@
 		"fastify-plugin": "^5.1.0",
 		"pg": "^8.16.3",
 		"pump": "^3.0.3",
-		"text-case": "^1.2.9"
+		"text-case": "^1.2.9",
+		"ws": "^8.18.3"
 	},
 	"devDependencies": {
 		"@types/bcrypt": "^6.0.0",
