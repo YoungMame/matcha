@@ -1,6 +1,7 @@
 import PasswordManager from "../utils/password";
 import User from "../classes/User";
 import UserModel from "../models/User";
+import LikeModel from "../models/Like";
 import fp from 'fastify-plugin';
 import fs from 'fs';
 import path from "path";
@@ -12,11 +13,13 @@ import { WebSocketMessageTypes, WebSocketMessageDataTypes, WebSocketMessageDataT
 class UserService {
     private fastify: FastifyInstance;
     private userModel: UserModel;
+    private likeModel: LikeModel;
     UsersCache: Map<number, User>;
 
     constructor(fastify: FastifyInstance) {
         this.fastify = fastify;
         this.userModel = new UserModel(fastify);
+        this.likeModel = new LikeModel(fastify);
         this.UsersCache = new Map<number, User>();
     }
 
@@ -256,6 +259,18 @@ class UserService {
             chatId: Math.floor(Math.random() * 1000000), // Example chat ID
             content: content,
             createdAt: new Date()
+        };
+        this.fastify.webSocketService.sendMessage(receiverId, data);
+    }
+
+    async sendLike(senderId: number, receiverId: number): Promise<void> {
+        // TODO check if user as a pp and is verified before he can be liked
+        // TODO check if they liked back and create a chat
+        const like = await this.likeModel.insert(senderId, receiverId)
+        const data: WebSocketMessageDataTypes[WebSocketMessageTypes.LIKE] = {
+            id: like.id,
+            likerId: like.likedId,
+            createdAt: like.createdAt
         };
         this.fastify.webSocketService.sendMessage(receiverId, data);
     }

@@ -11,6 +11,8 @@ declare module 'fastify' {
       updateUserProfilePicture(id: number, pictureIndex: number): Promise<string>;
       addUserProfilePicture(id: number, pictureName: string): Promise<void>;
       removeUserProfilePicture(id: number, pictureIndex: number): Promise<void>;
+      sendMessage(senderId: number, receiverId: number, content: string): Promise<void>;
+      sendLike(senderId: number, receiverId: number): Promise<void>;
       getMe(id: number): Promise<{
         id: number;
         email: string;

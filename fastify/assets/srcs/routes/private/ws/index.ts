@@ -13,7 +13,6 @@ export default async function wsRoutes(fastify: FastifyInstance, options: Fastif
         socket.on('message', (message: string) => {
             fastify.webSocketService.handleClientMessage(userId, message);
             fastify.log.debug(`WS: Received message: ${message}`);
-            socket.send('hi from server');
         })
         socket.on('close', () => {
             fastify.webSocketService.removeConnection(userId);

@@ -15,9 +15,6 @@ const indexRoutes = async (fastify: FastifyInstance) => {
 
     fastify.register(async function(instance) {
         instance.addHook('preHandler', async (request, reply) => {
-            console.log('Authenticating request to private routes: ', request.url);
-            console.log('Cookies: ', request.cookies);
-            console.log('Headers: ', request.headers);
             await instance.authenticate(request, reply);
         });
         instance.register(privateRoutes, { prefix: '/private' });

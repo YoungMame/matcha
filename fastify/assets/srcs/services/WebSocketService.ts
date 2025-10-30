@@ -5,11 +5,11 @@ import fp from 'fastify-plugin';
 type id = number;
 
 export enum WebSocketMessageTypes {
-    MESSAGE = "message_received",
-    LIKE = "like_received",
-    LIKE_BACK = "like_back_received",
-    UNLIKE = "unlike_received",
-    VIEWED = "profile_viewed"
+    MESSAGE = "message",
+    LIKE = "like",
+    LIKE_BACK = "like_back",
+    UNLIKE = "unlike",
+    VIEWED = "profile"
 }
 
 export interface WebSocketMessageDataTypes {
@@ -61,11 +61,11 @@ class WebSocketService {
         switch (raw.type) {
             case WebSocketMessageTypes.MESSAGE:
                 this.fastify.log.info(`User ${id} tried to send message to ${raw.targetId}: ${raw.content}`);
-                // this.fastify.userService.sendMessage(id, targetId, raw.content);
+                this.fastify.userService.sendMessage(id, raw.targetId, raw.content);
                 break;
             case WebSocketMessageTypes.LIKE:
                 this.fastify.log.info(`User ${id} liked user ${raw.targetId}`);
-                // this.fastify.userService.likeUser(id, targetId);
+                this.fastify.userService.sendLike(id, raw.targetId);
                 break;
             case WebSocketMessageTypes.UNLIKE:
                 this.fastify.log.info(`User ${id} unliked user ${raw.targetId}`);

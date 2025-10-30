@@ -11,13 +11,18 @@ export interface Like {
 export default class LikeModel {
     constructor(private fastify: FastifyInstance) {}
 
-    insert = async (likerId: number, likedId: number): Promise<number> => {
+    insert = async (likerId: number, likedId: number): Promise<Like> => {
         try {
             const result = await this.fastify.pg.query(
                 'INSERT INTO likes (liker_id, liked_id) VALUES ($1, $2) RETURNING id',
                 [likerId, likedId]
             );
-            return result.rows[0].id;
+            return {
+                id: result.rows[0].id,
+                likerId: result.rows[0].likerId,
+                likedId: result.rows[0].likedId,
+                createdAt: result.rows[0].createdAt
+            };
         } catch (error) {
             this.fastify.log.error((error as Error).message || undefined);
             throw new InternalServerError('Error inserting like');
