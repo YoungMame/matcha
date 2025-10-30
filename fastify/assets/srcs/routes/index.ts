@@ -1,10 +1,11 @@
 import { FastifyInstance } from 'fastify';
 import authRoutes from './auth';
 import privateRoutes from './private';
+import wsRoutes from './ws';
 
 const indexRoutes = async (fastify: FastifyInstance) => {
     fastify.get('/', async () => {
-        return { message: 'Welcome to the API', routes: ['/auth', '/private'] };
+        return { message: 'Welcome to the API', routes: ['/auth', '/private', '/ws'] };
     });
     
     fastify.get('/hello', async () => {
@@ -18,6 +19,7 @@ const indexRoutes = async (fastify: FastifyInstance) => {
             await instance.authenticate(request, reply);
         });
         instance.register(privateRoutes, { prefix: '/private' });
+        instance.register(wsRoutes, { prefix: '/ws' });
     });
 }
 

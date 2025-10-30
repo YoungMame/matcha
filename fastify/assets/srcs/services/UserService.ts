@@ -7,6 +7,7 @@ import path from "path";
 import { FastifyInstance } from 'fastify';
 import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError } from "../utils/error";
 import commonPasswords from '../utils/1000-most-common-passwords.json';
+import { WebSocketMessageTypes, WebSocketMessageDataTypes, WebSocketMessageDataType } from "./WebSocketService";
 
 class UserService {
     private fastify: FastifyInstance;
@@ -245,6 +246,18 @@ class UserService {
                 longitude: user.location?.longitude || null
             }
         };
+    }
+
+    async sendMessage(senderId: number, receiverId: number, content: string): Promise<void> {
+        // Implementation for sending a message
+        const data: WebSocketMessageDataTypes[WebSocketMessageTypes.MESSAGE] = {
+            id: Math.floor(Math.random() * 1000000), // Example message ID
+            senderId: senderId,
+            chatId: Math.floor(Math.random() * 1000000), // Example chat ID
+            content: content,
+            createdAt: new Date()
+        };
+        this.fastify.webSocketService.sendMessage(receiverId, data);
     }
 }
 

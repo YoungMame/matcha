@@ -34,6 +34,21 @@ export const buildApp = () => {
         }
     });
 
+    app.register(websocket, {
+        errorHandler(error, socket, request, reply) {
+            // TODO call websocketServicePlugin.closeConn(websocketServicePlugin.findUserBySocket(socket));
+            socket.terminate();
+        },
+        options: {
+            maxPayload: 1048576,
+            verifyClient: function (info: any, next: any) {
+                if (!(info?.req?.user))
+                    return next(false);
+                next(true); // the connection is allowed
+            }
+        }
+    });
+
     app.register(router);
 
     app.register(userServicePlugin);

@@ -39,6 +39,17 @@ declare module 'fastify' {
         location: { latitude: number | null; longitude: number | null };
       }>;
     };
+    webSocketService: {
+      handleClientMessage(id: number, message: string): void;
+      addConnection(id: number, ws: WebSocket): void;
+      removeConnection(id: number): void;
+      closeConnection(id: number): void;
+      sendMessage(id: number, data: DataTypes[types.MESSAGE]): void;
+      sendLike(id: number, data: DataTypes[types.LIKE]): void;
+      sendLikeBack(id: number, data: DataTypes[types.LIKE_BACK]): void;
+      sendUnlike(id: number, data: DataTypes[types.UNLIKE]): void;
+      sendProfileViewed(id: number, data: DataTypes[types.VIEWED]): void;
+    };
     authenticate(request: any, reply: any): Promise<void>;
   }
 
