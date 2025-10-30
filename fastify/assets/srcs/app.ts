@@ -41,12 +41,7 @@ export const buildApp = () => {
             socket.terminate();
         },
         options: {
-            maxPayload: 1048576,
-            verifyClient: function (info: any, next: any) {
-                if (!(info?.req?.user))
-                    return next(false);
-                next(true); // the connection is allowed
-            }
+            maxPayload: 1048576
         }
     });
 

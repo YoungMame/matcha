@@ -1,7 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import authRoutes from './auth';
 import privateRoutes from './private';
-import wsRoutes from './ws';
 
 const indexRoutes = async (fastify: FastifyInstance) => {
     fastify.get('/', async () => {
@@ -16,10 +15,12 @@ const indexRoutes = async (fastify: FastifyInstance) => {
 
     fastify.register(async function(instance) {
         instance.addHook('preHandler', async (request, reply) => {
+            console.log('Authenticating request to private routes: ', request.url);
+            console.log('Cookies: ', request.cookies);
+            console.log('Headers: ', request.headers);
             await instance.authenticate(request, reply);
         });
         instance.register(privateRoutes, { prefix: '/private' });
-        instance.register(wsRoutes, { prefix: '/ws' });
     });
 }
 
