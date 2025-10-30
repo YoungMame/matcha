@@ -86,6 +86,15 @@ class WebSocketService {
         this.activeConns.delete(id);
     }
 
+    public findUserBySocket(socket: WebSocket): id | undefined {
+        for (const [id, ws] of this.activeConns.entries()) {
+            if (ws === socket) {
+                return id;
+            }
+        }
+        return undefined;
+    }
+
     public closeConnection(id: id) {
         const ws = this.activeConns.get(id);
         if (ws) {

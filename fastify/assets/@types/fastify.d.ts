@@ -49,6 +49,7 @@ declare module 'fastify' {
       sendLikeBack(id: number, data: DataTypes[types.LIKE_BACK]): void;
       sendUnlike(id: number, data: DataTypes[types.UNLIKE]): void;
       sendProfileViewed(id: number, data: DataTypes[types.VIEWED]): void;
+      findUserBySocket(ws: WebSocket): number | undefined;
     };
     authenticate(request: any, reply: any): Promise<void>;
   }

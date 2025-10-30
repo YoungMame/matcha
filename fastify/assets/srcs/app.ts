@@ -9,6 +9,7 @@ import multipart from '@fastify/multipart'
 // import routes
 import router from './routes'
 // import services
+import websocketServicePlugin from './services/WebSocketService'
 import userServicePlugin from './services/UserService'
 // import custom plugins
 import authenticate from './plugins/authenticate'
@@ -52,6 +53,8 @@ export const buildApp = () => {
     app.register(router);
 
     app.register(userServicePlugin);
+
+    app.register(websocketServicePlugin);
 
     app.register(pg, {
         connectionString: process.env.PG
