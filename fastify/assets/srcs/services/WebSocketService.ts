@@ -107,9 +107,14 @@ class WebSocketService {
     private sendTo(id: id, type: string, data: WebSocketMessageDataType) {
         const ws = this.activeConns.get(id);
         if (!ws || ws.readyState !== ws.OPEN) {
+            this.fastify.log.warn(`WebSocket connection ${id} is not open`);
             return;
         }
-        ws.send(JSON.stringify({ type, data }));
+        try {
+            ws.send(JSON.stringify({ type, data }));
+        } catch (error) {
+            this.fastify.log.error(`Error sending WebSocket message: ${error || ""}`);
+        }
     }
 
     private broadcast(type: string, data: WebSocketMessageDataType) {

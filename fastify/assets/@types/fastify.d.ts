@@ -28,7 +28,7 @@ declare module 'fastify' {
         location: { latitude: number | null; longitude: number | null };
         createdAt: Date;
       }>;
-      getUserPublic(id: number): Promise<{
+      getUserPublic(id: number | string): Promise<{
         id: number;
         username: string;
         profilePictureIndex: number | undefined;

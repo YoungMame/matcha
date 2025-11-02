@@ -219,7 +219,7 @@ class UserService {
         });
     }
 
-    async getUserPublic(id: number): Promise<{
+    async getUserPublic(id: number | string): Promise<{
         id: number;
         username: string;
         profilePictureIndex: number | undefined;
@@ -272,7 +272,7 @@ class UserService {
             likerId: like.likedId,
             createdAt: like.createdAt
         };
-        this.fastify.webSocketService.sendMessage(receiverId, data);
+        this.fastify.webSocketService.sendLike(receiverId, data);
     }
 }
 
