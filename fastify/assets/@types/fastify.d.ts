@@ -13,6 +13,8 @@ declare module 'fastify' {
       removeUserProfilePicture(id: number, pictureIndex: number): Promise<void>;
       sendMessage(senderId: number, receiverId: number, content: string): Promise<void>;
       sendLike(senderId: number, receiverId: number): Promise<void>;
+      sendUnlike(senderId: number, receiverId: number): Promise<void>;
+      getLikes(userId: number): Promise<Like[]>;
       getMe(id: number): Promise<{
         id: number;
         email: string;

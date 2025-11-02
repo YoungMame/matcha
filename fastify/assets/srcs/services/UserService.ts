@@ -2,24 +2,28 @@ import PasswordManager from "../utils/password";
 import User from "../classes/User";
 import UserModel from "../models/User";
 import LikeModel from "../models/Like";
+// import ChatModel from "../models/Chat";
 import fp from 'fastify-plugin';
 import fs from 'fs';
 import path from "path";
 import { FastifyInstance } from 'fastify';
-import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError } from "../utils/error";
+import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError, ForbiddenError } from "../utils/error";
 import commonPasswords from '../utils/1000-most-common-passwords.json';
-import { WebSocketMessageTypes, WebSocketMessageDataTypes, WebSocketMessageDataType } from "./WebSocketService";
+import { WebSocketMessageTypes, WebSocketMessageDataTypes } from "./WebSocketService";
+import { Like } from "../models/Like"
 
 class UserService {
     private fastify: FastifyInstance;
     private userModel: UserModel;
     private likeModel: LikeModel;
+    // private chatModel: ChatModel;
     UsersCache: Map<number, User>;
 
     constructor(fastify: FastifyInstance) {
         this.fastify = fastify;
         this.userModel = new UserModel(fastify);
         this.likeModel = new LikeModel(fastify);
+        // this.chatModel = new ChatModel(fastify);
         this.UsersCache = new Map<number, User>();
     }
 
@@ -264,16 +268,59 @@ class UserService {
     }
 
     async sendLike(senderId: number, receiverId: number): Promise<void> {
+        if (senderId === receiverId)
+            throw new BadRequestError();
         // TODO check if user as a pp and is verified before he can be liked
-        // TODO check if they liked back and create a chat
+        const existingLike = await this.likeModel.getLikeBetweenUsers(senderId, receiverId);
+        if (existingLike)
+            throw new ForbiddenError();
+        const existingLikeBack = await this.likeModel.getLikeBetweenUsers(receiverId, senderId);
         const like = await this.likeModel.insert(senderId, receiverId)
+        if (existingLikeBack) // TODO It's a match!
+        {
+            // const chat = await this.chatModel.insert({ senderId, receiverId });
+            // const chatId = chatId;
+            const chatId = Math.floor(Math.random() * 1000000); // Example chat ID
+            const data: WebSocketMessageDataTypes[WebSocketMessageTypes.LIKE_BACK] = {
+                id: like.id,
+                createdChatId: chatId,
+                createdAt: like.createdAt
+            };
+            this.fastify.webSocketService.sendLikeBack(receiverId, data);
+        }
         const data: WebSocketMessageDataTypes[WebSocketMessageTypes.LIKE] = {
             id: like.id,
-            likerId: like.likedId,
+            likerId: senderId,
             createdAt: like.createdAt
         };
         this.fastify.webSocketService.sendLike(receiverId, data);
     }
+
+    async sendUnlike(senderId: number, receiverId: number): Promise<void> {
+        if (senderId === receiverId)
+            throw new BadRequestError();
+        const like = await this.likeModel.getLikeBetweenUsers(senderId, receiverId);
+        if (!like)
+            throw new NotFoundError();
+        const likeId = like.id;
+        await this.likeModel.remove(likeId);
+        // const chat = this.fastify.chatService.getChatByUsers({senderId, receiverId}) // TODO replace with real method
+        // const chatId = chat?.id;
+        const chatId = Math.floor(Math.random() * 1000000); // Example chat ID
+        const data: WebSocketMessageDataTypes[WebSocketMessageTypes.UNLIKE] = {
+            id: likeId,
+            unlikerId: senderId,
+            createdChatId: chatId,
+            removedAt: new Date()
+        };
+        this.fastify.webSocketService.sendUnlike(receiverId, data);
+    }
+
+    async getLikes(userId: number): Promise<Like[]> {
+        const like = await this.likeModel.getAllByLikedId(userId);
+        return like;
+    }
+
 }
 
 export default fp(async (fastify: FastifyInstance) => {

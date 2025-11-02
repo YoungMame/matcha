@@ -31,9 +31,10 @@ export interface WebSocketMessageDataTypes {
         createdAt: Date
     },
     [WebSocketMessageTypes.UNLIKE]: {
+        id: id,
         unlikerId: id,
         createdChatId: id,
-        createdAt: Date
+        removedAt: Date
     },
     [WebSocketMessageTypes.VIEWED]: {
         id: id,

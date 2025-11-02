@@ -1,15 +1,15 @@
-import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { likeProfileHandler } from '../../../../controllers/private/like';
+import { FastifyInstance } from 'fastify';
+import { likeProfileHandler, unlikeProfile, getLikesHandler } from '../../../../controllers/private/like';
 
 const likeRoutes = async (fastify: FastifyInstance) => {
-    fastify.post('/:postId', {
+    fastify.post('/:userId', {
         schema: {
             params: {
                 type: 'object',
                 properties: {
-                    postId: { type: 'integer' }
+                    userId: { type: 'integer' }
                 },
-                required: ['postId'],
+                required: ['userId'],
                 additionalProperties: false
             },
             response: {
@@ -30,7 +30,7 @@ const likeRoutes = async (fastify: FastifyInstance) => {
                 500: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        error: { type: 'string' }
                     },
                     additionalProperties: false
                 }
@@ -38,14 +38,15 @@ const likeRoutes = async (fastify: FastifyInstance) => {
         },
         handler: likeProfileHandler
     });
-    fastify.delete('/:postId', {
+
+    fastify.delete('/:userId', {
         schema: {
             params: {
                 type: 'object',
                 properties: {
-                    postId: { type: 'integer' }
+                    userId: { type: 'integer' }
                 },
-                required: ['postId'],
+                required: ['userId'],
                 additionalProperties: false
             },
             response: {
@@ -66,13 +67,50 @@ const likeRoutes = async (fastify: FastifyInstance) => {
                 500: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        error: { type: 'string' }
                     },
                     additionalProperties: false
                 }
             }
         },
-        handler: likeProfileHandler // unLikeProfileHandler
+        handler: unlikeProfile
+    });
+
+    fastify.get('/', {
+        schema: {
+            response: {
+                200: {
+                    type: 'object',
+                    properties: {
+                        likes: { type: 'array', items: { 
+                            type: 'object',
+                            properties: {
+                                id: { type: 'integer' },
+                                likerId: { type: 'integer' },
+                                likedId: { type: 'integer' },
+                                createdAt: { type: 'string', format: 'date-time' }
+                            }
+                        }}
+                    },
+                    additionalProperties: false
+                },
+                400: {
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string', }
+                    },
+                    additionalProperties: false
+                },
+                500: {
+                    type: 'object',
+                    properties: {
+                        error: { type: 'string' }
+                    },
+                    additionalProperties: false
+                }
+            }
+        },
+        handler: getLikesHandler
     });
 }
 
