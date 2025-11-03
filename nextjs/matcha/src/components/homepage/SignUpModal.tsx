@@ -28,7 +28,7 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
 		}
 	};
 
-	const handleRegister = (e: React.FormEvent) => {
+	const handleRegister = async (e: React.FormEvent) => {
 		e.preventDefault();
 
 		// Check if passwords match
@@ -37,14 +37,51 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
 			return;
 		}
 
+		// Validate password requirements
+		const passwordRegex = /^(?=.*?\d)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[!@#$%^&*?\-])[\S]{10,}$/;
+		if (!passwordRegex.test(password)) {
+			setPasswordError(
+				"Le mot de passe doit contenir au moins 10 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial (!@#$%^&*?-)"
+			);
+			return;
+		}
+
 		// Clear error if passwords match
 		setPasswordError("");
 
-		// Handle registration logic here
-		console.log({ email, username, password, passwordConfirm });
+		try {
+			// Prepare signup data with defaults for missing fields
+			const signupData = {
+				email,
+				username,
+				password,
+				bornAt: "1990-01-01", // Default date of birth
+				orientation: "bisexual" as const, // Default orientation
+				gender: "men" as const, // Default gender
+			};
 
-		// Move to confirmation step
-		setStep("confirmation");
+			const response = await fetch("/api/auth/signup", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(signupData),
+			});
+
+			console.log("Signup response:", response.body);
+
+			if (!response.ok) {
+				const errorData = await response.json();
+				setPasswordError(errorData.error || "Une erreur est survenue lors de l'inscription");
+				return;
+			}
+
+			// Move to confirmation step on success
+			setStep("confirmation");
+		} catch (error) {
+			console.error("Signup error:", error);
+			setPasswordError("Erreur de connexion au serveur");
+		}
 	};
 
 	const handleClose = () => {
@@ -133,8 +170,8 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
 							}}
 							placeholder="Mot de passe"
 							required
-							minLength={6}
-							helperText="Minimum 6 caractères"
+							minLength={10}
+							helperText="Min. 10 caractères, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial"
 						/>
 						<TextField
 							type="password"
@@ -146,7 +183,7 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
 							}}
 							placeholder="Confirmer le mot de passe"
 							required
-							minLength={6}
+							minLength={10}
 						/>
 					</div>
 

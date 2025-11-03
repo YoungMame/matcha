@@ -24,7 +24,7 @@ export default function SignInModal({
 }: SignInModalProps) {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: "",
   });
   const [error, setError] = useState("");
@@ -49,7 +49,7 @@ export default function SignInModal({
 
   const handleClose = () => {
     // Reset state when closing
-    setFormData({ username: "", password: "" });
+    setFormData({ email: "", password: "" });
     setError("");
     setLoading(false);
     onClose();
@@ -76,13 +76,13 @@ export default function SignInModal({
       <form onSubmit={handleSubmit}>
         <Stack spacing="md">
           <TextField
-            label="Nom d'utilisateur"
-            type="text"
-            value={formData.username}
+            label="Adresse e-mail"
+            type="email"
+            value={formData.email}
             onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
+              setFormData({ ...formData, email: e.target.value })
             }
-            placeholder="Entrez votre nom d'utilisateur"
+            placeholder="Entrez votre adresse e-mail"
             required
           />
 
@@ -102,29 +102,6 @@ export default function SignInModal({
           </Button>
         </Stack>
       </form>
-
-      {/* Demo credentials */}
-      <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded">
-        <Typography
-          variant="small"
-          color="secondary"
-          className="mb-2 font-medium"
-        >
-          Identifiants de test :
-        </Typography>
-        <Stack spacing="sm">
-          <Typography variant="small" color="secondary">
-            <code className="bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded">
-              admin / admin123
-            </code>
-          </Typography>
-          <Typography variant="small" color="secondary">
-            <code className="bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded">
-              user / user123
-            </code>
-          </Typography>
-        </Stack>
-      </div>
 
       {/* Switch to sign up */}
       {onSwitchToSignUp && (

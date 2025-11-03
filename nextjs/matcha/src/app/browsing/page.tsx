@@ -88,15 +88,15 @@ export default function BrowsingPage() {
 		return searchCriteria ? generateMockProfilesWithMetadata(searchCriteria, 200) : [];
 	}, [searchCriteria]);
 
-	// Fetch current user data
-	const { data, isLoading, error } = useQuery<{ user: User }>({
-		queryKey: ["user"],
-		queryFn: async () => {
-			const response = await axios.get("/api/auth/me");
-			return response.data;
-		},
-		retry: false,
-	});
+	// // Fetch current user data
+	// const { data, isLoading, error } = useQuery<{ user: User }>({
+	// 	queryKey: ["user"],
+	// 	queryFn: async () => {
+	// 		const response = await axios.get("/api/auth/me");
+	// 		return response.data;
+	// 	},
+	// 	retry: false,
+	// });
 
 	// Extract unique interests from all profiles
 	const availableInterests = useMemo(() => {
@@ -196,54 +196,55 @@ export default function BrowsingPage() {
 		? allMessages[selectedConversationId as keyof typeof allMessages] || []
 		: [];
 
-	if (isLoading) {
-		return (
-			<Stack
-				direction="column"
-				align="center"
-				justify="center"
-				className="bg-gray-50 dark:bg-gray-900 h-screen"
-			>
-				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-				<Typography color="secondary" className="mt-4">
-					Loading...
-				</Typography>
-			</Stack>
-		);
-	}
+	// if (isLoading) {
+	// 	return (
+	// 		<Stack
+	// 			direction="column"
+	// 			align="center"
+	// 			justify="center"
+	// 			className="bg-gray-50 dark:bg-gray-900 h-screen"
+	// 		>
+	// 			<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+	// 			<Typography color="secondary" className="mt-4">
+	// 				Loading...
+	// 			</Typography>
+	// 		</Stack>
+	// 	);
+	// }
 
-	if (error) {
-		return (
-			<Stack
-				direction="column"
-				align="center"
-				justify="center"
-				className="bg-gray-50 dark:bg-gray-900 h-screen"
-			>
-				<Stack direction="column" align="center" spacing="md">
-					<Typography variant="h2" color="error">
-						Authentication Error
-					</Typography>
-					<Typography color="secondary">
-						Please try logging in again.
-					</Typography>
-					<Button
-						variant="outline"
-						onClick={() => router.push("/")}
-					>
-						← Back to home
-					</Button>
-				</Stack>
-			</Stack>
-		);
-	}
+	// if (error) {
+	// 	return (
+	// 		<Stack
+	// 			direction="column"
+	// 			align="center"
+	// 			justify="center"
+	// 			className="bg-gray-50 dark:bg-gray-900 h-screen"
+	// 		>
+	// 			<Stack direction="column" align="center" spacing="md">
+	// 				<Typography variant="h2" color="error">
+	// 					Authentication Error
+	// 				</Typography>
+	// 				<Typography color="secondary">
+	// 					Please try logging in again.
+	// 				</Typography>
+	// 				<Button
+	// 					variant="outline"
+	// 					onClick={() => router.push("/")}
+	// 				>
+	// 					← Back to home
+	// 				</Button>
+	// 			</Stack>
+	// 		</Stack>
+	// 	);
+	// }
 
 	return (
 		<Stack direction="row" className="h-full bg-gray-50 dark:bg-gray-900">
 			{/* Left Drawer */}
 			<LeftDrawer
 				currentUser={{
-					username: data?.user.username || "User",
+					username: "User",
+					// username: data?.user.username || "User",
 					pictureUrl: "/bob.jpg",
 				}}
 				matches={mockMatches}

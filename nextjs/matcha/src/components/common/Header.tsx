@@ -28,15 +28,17 @@ export default function Header() {
   const showLanguage = isOnboarding || isBrowsing;
 
   // Fetch current user data
-  const { data: userData } = useQuery<{ user: User }>({
-    queryKey: ["user"],
-    queryFn: async () => {
-      const response = await axios.get("/api/auth/me");
-      return response.data;
-    },
-    retry: false,
-    enabled: !isHomePage, // Only fetch if not on home page
-  });
+//   const { data: userData } = useQuery<{ user: User }>({
+//     queryKey: ["user"],
+//     queryFn: async () => {
+//       const response = await axios.get("/api/auth/me");
+//       return response.data;
+//     },
+//     retry: false,
+//     enabled: !isHomePage, // Only fetch if not on home page
+//   });
+
+	const userData:any = undefined;
 
   const handleLogout = async () => {
     try {
@@ -100,7 +102,7 @@ export default function Header() {
               {!isHomePage && userData?.user && (
                 <>
                   <Typography color="secondary" className="hidden sm:block">
-                    Welcome, <strong>{userData.user.username}</strong>
+                    Welcome, <strong>{userData?.user?.username ?? "username"}</strong>
                   </Typography>
                   <Button
                     onClick={handleLogout}

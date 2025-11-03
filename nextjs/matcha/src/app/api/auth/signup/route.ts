@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
 
     // Forward the request to Fastify backend
     const fastifyUrl = process.env.FASTIFY_API_URL || "http://fastify:3000";
-    const response = await fetch(`${fastifyUrl}/auth/login`, {
+    const response = await fetch(`${fastifyUrl}/auth/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
 
     return nextResponse;
   } catch (error) {
-    console.error("Login API error:", error);
+    console.error("Signup API error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
