@@ -4,7 +4,6 @@ import { InternalServerError, NotFoundError } from "../../utils/error";
 export interface View {
     id: number;
     viewerId: number;
-    viewedId: number;
     createdAt: Date;
 };
 
@@ -14,14 +13,13 @@ export default class ViewModel {
     insert = async (viewerId: number, viewedId: number): Promise<View> => {
         try {
             const result = await this.fastify.pg.query(
-                'INSERT INTO views (viewer_id, viewed_id) VALUES ($1, $2) RETURNING id',
+                'INSERT INTO views (viewer_id, viewed_id) VALUES ($1, $2) RETURNING *',
                 [viewerId, viewedId]
             );
             return {
                 id: result.rows[0].id,
-                viewerId: result.rows[0].viewerId,
-                viewedId: result.rows[0].viewedId,
-                createdAt: result.rows[0].createdAt
+                viewerId: result.rows[0].viewer_id,
+                createdAt: result.rows[0].created_at
             };
         } catch (error) {
             this.fastify.log.error((error as Error).message || undefined);
@@ -39,9 +37,8 @@ export default class ViewModel {
                 throw new NotFoundError();
             return {
                 id: result.rows[0].id,
-                viewerId: result.rows[0].viewerId,
-                viewedId: result.rows[0].viewedId,
-                createdAt: result.rows[0].createdAt
+                viewerId: result.rows[0].viewer_id,
+                createdAt: result.rows[0].created_at
             };
         } catch (error) {
             this.fastify.log.error((error as Error).message || undefined);
@@ -58,7 +55,6 @@ export default class ViewModel {
             return result.rows.map((row: { id: number, viewer_id: number, viewed_id: number, created_at: Date}) => ({
                 id: row.id,
                 viewerId: row.viewer_id,
-                viewedId: row.viewed_id,
                 createdAt: row.created_at
             }));
         } catch (error) {
@@ -76,7 +72,6 @@ export default class ViewModel {
             return result.rows.map((row: { id: number, viewer_id: number, viewed_id: number, created_at: Date}) => ({
                 id: row.id,
                 viewerId: row.viewer_id,
-                viewedId: row.viewed_id,
                 createdAt: row.created_at
             }));
         } catch (error) {
@@ -96,7 +91,6 @@ export default class ViewModel {
             return {
                 id: result.rows[0].id,
                 viewerId: result.rows[0].viewer_id,
-                viewedId: result.rows[0].viewed_id,
                 createdAt: result.rows[0].created_at
             };
         } catch (error) {

@@ -48,7 +48,7 @@ describe('Websocket like test', () => {
         const ws1 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token1}` } });
         const ws2 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token2}` } });
 
-        const meData2 = await app.userService.getUserPublic(undefined, 'wstestuser2@example.com');
+        const meData2 = await app.userService.getUserPublic(undefined, 'wslikestestuser2@example.com');
         expect(meData2).to.be.an('object');
         const user2id = meData2.id;
 
@@ -114,7 +114,7 @@ describe('Websocket like test', () => {
         const token = await signUpAndGetToken(app, userData);
         expect(token).to.be.a('string');
 
-        const meData = await app.userService.getUserPublic('wslikestestuser11@example.com');
+        const meData = await app.userService.getUserPublic(undefined, 'wslikestestuser11@example.com');
         expect(meData).to.be.an('object');
         const userId = meData.id;
 
@@ -154,13 +154,13 @@ describe('Websocket like test', () => {
         const tokenA = await signUpAndGetToken(app, userDataA);
         expect(tokenA).to.be.a('string');
 
-        const meDataA = await app.userService.getUserPublic('wslikestestuser21@example.com');
+        const meDataA = await app.userService.getUserPublic(undefined, 'wslikestestuser21@example.com');
         expect(meDataA).to.be.an('object');
 
         const tokenB = await signUpAndGetToken(app, userDataB);
         expect(tokenB).to.be.a('string');
 
-        const meDataB = await app.userService.getUserPublic('wslikestestuser22@example.com');
+        const meDataB = await app.userService.getUserPublic(undefined, 'wslikestestuser22@example.com');
         expect(meDataB).to.be.an('object');
         const userId = meDataB.id;
 
@@ -214,11 +214,11 @@ describe('Websocket like test', () => {
         const ws1 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token1}` } });
         const ws2 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token2}` } });
 
-        const meData1 = await app.userService.getUserPublic('wslikestestuser41@example.com');
+        const meData1 = await app.userService.getUserPublic(undefined, 'wslikestestuser41@example.com');
         expect(meData1).to.be.an('object');
         const user1id = meData1.id;
 
-        const meData2 = await app.userService.getUserPublic('wslikestestuser42@example.com');
+        const meData2 = await app.userService.getUserPublic(undefined, 'wslikestestuser42@example.com');
         expect(meData2).to.be.an('object');
         const user2id = meData2.id;
 

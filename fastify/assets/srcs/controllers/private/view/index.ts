@@ -11,7 +11,7 @@ export const viewProfileHandler = async (
         const user = request.user;
         if (!user || !user.id)
             throw new UnauthorizedError();
-        const data = await request.server.userService.viewUserProfile(user.id, params.id);
+        const data = await request.server.userService.getUserPublic(user.id, params.id);
         reply.send(data);
     } catch (error) {
         if (error instanceof AppError)

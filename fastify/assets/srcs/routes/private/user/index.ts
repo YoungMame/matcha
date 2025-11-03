@@ -5,11 +5,11 @@ import viewRoutes from './view';
 
 const userRoutes = async (fastify: FastifyInstance) => {
     fastify.get('/', async () => {
-        return { message: 'Available routes', routes: ['/me', '/view/:id'] };
+        return { message: 'Available routes', routes: ['/me', '/like', '/view/:id'] };
     });
-    fastify.register(meRoutes, { prefix: '/me' });
     fastify.register(likeRoutes, { prefix: '/like' });
     fastify.register(viewRoutes, { prefix: '/view' });
+    fastify.register(meRoutes, { prefix: '/me' });
 }
 
 export default userRoutes;

@@ -9,7 +9,7 @@ export enum WebSocketMessageTypes {
     LIKE = "like",
     LIKE_BACK = "like_back",
     UNLIKE = "unlike",
-    VIEWED = "profile"
+    VIEWED = "view"
 }
 
 export interface WebSocketMessageDataTypes {

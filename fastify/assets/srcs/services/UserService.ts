@@ -38,8 +38,7 @@ class UserService {
             codeArray[i] = Math.random() * 10 - 1; // give a digit
 
         const code = codeArray.map(digit => Math.round(digit).toString()).join('');
-        const seconds = 600
-        console.log(`Sending verification email to ${user.email} for user ID ${user.id} with code ${code}, available for ${600 / 60} minutes`);
+        const seconds = 600;
         user.setEmailCode("emailValidation", seconds, code);
     }
 
@@ -250,7 +249,6 @@ class UserService {
                 this.fastify.webSocketService.sendProfileViewed(user.id, {
                     id: view.id,
                     viewerId: view.viewerId,
-                    viewedId: view.viewedId,
                     createdAt: view.createdAt
                 });
             }
