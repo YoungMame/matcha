@@ -16,6 +16,7 @@ declare module 'fastify' {
       getLikes(userId: number): Promise<Like[]>;
       setUserConnected(userId: number): Promise<void>;
       setUserDisconnected(userId: number): Promise<void>;
+      getUserConnectionStatus(userId: number): Promise<{ isConnected: boolean; lastConnection: Date | undefined } | null>;
       getMe(id: number): Promise<{
         id: number;
         email: string;

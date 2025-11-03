@@ -23,11 +23,11 @@ export default class ChatModel {
         try {
             let chatUsersResult: any[] = [];
             const result = await this.fastify.pg.query(
-                'INSERT INTO chats () VALUES () RETURNING *',
+                'INSERT INTO chats DEFAULT VALUES RETURNING *',
             );
             await Promise.all(userIds.map(async id => {
                 const chatUserResult = await this.fastify.pg.query(
-                    'INSERT INTO chat_users (chat_id, user_id) VALUES ($1, $2) RETURNING *',
+                    'INSERT INTO chats_users (chat_id, user_id) VALUES ($1, $2) RETURNING *',
                     [result.rows[0].id, id]
                 );
                 chatUsersResult.push(chatUserResult.rows[0].id);
@@ -101,7 +101,7 @@ export default class ChatModel {
     getBeetweenUsers = async (userIds: number[]): Promise<Chat | null> => {
         try {
             const result = await this.fastify.pg.query(
-                'SELECT * FROM chats WHERE id IN (SELECT chat_id FROM chat_users WHERE user_id = ANY($1))',
+                'SELECT * FROM chats WHERE id IN (SELECT chat_id FROM chats_users WHERE user_id = ANY($1))',
                 [userIds]
             );
             if (result.rows.length === 0)

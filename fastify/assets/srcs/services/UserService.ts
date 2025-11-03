@@ -334,6 +334,9 @@ class UserService {
         await this.userModel.setUserConnection(userId, true);
     }
 
+    async getUserConnectionStatus(userId: number): Promise<{ isConnected: boolean; lastConnection: Date | undefined } | null> {
+        return await this.userModel.getUserConnection(userId);
+    }
 }
 
 export default fp(async (fastify: FastifyInstance) => {
