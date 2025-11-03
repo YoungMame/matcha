@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Typography from "@/components/common/Typography";
@@ -11,17 +11,24 @@ import { useGeolocation } from "@/hooks/useGeolocation";
 import LocationPermissionModal from "@/components/app/LocationPermissionModal";
 import LeftDrawer from "@/components/browsing/LeftDrawer";
 import SearchBar from "@/components/browsing/SearchBar";
+import { FilterBar, FilterOptions } from "@/components/browsing/FilterBar";
 import ProfileCard from "@/components/browsing/ProfileCard";
 import MatchingModal from "@/components/browsing/MatchingModal";
 import ChatInterface from "@/components/browsing/ChatInterface";
 import ChatProfilePanel from "@/components/browsing/ChatProfilePanel";
 import {
-	generateMockUserProfiles,
+	generateMockProfilesWithMetadata,
 	mockConversations,
 	mockMatches,
 	mockMessages,
 } from "@/mocks/browsing_mocks";
-import { UserProfile } from "@/types/UserProfile";
+import { UserProfile } from "@/types/userProfile";
+import { Message } from "@/types/message";
+import {
+	parseSearchParams,
+	calculateAge,
+	filterProfiles,
+} from "@/lib/searchUtils";
 
 type Tab = "matches" | "messages";
 
@@ -32,6 +39,7 @@ interface User {
 
 export default function BrowsingPage() {
 	const router = useRouter();
+	const searchParams = useSearchParams();
 	const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isFromMatch, setIsFromMatch] = useState(false);
@@ -39,6 +47,18 @@ export default function BrowsingPage() {
 	const [selectedConversationId, setSelectedConversationId] = useState<
 		string | null
 	>(null);
+	const [allMessages, setAllMessages] = useState<Record<string, Message[]>>(
+		mockMessages
+	);
+	const [filters, setFilters] = useState<FilterOptions>({
+		sortBy: "none",
+		selectedInterests: [],
+		ranges: {
+			age: [18, 99],
+			location: [2, 40],
+			fame: [0, 1000],
+		},
+	});
 
 	const {
 		hasAsked,
@@ -47,6 +67,26 @@ export default function BrowsingPage() {
 		requestPermission,
 		denyPermission,
 	} = useGeolocation();
+	
+	// Check if we have search params in URL
+	const searchCriteria = useMemo(() => {
+		return parseSearchParams(searchParams);
+	}, [searchParams]);
+	
+	// When search params change, update filters
+	useEffect(() => {
+		if (searchCriteria) {
+			setFilters(searchCriteria);
+		}
+	}, [searchCriteria]);
+	
+	// Generate ALL profiles (not filtered by search) - needed for matches/messages
+	const allProfiles = useMemo(() => generateMockProfilesWithMetadata(undefined, 200), []);
+	
+	// Generate search-filtered profiles if we have search criteria
+	const searchProfiles = useMemo(() => {
+		return searchCriteria ? generateMockProfilesWithMetadata(searchCriteria, 200) : [];
+	}, [searchCriteria]);
 
 	// Fetch current user data
 	const { data, isLoading, error } = useQuery<{ user: User }>({
@@ -58,10 +98,36 @@ export default function BrowsingPage() {
 		retry: false,
 	});
 
-	const mockUserProfiles = useMemo(() => generateMockUserProfiles(30), []);
+	// Extract unique interests from all profiles
+	const availableInterests = useMemo(() => {
+		const interestsSet = new Set<string>();
+		allProfiles.forEach((profile) => {
+			profile.interests.forEach((interest) => interestsSet.add(interest));
+		});
+		return Array.from(interestsSet).sort();
+	}, [allProfiles]);
+
+	// Filter and sort profiles based on active filters
+	// If we have search params, use searchProfiles; otherwise use allProfiles
+	const filteredProfiles = useMemo(() => {
+		if (searchCriteria) {
+			// Apply search filters to search-specific profiles
+			console.log("Applying search criteria filters");
+			return filterProfiles(searchProfiles, filters);
+		} else {
+			console.log("No search criteria, applying default filters");
+			// No search - show default subset with current filters applied
+			const defaultProfiles = allProfiles.slice(0, 30);
+			return filterProfiles(defaultProfiles, filters);
+		}
+	}, [allProfiles, searchProfiles, filters, searchCriteria]);
+
+	const handleFilterChange = useCallback((newFilters: FilterOptions) => {
+		setFilters(newFilters);
+	}, []);
 
 	const handleOpenProfile = (userId: string, fromMatch = false) => {
-		const user = mockUserProfiles.find((u) => u.id === userId);
+		const user = allProfiles.find((u) => u.id === userId);
 		if (user) {
 			setSelectedUser(user);
 			setIsFromMatch(fromMatch);
@@ -98,8 +164,22 @@ export default function BrowsingPage() {
 	};
 
 	const handleSendMessage = (content: string) => {
-		console.log("Sending message:", content);
-		// TODO: Implement send message logic
+		if (!selectedConversationId) return;
+
+		const newMessage: Message = {
+			id: `msg-${Date.now()}`,
+			senderId: "current-user",
+			content,
+			timestamp: new Date(),
+		};
+
+		setAllMessages((prev) => ({
+			...prev,
+			[selectedConversationId]: [
+				...(prev[selectedConversationId] || []),
+				newMessage,
+			],
+		}));
 	};
 
 	// Get the current conversation data
@@ -109,27 +189,12 @@ export default function BrowsingPage() {
 
 	const selectedChatUser =
 		selectedConversation && selectedConversation.userId
-			? mockUserProfiles.find((u) => u.id === selectedConversation.userId)
+			? allProfiles.find((u) => u.id === selectedConversation.userId)
 			: null;
 
 	const conversationMessages = selectedConversationId
-		? mockMessages[selectedConversationId as keyof typeof mockMessages] || []
+		? allMessages[selectedConversationId as keyof typeof allMessages] || []
 		: [];
-
-	// Calculate age helper
-	const calculateAge = (birthday: string): number => {
-		const birthDate = new Date(birthday);
-		const today = new Date();
-		let age = today.getFullYear() - birthDate.getFullYear();
-		const monthDiff = today.getMonth() - birthDate.getMonth();
-		if (
-			monthDiff < 0 ||
-			(monthDiff === 0 && today.getDate() < birthDate.getDate())
-		) {
-			age--;
-		}
-		return age;
-	};
 
 	if (isLoading) {
 		return (
@@ -209,13 +274,29 @@ export default function BrowsingPage() {
 			) : (
 				// Browse View
 				<div className="flex-1 overflow-y-auto">
-					<div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-						{/* Search Bar */}
-						<SearchBar placeholder="Rechercher des profils..." />
+				<div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+					{/* Search Bar */}
+					<SearchBar 
+						availableInterests={availableInterests}
+						initialCriteria={searchCriteria ? {
+							ageRange: searchCriteria.ranges.age,
+							fameRange: searchCriteria.ranges.fame,
+							locationRange: searchCriteria.ranges.location,
+							interests: searchCriteria.selectedInterests,
+						} : undefined}
+						onSearch={(criteria) => {
+							console.log("Search criteria:", criteria);
+							// The URL update is already handled in handleSubmit
+						}}
+					/>
 
-						{/* Profile Grid */}
+					{/* Filter Bar */}
+					<FilterBar
+						onFilterChange={handleFilterChange}
+						availableInterests={availableInterests}
+					/>						{/* Profile Grid */}
 						<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-							{mockUserProfiles.map((profile) => (
+							{filteredProfiles.map((profile) => (
 								<ProfileCard
 									key={profile.id}
 									id={profile.id}

@@ -6,6 +6,8 @@ export type UserProfile = {
   birthday: string;
   biography: string;
   interests: string[];
+  fame: number;
+  distance: number;
   gender: string;
   interestedInGenders: string[];
   profilePicture: string | null;

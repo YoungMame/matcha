@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Typography from "@/components/common/Typography";
 import Stack from "@/components/common/Stack";
@@ -28,6 +28,15 @@ export default function ChatInterface({
   onSendMessage,
 }: ChatInterfaceProps) {
   const [messageInput, setMessageInput] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSend = () => {
     if (messageInput.trim()) {
@@ -103,6 +112,7 @@ export default function ChatInterface({
             );
           })
         )}
+        <div ref={messagesEndRef} />
       </Stack>
 
       {/* Message Input */}

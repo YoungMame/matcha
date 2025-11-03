@@ -1,136 +1,148 @@
-import { UserProfile } from "@/types/UserProfile";
+import { UserProfile } from "@/types/userProfile";
+import { FilterOptions } from "@/components/browsing/FilterBar/types";
+import { filterProfiles } from "@/lib/searchUtils";
 
 // Mock data with full user structure
 export const mockUserProfiles: UserProfile[] = [
   {
-    id: "1",
-    firstName: "Alice",
-    lastName: "Dupont",
-    birthday: "1999-03-15",
-    biography:
-      "Passionnée de voyages et de photographie. J'adore découvrir de nouvelles cultures et partager des moments authentiques.",
-    interests: ["Voyages", "Photographie", "Cuisine", "Yoga"],
-    gender: "female",
-    interestedInGenders: ["male"],
-    profilePicture: "/bob.jpg",
-    additionalPictures: ["/bob.jpg", "/bob.jpg", null, null],
+	  id: "1",
+	  firstName: "Alice",
+	  lastName: "Dupont",
+	  birthday: "1999-03-15",
+	  biography: "Passionnée de voyages et de photographie. J'adore découvrir de nouvelles cultures et partager des moments authentiques.",
+	  interests: ["Voyages", "Photographie", "Cuisine", "Yoga"],
+	  gender: "female",
+	  interestedInGenders: ["male"],
+	  profilePicture: "/bob.jpg",
+	  additionalPictures: ["/bob.jpg", "/bob.jpg", null, null],
+	  fame: 85,
+	  distance: 2
   },
   {
-    id: "2",
-    firstName: "Marie",
-    lastName: "Martin",
-    birthday: "1997-07-22",
-    biography:
-      "Architecte le jour, artiste la nuit. J'aime créer et explorer l'art sous toutes ses formes.",
-    interests: ["Architecture", "Art", "Musique", "Randonnée"],
-    gender: "female",
-    interestedInGenders: ["male"],
-    profilePicture: "/bob.jpg",
-    additionalPictures: ["/bob.jpg", null, null, null],
+	  id: "2",
+	  firstName: "Marie",
+	  lastName: "Martin",
+	  birthday: "1997-07-22",
+	  biography: "Architecte le jour, artiste la nuit. J'aime créer et explorer l'art sous toutes ses formes.",
+	  interests: ["Architecture", "Art", "Musique", "Randonnée"],
+	  gender: "female",
+	  interestedInGenders: ["male"],
+	  profilePicture: "/bob.jpg",
+	  additionalPictures: ["/bob.jpg", null, null, null],
+	  fame: 62,
+	  distance: 5
   },
   {
-    id: "3",
-    firstName: "Laura",
-    lastName: "Bernard",
-    birthday: "2001-11-08",
-    biography:
-      "Étudiante en médecine et amoureuse des animaux. Je cherche quelqu'un avec qui partager de bons moments.",
-    interests: ["Médecine", "Animaux", "Lecture", "Sport"],
-    gender: "female",
-    interestedInGenders: ["male"],
-    profilePicture: "/bob.jpg",
-    additionalPictures: ["/bob.jpg", "/bob.jpg", "/bob.jpg", null],
+	  id: "3",
+	  firstName: "Laura",
+	  lastName: "Bernard",
+	  birthday: "2001-11-08",
+	  biography: "Étudiante en médecine et amoureuse des animaux. Je cherche quelqu'un avec qui partager de bons moments.",
+	  interests: ["Médecine", "Animaux", "Lecture", "Sport"],
+	  gender: "female",
+	  interestedInGenders: ["male"],
+	  profilePicture: "/bob.jpg",
+	  additionalPictures: ["/bob.jpg", "/bob.jpg", "/bob.jpg", null],
+	  fame: 45,
+	  distance: 3
   },
   {
-    id: "4",
-    firstName: "Camille",
-    lastName: "Petit",
-    birthday: "1999-05-30",
-    biography:
-      "Développeuse web passionnée par les nouvelles technologies et l'innovation.",
-    interests: ["Technologie", "Gaming", "Cinéma", "Running"],
-    gender: "female",
-    interestedInGenders: ["male"],
-    profilePicture: "/bob.jpg",
-    additionalPictures: ["/bob.jpg", null, null, null],
+	  id: "4",
+	  firstName: "Camille",
+	  lastName: "Petit",
+	  birthday: "1999-05-30",
+	  biography: "Développeuse web passionnée par les nouvelles technologies et l'innovation.",
+	  interests: ["Technologie", "Gaming", "Cinéma", "Running"],
+	  gender: "female",
+	  interestedInGenders: ["male"],
+	  profilePicture: "/bob.jpg",
+	  additionalPictures: ["/bob.jpg", null, null, null],
+	  fame: 15,
+	  distance: 8
   },
   {
-    id: "5",
-    firstName: "Sarah",
-    lastName: "Moreau",
-    birthday: "1998-01-12",
-    biography:
-      "Professeure de danse et amoureuse de la vie. Toujours prête pour de nouvelles aventures !",
-    interests: ["Danse", "Musique", "Fitness", "Mode"],
-    gender: "female",
-    interestedInGenders: ["male"],
-    profilePicture: "/bob.jpg",
-    additionalPictures: ["/bob.jpg", "/bob.jpg", null, null],
+	  id: "5",
+	  firstName: "Sarah",
+	  lastName: "Moreau",
+	  birthday: "1998-01-12",
+	  biography: "Professeure de danse et amoureuse de la vie. Toujours prête pour de nouvelles aventures !",
+	  interests: ["Danse", "Musique", "Fitness", "Mode"],
+	  gender: "female",
+	  interestedInGenders: ["male"],
+	  profilePicture: "/bob.jpg",
+	  additionalPictures: ["/bob.jpg", "/bob.jpg", null, null],
+	  fame: 0,
+	  distance: 0
   },
   {
-    id: "6",
-    firstName: "Léa",
-    lastName: "Dubois",
-    birthday: "2002-09-25",
-    biography:
-      "Étudiante en communication, passionnée par les réseaux sociaux et le marketing digital.",
-    interests: ["Marketing", "Réseaux sociaux", "Café", "Voyage"],
-    gender: "female",
-    interestedInGenders: ["male"],
-    profilePicture: "/bob.jpg",
-    additionalPictures: [null, null, null, null],
+	  id: "6",
+	  firstName: "Léa",
+	  lastName: "Dubois",
+	  birthday: "2002-09-25",
+	  biography: "Étudiante en communication, passionnée par les réseaux sociaux et le marketing digital.",
+	  interests: ["Marketing", "Réseaux sociaux", "Café", "Voyage"],
+	  gender: "female",
+	  interestedInGenders: ["male"],
+	  profilePicture: "/bob.jpg",
+	  additionalPictures: [null, null, null, null],
+	  fame: 0,
+	  distance: 0
   },
   {
-    id: "7",
-    firstName: "Chloé",
-    lastName: "Roux",
-    birthday: "1996-04-18",
-    biography:
-      "Chef cuisinière qui aime expérimenter de nouvelles saveurs. Gourmande assumée !",
-    interests: ["Cuisine", "Gastronomie", "Vin", "Pâtisserie"],
-    gender: "female",
-    interestedInGenders: ["male"],
-    profilePicture: "/bob.jpg",
-    additionalPictures: ["/bob.jpg", "/bob.jpg", "/bob.jpg", "/bob.jpg"],
+	  id: "7",
+	  firstName: "Chloé",
+	  lastName: "Roux",
+	  birthday: "1996-04-18",
+	  biography: "Chef cuisinière qui aime expérimenter de nouvelles saveurs. Gourmande assumée !",
+	  interests: ["Cuisine", "Gastronomie", "Vin", "Pâtisserie"],
+	  gender: "female",
+	  interestedInGenders: ["male"],
+	  profilePicture: "/bob.jpg",
+	  additionalPictures: ["/bob.jpg", "/bob.jpg", "/bob.jpg", "/bob.jpg"],
+	  fame: 0,
+	  distance: 0
   },
   {
-    id: "8",
-    firstName: "Manon",
-    lastName: "Leroy",
-    birthday: "2000-02-14",
-    biography:
-      "Graphiste freelance et amoureuse de la nature. Je cherche quelqu'un de créatif et authentique.",
-    interests: ["Design", "Nature", "Randonnée", "Photographie"],
-    gender: "female",
-    interestedInGenders: ["male"],
-    profilePicture: "/bob.jpg",
-    additionalPictures: ["/bob.jpg", null, null, null],
+	  id: "8",
+	  firstName: "Manon",
+	  lastName: "Leroy",
+	  birthday: "2000-02-14",
+	  biography: "Graphiste freelance et amoureuse de la nature. Je cherche quelqu'un de créatif et authentique.",
+	  interests: ["Design", "Nature", "Randonnée", "Photographie"],
+	  gender: "female",
+	  interestedInGenders: ["male"],
+	  profilePicture: "/bob.jpg",
+	  additionalPictures: ["/bob.jpg", null, null, null],
+	  fame: 0,
+	  distance: 0
   },
   {
-    id: "9",
-    firstName: "Jade",
-    lastName: "Simon",
-    birthday: "1999-08-07",
-    biography:
-      "Infirmière dévouée le jour, aventurière le week-end. J'adore les activités en plein air.",
-    interests: ["Sport", "Nature", "Camping", "Vélo"],
-    gender: "female",
-    interestedInGenders: ["male"],
-    profilePicture: "/bob.jpg",
-    additionalPictures: ["/bob.jpg", "/bob.jpg", null, null],
+	  id: "9",
+	  firstName: "Jade",
+	  lastName: "Simon",
+	  birthday: "1999-08-07",
+	  biography: "Infirmière dévouée le jour, aventurière le week-end. J'adore les activités en plein air.",
+	  interests: ["Sport", "Nature", "Camping", "Vélo"],
+	  gender: "female",
+	  interestedInGenders: ["male"],
+	  profilePicture: "/bob.jpg",
+	  additionalPictures: ["/bob.jpg", "/bob.jpg", null, null],
+	  fame: 0,
+	  distance: 0
   },
   {
-    id: "10",
-    firstName: "Luna",
-    lastName: "Laurent",
-    birthday: "2001-06-20",
-    biography:
-      "Musicienne et compositrice. La musique est ma vie et je cherche quelqu'un qui partage cette passion.",
-    interests: ["Musique", "Concert", "Guitare", "Chant"],
-    gender: "female",
-    interestedInGenders: ["male"],
-    profilePicture: "/bob.jpg",
-    additionalPictures: ["/bob.jpg", null, null, null],
+	  id: "10",
+	  firstName: "Luna",
+	  lastName: "Laurent",
+	  birthday: "2001-06-20",
+	  biography: "Musicienne et compositrice. La musique est ma vie et je cherche quelqu'un qui partage cette passion.",
+	  interests: ["Musique", "Concert", "Guitare", "Chant"],
+	  gender: "female",
+	  interestedInGenders: ["male"],
+	  profilePicture: "/bob.jpg",
+	  additionalPictures: ["/bob.jpg", null, null, null],
+	  fame: 0,
+	  distance: 0
   },
 ];
 
@@ -347,18 +359,36 @@ export function generateMockUserProfiles(n: number): UserProfile[] {
       .map(() => (Math.random() > 0.3 ? "/bob.jpg" : null));
 
     profiles.push({
-      id: String(i + 1),
-      firstName,
-      lastName,
-      birthday,
-      biography,
-      interests,
-      gender,
-      interestedInGenders,
-      profilePicture: "/bob.jpg",
-      additionalPictures,
-    });
+		id: String(i + 1),
+		firstName,
+		lastName,
+		birthday,
+		biography,
+		interests,
+		gender,
+		interestedInGenders,
+		profilePicture: "/bob.jpg",
+		additionalPictures,
+		fame: 0,
+		distance: 0
+	});
   }
 
   return profiles;
+}
+
+export function generateMockProfilesWithMetadata(filterOptions?: FilterOptions, count: number = 200): Array<UserProfile > {
+	  let baseProfiles = generateMockUserProfiles(count);
+	  baseProfiles = baseProfiles.map(profile => ({
+		  ...profile,
+		  // Generate random distance between 2-40km
+		  distance: Math.floor(Math.random() * 38) + 2,
+		  // Generate random fame score between 0-1000
+		  fame: Math.floor(Math.random() * 1000),
+	  }));
+	  if (filterOptions) {
+		  baseProfiles = filterProfiles(baseProfiles, filterOptions);
+	  }
+
+	  return baseProfiles;
 }
