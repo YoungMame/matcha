@@ -62,7 +62,7 @@ class WebSocketService {
         switch (raw.type) {
             case WebSocketMessageTypes.MESSAGE:
                 this.fastify.log.info(`User ${id} tried to send message to ${raw.targetId}: ${raw.content}`);
-                this.fastify.userService.sendMessage(id, raw.targetId, raw.content);
+                this.fastify.chatService.sendMessage(id, raw.targetId, raw.content);
                 break;
             case WebSocketMessageTypes.LIKE:
                 this.fastify.log.info(`User ${id} liked user ${raw.targetId}`);
@@ -70,7 +70,7 @@ class WebSocketService {
                 break;
             case WebSocketMessageTypes.UNLIKE:
                 this.fastify.log.info(`User ${id} unliked user ${raw.targetId}`);
-                // this.fastify.userService.unlikeUser(id, targetId);
+                this.fastify.userService.sendUnlike(id, raw.targetId);
                 break;
             // Other types will be sent from backend
             default:

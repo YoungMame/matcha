@@ -155,5 +155,12 @@ export default class UserModel {
         await this.fastify.pg.query(
             `DELETE FROM users WHERE id=${id}`
         );
-    }  
+    }
+
+    setUserConnection = async (id: number, isConnected: boolean, lastConnection?: Date) => {
+        await this.fastify.pg.query(
+            `UPDATE users SET is_connected=$1${lastConnection ? ', last_connection=$2' : ''} WHERE id=$3`,
+            lastConnection ? [isConnected, lastConnection, id] : [isConnected, id]
+        );
+    }
 }

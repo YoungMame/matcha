@@ -11,6 +11,7 @@ import router from './routes'
 // import services
 import websocketServicePlugin from './services/WebSocketService'
 import userServicePlugin from './services/UserService'
+import chatServicePlugin from './services/ChatService'
 // import custom plugins
 import authenticate from './plugins/authenticate'
 
@@ -37,7 +38,12 @@ export const buildApp = () => {
 
     app.register(websocket, {
         errorHandler(error, socket, request, reply) {
-            // TODO call websocketServicePlugin.closeConn(websocketServicePlugin.findUserBySocket(socket));
+            const userId = app.webSocketService.findUserBySocket(socket);
+            if (userId)
+            {
+                app.webSocketService.closeConnection(userId);
+                app.userService.setUserDisconnected(userId);
+            }
             socket.terminate();
         },
         options: {
@@ -50,6 +56,8 @@ export const buildApp = () => {
     app.register(userServicePlugin);
 
     app.register(websocketServicePlugin);
+
+    app.register(chatServicePlugin);
 
     app.register(pg, {
         connectionString: process.env.PG

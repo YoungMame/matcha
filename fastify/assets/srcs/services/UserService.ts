@@ -194,7 +194,6 @@ class UserService {
         } catch (error) {
             user.profilePictures.pop();
             user.profilePictureIndex = (user.profilePictures.length === 0) ? undefined : 0;
-            fs.unlinkSync(pictureName);
             throw error;
         }
     }
@@ -270,18 +269,6 @@ class UserService {
         };
     }
 
-    async sendMessage(senderId: number, receiverId: number, content: string): Promise<void> {
-        // Implementation for sending a message
-        const data: WebSocketMessageDataTypes[WebSocketMessageTypes.MESSAGE] = {
-            id: Math.floor(Math.random() * 1000000), // Example message ID
-            senderId: senderId,
-            chatId: Math.floor(Math.random() * 1000000), // Example chat ID
-            content: content,
-            createdAt: new Date()
-        };
-        this.fastify.webSocketService.sendMessage(receiverId, data);
-    }
-
     async sendLike(senderId: number, receiverId: number): Promise<void> {
         if (senderId === receiverId)
             throw new BadRequestError();
@@ -291,11 +278,9 @@ class UserService {
             throw new ForbiddenError();
         const existingLikeBack = await this.likeModel.getLikeBetweenUsers(receiverId, senderId);
         const like = await this.likeModel.insert(senderId, receiverId)
-        if (existingLikeBack) // TODO It's a match!
+        if (existingLikeBack)
         {
-            // const chat = await this.chatModel.insert({ senderId, receiverId });
-            // const chatId = chatId;
-            const chatId = Math.floor(Math.random() * 1000000); // Example chat ID
+            const chatId = await this.fastify.chatService.createChat([senderId, receiverId]);
             const data: WebSocketMessageDataTypes[WebSocketMessageTypes.LIKE_BACK] = {
                 id: like.id,
                 createdChatId: chatId,
@@ -319,9 +304,14 @@ class UserService {
             throw new NotFoundError();
         const likeId = like.id;
         await this.likeModel.remove(likeId);
-        // const chat = this.fastify.chatService.getChatByUsers({senderId, receiverId}) // TODO replace with real method
-        // const chatId = chat?.id;
-        const chatId = Math.floor(Math.random() * 1000000); // Example chat ID
+        const chat = await this.fastify.chatService.getChatBetweenUsers([senderId, receiverId]);
+        let chatId: number;
+        if (chat) {
+            chatId = chat.id;
+            await this.fastify.chatService.deleteChat(chatId);
+        }  else {
+            chatId = -1;
+        }
         const data: WebSocketMessageDataTypes[WebSocketMessageTypes.UNLIKE] = {
             id: likeId,
             unlikerId: senderId,
@@ -334,6 +324,14 @@ class UserService {
     async getLikes(userId: number): Promise<Like[]> {
         const like = await this.likeModel.getAllByLikedId(userId);
         return like;
+    }
+
+    async setUserDisconnected(userId: number): Promise<void> {
+        await this.userModel.setUserConnection(userId, false, new Date());
+    }
+
+    async setUserConnected(userId: number): Promise<void> {
+        await this.userModel.setUserConnection(userId, true);
     }
 
 }

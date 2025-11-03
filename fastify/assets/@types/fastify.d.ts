@@ -11,10 +11,11 @@ declare module 'fastify' {
       updateUserProfilePicture(id: number, pictureIndex: number): Promise<string>;
       addUserProfilePicture(id: number, pictureName: string): Promise<void>;
       removeUserProfilePicture(id: number, pictureIndex: number): Promise<void>;
-      sendMessage(senderId: number, receiverId: number, content: string): Promise<void>;
       sendLike(senderId: number, receiverId: number): Promise<void>;
       sendUnlike(senderId: number, receiverId: number): Promise<void>;
       getLikes(userId: number): Promise<Like[]>;
+      setUserConnected(userId: number): Promise<void>;
+      setUserDisconnected(userId: number): Promise<void>;
       getMe(id: number): Promise<{
         id: number;
         email: string;
@@ -54,6 +55,15 @@ declare module 'fastify' {
       sendUnlike(id: number, data: DataTypes[types.UNLIKE]): void;
       sendProfileViewed(id: number, data: DataTypes[types.VIEWED]): void;
       findUserBySocket(ws): number | undefined;
+    };
+
+    chatService: {
+      createChat(userIds: number[]): Promise<number>;
+      deleteChat(id: number): Promise<void>;
+      sendMessage(senderId: number, chatId: number, content: string): Promise<void>;
+      addChatFile(senderId: number, fileURL: string, chatId: number): Promise<void>;
+      getChatBetweenUsers(userId1s: number[]): Promise<Chat | null>;
+      getChatMessages(userId: number, chatId: number, fromLast: number, toLast: number): Promise<ChatMessage[]>;
     };
     authenticate(request: any, reply: any): Promise<void>;
   }

@@ -83,7 +83,6 @@ const profilePictureRoutes = async (fastify: FastifyInstance) => {
                     properties: {
                         message: { type: 'string' },
                         url: { type: 'string' }
-
                     },
                     additionalProperties: false
                 },

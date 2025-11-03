@@ -13,7 +13,7 @@ const loginRoutes = async (fastify: FastifyInstance) => {
                 required: ['email', 'password'],
                 additionalProperties: false
             },
-            response: { // TODO fix return code
+            response: {
                 203: {
                     type: 'object',
                     cookies: {
