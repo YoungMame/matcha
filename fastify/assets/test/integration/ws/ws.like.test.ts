@@ -48,7 +48,7 @@ describe('Websocket like test', () => {
         const ws1 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token1}` } });
         const ws2 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token2}` } });
 
-        const meData2 = await app.userService.getUserPublic('wstestuser2@example.com');
+        const meData2 = await app.userService.getUserPublic(undefined, 'wstestuser2@example.com');
         expect(meData2).to.be.an('object');
         const user2id = meData2.id;
 
