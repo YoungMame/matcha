@@ -2,6 +2,7 @@ import PasswordManager from "../utils/password";
 import User from "../classes/User";
 import UserModel from "../models/User";
 import LikeModel from "../models/Like";
+import ViewModel from "../models/View"
 // import ChatModel from "../models/Chat";
 import fp from 'fastify-plugin';
 import fs from 'fs';
@@ -16,6 +17,7 @@ class UserService {
     private fastify: FastifyInstance;
     private userModel: UserModel;
     private likeModel: LikeModel;
+    private viewModel: ViewModel
     // private chatModel: ChatModel;
     UsersCache: Map<number, User>;
 
@@ -23,6 +25,7 @@ class UserService {
         this.fastify = fastify;
         this.userModel = new UserModel(fastify);
         this.likeModel = new LikeModel(fastify);
+        this.viewModel = new ViewModel(fastify);
         // this.chatModel = new ChatModel(fastify);
         this.UsersCache = new Map<number, User>();
     }
@@ -223,7 +226,7 @@ class UserService {
         });
     }
 
-    async getUserPublic(id: number | string): Promise<{
+    async getUserPublic(viewerId: number | undefined, id: number | string): Promise<{
         id: number;
         username: string;
         profilePictureIndex: number | undefined;
@@ -238,6 +241,20 @@ class UserService {
         const user = await this.getUser(id);
         if (!user)
             throw new NotFoundError();
+        if (viewerId)
+        {
+            const existingView = await this.viewModel.getBeetweenUsers(viewerId, user.id);
+            if (!existingView)
+            {
+                const view = await this.viewModel.insert(viewerId, user.id);
+                this.fastify.webSocketService.sendProfileViewed(user.id, {
+                    id: view.id,
+                    viewerId: view.viewerId,
+                    viewedId: view.viewedId,
+                    createdAt: view.createdAt
+                });
+            }
+        }
         return {
             id: user.id,
             username: user.username,
