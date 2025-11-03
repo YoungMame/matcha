@@ -4,7 +4,7 @@ import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
 
 // import fixtures
-import { signUpAndGetToken, UserData } from '../fixtures/auth.fixtures';
+import { signUpAndGetToken, quickUser, UserData } from '../fixtures/auth.fixtures';
 
 describe('Websocket like test', () => {
     let app: FastifyInstance;
@@ -21,36 +21,14 @@ describe('Websocket like test', () => {
     it('should get connected to ws and deliver a like to the target user then unlike', async function (this: any) {
         this.timeout(5000);
 
-        const userData: UserData = {
-            username: 'wslikestestuser1',
-            email: 'wslikestestuser1@example.com',
-            password: 'ghhgdhgdF123!',
-            bornAt: '2000-01-01',
-            orientation: 'heterosexual',
-            gender: 'men'
-        };
-
-        const token1 = await signUpAndGetToken(app, userData);
-        expect(token1).to.be.a('string');
-
-        const userData2: UserData = {
-            username: 'wslikestestuser2',
-            email: 'wslikestestuser2@example.com',
-            password: 'ghhgdhgdF123!',
-            bornAt: '2000-01-01',
-            orientation: 'heterosexual',
-            gender: 'men'
-        };
-
-        const token2 = await signUpAndGetToken(app, userData2);
-        expect(token2).to.be.a('string');
+        const { userData: data1, token: token1 } = await quickUser(app);
+        const { userData: data2, token: token2 } = await quickUser(app);
 
         const ws1 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token1}` } });
         const ws2 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token2}` } });
 
-        const meData2 = await app.userService.getUserPublic(undefined, 'wslikestestuser2@example.com');
-        expect(meData2).to.be.an('object');
-        const user2id = meData2.id;
+        const user2id = data2.id;
+        const user1id = data1.id;
 
         let resolveMsg: (value: any) => void = () => {};
         const promise = new Promise<string>(r => { resolveMsg = r; });
@@ -65,7 +43,6 @@ describe('Websocket like test', () => {
             headers: {
                 'Cookie': `jwt=${token1}`
             },
-            body: {}
         });
         expect(response.statusCode).to.equal(201);
 
@@ -73,7 +50,7 @@ describe('Websocket like test', () => {
         const object = JSON.parse(value);
         expect(object.type).to.equal('like');
         expect(object.data).to.be.an('object');
-        expect(object.data.likerId).to.equal(user2id - 1);
+        expect(object.data.likerId).to.equal(user1id);
 
         let resolveMsg2: (value: any) => void = () => {};
         const promise2 = new Promise<string>(r => { resolveMsg2 = r; });
@@ -86,7 +63,7 @@ describe('Websocket like test', () => {
             method: 'DELETE',
             url: `/private/user/like/${user2id}`,
             headers: {
-                'Cookie': `jwt=${token1}`
+                'Cookie': `jwt=${token2}`
             },
             body: {}
         });
@@ -102,25 +79,11 @@ describe('Websocket like test', () => {
     it('should not be able to like their own profile', async function (this: any) {
         this.timeout(5000);
 
-        const userData: UserData = {
-            username: 'wslikestestuser11',
-            email: 'wslikestestuser11@example.com',
-            password: 'ghhgdhgdF123!',
-            bornAt: '2000-01-01',
-            orientation: 'heterosexual',
-            gender: 'men'
-        };
-
-        const token = await signUpAndGetToken(app, userData);
-        expect(token).to.be.a('string');
-
-        const meData = await app.userService.getUserPublic(undefined, 'wslikestestuser11@example.com');
-        expect(meData).to.be.an('object');
-        const userId = meData.id;
+        const { userData, token } = await quickUser(app);
 
         const response = await app.inject({
             method: 'POST',
-            url: `/private/user/like/${userId}`,
+            url: `/private/user/like/${userData.id}`,
             headers: {
                 'Cookie': `jwt=${token}`
             },
@@ -132,41 +95,12 @@ describe('Websocket like test', () => {
     it('should not be able to like a profile twice', async function (this: any) {
         this.timeout(5000);
 
-        const userDataA: UserData = {
-            username: 'wslikestestuser21',
-            email: 'wslikestestuser21@example.com',
-            password: 'ghhgdhgdF123!',
-            bornAt: '2000-01-01',
-            orientation: 'heterosexual',
-            gender: 'men'
-        };
-
-        const userDataB: UserData = {
-            username: 'wslikestestuser22',
-            email: 'wslikestestuser22@example.com',
-            password: 'ghhgdhgdF123!',
-            bornAt: '2000-01-01',
-            orientation: 'heterosexual',
-            gender: 'men'
-        };
-
-
-        const tokenA = await signUpAndGetToken(app, userDataA);
-        expect(tokenA).to.be.a('string');
-
-        const meDataA = await app.userService.getUserPublic(undefined, 'wslikestestuser21@example.com');
-        expect(meDataA).to.be.an('object');
-
-        const tokenB = await signUpAndGetToken(app, userDataB);
-        expect(tokenB).to.be.a('string');
-
-        const meDataB = await app.userService.getUserPublic(undefined, 'wslikestestuser22@example.com');
-        expect(meDataB).to.be.an('object');
-        const userId = meDataB.id;
+        const { userData: userAData, token: tokenA } = await quickUser(app);
+        const { userData: userBData, token: tokenB } = await quickUser(app);
 
         const responseA = await app.inject({
             method: 'POST',
-            url: `/private/user/like/${userId}`,
+            url: `/private/user/like/${userBData.id}`,
             headers: {
                 'Cookie': `jwt=${tokenA}`
             },
@@ -175,7 +109,7 @@ describe('Websocket like test', () => {
         expect(responseA.statusCode).to.equal(201);
         const responseB = await app.inject({
             method: 'POST',
-            url: `/private/user/like/${userId}`,
+            url: `/private/user/like/${userBData.id}`,
             headers: {
                 'Cookie': `jwt=${tokenA}`
             },
@@ -187,38 +121,18 @@ describe('Websocket like test', () => {
     it('should send a like event when a user likes another user', async function (this: any) {
         this.timeout(5000);
 
-        const userData: UserData = {
-            username: 'wslikestestuser41',
-            email: 'wslikestestuser41@example.com',
-            password: 'ghhgdhgdF123!',
-            bornAt: '2000-01-01',
-            orientation: 'heterosexual',
-            gender: 'men'
-        };
-
-        const token1 = await signUpAndGetToken(app, userData);
-        expect(token1).to.be.a('string');
-
-        const userData2: UserData = {
-            username: 'wslikestestuser42',
-            email: 'wslikestestuser42@example.com',
-            password: 'ghhgdhgdF123!',
-            bornAt: '2000-01-01',
-            orientation: 'heterosexual',
-            gender: 'men'
-        };
-
-        const token2 = await signUpAndGetToken(app, userData2);
-        expect(token2).to.be.a('string');
+       const { userData: user1Data, token: token1 } = await quickUser(app);
+       const { userData: user2Data, token: token2 } = await quickUser(app);
 
         const ws1 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token1}` } });
         const ws2 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token2}` } });
-
-        const meData1 = await app.userService.getUserPublic(undefined, 'wslikestestuser41@example.com');
+        console.log('user1Data:', user1Data);
+        console.log('user2Data:', user2Data);
+        const meData1 = await app.userService.getUserPublic(undefined, user1Data.email);
         expect(meData1).to.be.an('object');
         const user1id = meData1.id;
 
-        const meData2 = await app.userService.getUserPublic(undefined, 'wslikestestuser42@example.com');
+        const meData2 = await app.userService.getUserPublic(undefined, user2Data.email);
         expect(meData2).to.be.an('object');
         const user2id = meData2.id;
 
@@ -254,12 +168,6 @@ describe('Websocket like test', () => {
         expect(object.type).to.equal('like_back');
         expect(object.data).to.be.an('object');
         expect(object.data.id).to.be.a('number');
-        
-        // TODO uncomment
-        // const createdChatId = object.data.createdChatId;
-        // const chatExists = await app.chatModel.getChatById(createdChatId);
-        // expect(chatExists).to.be.an('object');
-        // expect(chatExists.members).to.include.members([user1id, user2id]);
 
         ws1.terminate();
         ws2.terminate();
