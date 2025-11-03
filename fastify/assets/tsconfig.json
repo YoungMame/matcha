@@ -9,6 +9,9 @@
     // See also https://aka.ms/tsconfig/module
     "module": "commonjs",
     "target": "es2024",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
@@ -33,5 +36,13 @@
 
     "strict": true,
     "skipLibCheck": true,
-  }
+  },
+  "ts-node": {
+    "files": true
+  },
+  "include": [
+    "./**/*.ts",
+    "./**/*.d.ts",
+    "./**/*.ts"
+  ]
 }

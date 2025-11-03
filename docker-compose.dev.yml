@@ -4,15 +4,19 @@ services:
   fastify:
     container_name: fastify-app
     depends_on:
-      - postgresql
+      - db
     environment:
       NODE_ENV: dev
-      PG: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgresql:5432/${POSTGRES_DB}
+      PG: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      PGDB: ${POSTGRES_DB}
       PGUSER: ${POSTGRES_USER}
       PGPASSWORD: ${POSTGRES_PASSWORD}
       PGDATABASE: ${POSTGRES_DB}
-      PGHOST: postgresql
+      PGHOST: db
       PGPORT: 5432
+      RUN_SEED: ${RUN_SEED}
+      JWT_SECRET: ${JWT_SECRET}
+      COOKIE_SECRET: ${COOKIE_SECRET}
     restart: on-failure
     build: 
         context: ./fastify
@@ -29,6 +33,7 @@ services:
           target: /usr/src/app
           ignore:
             - node_modules/
+            - uploads/
   
   nextjs:
     container_name: nextjs-app
@@ -70,8 +75,7 @@ services:
     networks:
       - router
 
-  postgresql:
-    container_name: postgresql
+  db:
     image: postgres:18-alpine3.22
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -79,13 +83,19 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
      - pgdata:/var/lib/postgresql/data
+     - ./postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - router
+    ports:
+      - 5432:5432
 
   adminer:
     container_name: adminer
+    hostname: adminer
     image: adminer:5.4.1
     restart: always
     depends_on:
-      - postgresql
+      - db
     ports:
       - 8080:8080
     networks:
