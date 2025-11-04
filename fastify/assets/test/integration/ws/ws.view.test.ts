@@ -124,8 +124,6 @@ describe('Websocket view test', () => {
                 resolveMsg3(false);
         });
 
-
-
         const response2 = await app.inject({
             method: 'GET',
             url: `/private/user/view/${data1.id}`,
