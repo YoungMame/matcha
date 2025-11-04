@@ -1,5 +1,4 @@
 import { FastifyInstance } from "fastify";
-import User from "../../../srcs/classes/User";
 
 export type UserData = {
     id?: number;
@@ -44,14 +43,14 @@ export const quickUser = async (app: FastifyInstance): Promise<{ userData: UserD
         password: 'fsdaf!ADAasf2321!!!!',
         bornAt: '2000-01-01',
         orientation: 'heterosexual',
-        gender: (userCounter % 2 === 0 ? 'men' : 'women')
+        gender: 'men'
     };
     const token = await signUpAndGetToken(app, userData);
     if (!token) throw new Error('Failed to create quick user');
 
     const response = await app.inject({
         method: 'GET',
-        url: '/private/user/me',
+        url: '/private/user/me/profile',
         headers: {
             'Cookie': `jwt=${token}`
         }

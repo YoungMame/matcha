@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { AppError } from '../../utils/error';
+import { AppError, NotFoundError, UnauthorizedError } from '../../utils/error';
 
 export const loginHandler = async (
     request: FastifyRequest,
@@ -23,7 +23,11 @@ export const loginHandler = async (
         }).send({ message: 'User logged in successfully' });
     } catch (error) {
         if (error instanceof AppError)
+        {
+            if (error instanceof NotFoundError || error instanceof UnauthorizedError)
+                return reply.code(404).send({ error: "Wrong email or password" });
             return reply.code(error.statusCode).send({ error: error.message });
+        }
         return reply.code(500).send({ error: 'Internal server error' });
     }
 }

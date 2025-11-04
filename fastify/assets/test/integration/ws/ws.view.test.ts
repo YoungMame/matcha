@@ -58,6 +58,7 @@ describe('Websocket view test', () => {
             resolveMsg2(data.toString());
         });
 
+
         const response2 = await app.inject({
             method: 'GET',
             url: `/private/user/view/${data1.id}`,
@@ -66,6 +67,7 @@ describe('Websocket view test', () => {
             },
             body: {}
         });
+
         expect(response2.statusCode).to.equal(200);
         const value2 = await promise2;
         const object2 = JSON.parse(value2);
@@ -114,7 +116,7 @@ describe('Websocket view test', () => {
         let resolveMsg3: (value: any) => void = () => {};
         const promise2 = new Promise<string>(r => { resolveMsg2 = r; });
         const promise3 = new Promise<boolean>(r => { resolveMsg3 = r; });
-        let isFirstNotificationDelivered = true;
+        let isFirstNotificationDelivered = false;
         ws1.on('message', (data: Buffer) => {
             if (!isFirstNotificationDelivered)
                 resolveMsg2(data.toString());
@@ -122,9 +124,7 @@ describe('Websocket view test', () => {
                 resolveMsg3(false);
         });
 
-        setTimeout(() => {
-            resolveMsg3(true);
-        }, 4000);
+
 
         const response2 = await app.inject({
             method: 'GET',
@@ -149,8 +149,15 @@ describe('Websocket view test', () => {
                 'Cookie': `jwt=${token2}`
             },
         });
+
+        const timer = setTimeout(() => {
+            resolveMsg3(true);
+        }, 2000);
+
         const value3 = await promise3;
         expect(value3).to.equal(true); // if no second notification is delivered, the promise resolves to true
+
+        clearTimeout(timer);
 
         ws1.terminate();
         ws2.terminate();

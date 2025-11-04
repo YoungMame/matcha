@@ -63,9 +63,8 @@ describe('Websocket like test', () => {
             method: 'DELETE',
             url: `/private/user/like/${user2id}`,
             headers: {
-                'Cookie': `jwt=${token2}`
+                'Cookie': `jwt=${token1}`
             },
-            body: {}
         });
         expect(response2.statusCode).to.equal(200);
         const value2 = await promise2;
@@ -126,8 +125,6 @@ describe('Websocket like test', () => {
 
         const ws1 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token1}` } });
         const ws2 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token2}` } });
-        console.log('user1Data:', user1Data);
-        console.log('user2Data:', user2Data);
         const meData1 = await app.userService.getUserPublic(undefined, user1Data.email);
         expect(meData1).to.be.an('object');
         const user1id = meData1.id;
@@ -172,6 +169,102 @@ describe('Websocket like test', () => {
         ws1.terminate();
         ws2.terminate();
     });
+
+    const sendLike = async (app: FastifyInstance, fromToken: string, toUserId: number) => {
+        const response = await app.inject({
+            method: 'POST',
+            url: `/private/user/like/${toUserId}`,
+            headers: {
+                'Cookie': `jwt=${fromToken}`
+            },
+            body: {}
+        });
+        return response;
+    }
+
+    it('should be able to see who liked his profile', async function (this: any) {
+        this.timeout(5000);
+
+        const { userData: userAData, token: tokenA } = await quickUser(app);
+        const { userData: userBData, token: tokenB } = await quickUser(app);
+        const { userData: userCData, token: tokenC } = await quickUser(app);
+
+        const responseCempty = await app.inject({
+            method: 'GET',
+            url: `/private/user/like/`,
+            headers: {
+                'Cookie': `jwt=${tokenC}`
+            }
+        });
+        expect(responseCempty.statusCode).to.equal(200);
+        const responseEmpty = JSON.parse(responseCempty.body);
+        const emptyLikes = responseEmpty.likes;
+        expect(emptyLikes).to.be.an('array');
+        expect(emptyLikes.length).to.equal(0);
+
+        const responseA = await sendLike(app, tokenA, userCData?.id as number);
+        const responseB = await sendLike(app, tokenB, userCData?.id as number);
+
+        const responseC = await app.inject({
+            method: 'GET',
+            url: `/private/user/like/`,
+            headers: {
+                'Cookie': `jwt=${tokenC}`
+            }
+        });
+        expect(responseC.statusCode).to.equal(200);
+        const responseData = JSON.parse(responseC.body);
+        const likes = responseData.likes;
+        expect(likes).to.be.an('array');
+        const likerIds = likes.map((like: any) => like.likerId);
+        expect(likerIds).to.include.members([userAData.id, userBData.id]);
+    });
+
+    it('should deliver a notification on like back and create a chat', async function (this: any) {
+        this.timeout(5000);
+
+        const { userData: userAData, token: tokenA } = await quickUser(app);
+        const { userData: userBData, token: tokenB } = await quickUser(app);
+
+        const ws1 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${tokenA}` } });
+        const ws2 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${tokenB}` } });
+
+        let resolveMsg: (value: any) => void = () => {};
+        const promise = new Promise<string>(r => { resolveMsg = r; });
+
+        ws1.on('message', (data: Buffer) => {
+            const dataStr = data.toString();
+            const rawObject = JSON.parse(dataStr);
+            if (rawObject.type === 'like_back') {
+                resolveMsg(data.toString());
+            }
+        });
+
+        let resolveMsg2: (value: any) => void = () => {};
+        const promise2 = new Promise<string>(r => { resolveMsg2 = r; });
+
+        ws2.on('message', (data: Buffer) => {
+            resolveMsg2(data.toString());
+        });
+
+        await sendLike(app, tokenA, userBData?.id as number);
+        await sendLike(app, tokenB, userAData?.id as number);
+
+        const value = await promise;
+        const object = JSON.parse(value);
+        const chatId = object.data.createdChatId;
+        expect(object.type).to.equal('like_back');
+
+        const value2 = await promise2;
+        const object2 = JSON.parse(value2);
+        expect(object2.type).to.equal('like');
+        expect(object2.data.likerId).to.be.equal(userAData.id);
+
+        const chat = await app.chatService.getChatBetweenUsers([userAData.id as number, userBData.id as number]);
+        expect(chat).to.be.an('object');
+        expect(chat.id).to.be.a('number').and.equal(chatId);
+    });
+
 
     // TODO not validated or not pp user should not be able to like another user or be liked
 });
