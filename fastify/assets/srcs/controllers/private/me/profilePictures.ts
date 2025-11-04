@@ -30,13 +30,9 @@ export const addProfilePictureHandler = async (
     request: FastifyRequest,
     reply: FastifyReply
 ) => {
-    const {
-        index
-    } = request.params as any
-
     try {
         const user = request.user;
-        const userId: number = (user as any)?.id; // TODO manage jwt in prehandler
+        const userId: number = (user as any)?.id;
         if (!userId)
             throw new UnauthorizedError();
 
@@ -54,7 +50,12 @@ export const addProfilePictureHandler = async (
         const newFileURL = `https://${process.env.DOMAIN || 'localhost'}/api/private/uploads/${userId}/${newFileName}`;
         const dest = fs.createWriteStream(newFilePath);
         pump(file.file, dest);
-        await request.server.userService.addUserProfilePicture(userId, newFileURL);
+        try {
+            await request.server.userService.addUserProfilePicture(userId, newFileURL);
+        } catch (error) {
+            await fs.unlinkSync(newFilePath);
+            throw error;
+        }
         return reply.code(200).send({ message: 'User profile picture updated successfully', url: newFileURL });
     } catch (error) {
         if (error instanceof AppError)
@@ -73,7 +74,7 @@ export const removeProfilePictureHandler = async (
 
     try {
         const user = request.user;
-        const userId: number = (user as any)?.id; // TODO manage jwt in prehandler
+        const userId: number = (user as any)?.id;
         if (!userId)
             throw new UnauthorizedError();
 

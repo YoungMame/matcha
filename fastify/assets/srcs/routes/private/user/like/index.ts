@@ -1,23 +1,22 @@
-import { FastifyInstance } from "fastify";
-import { setProfilePictureIndexHandler, addProfilePictureHandler, removeProfilePictureHandler } from "../../../../controllers/private/me/profilePictures";
+import { FastifyInstance } from 'fastify';
+import { likeProfileHandler, unlikeProfile, getLikesHandler } from '../../../../controllers/private/like';
 
-const profilePictureRoutes = async (fastify: FastifyInstance) => {
-    fastify.put('/:index', {
+const likeRoutes = async (fastify: FastifyInstance) => {
+    fastify.post('/:userId', {
         schema: {
             params: {
                 type: 'object',
                 properties: {
-                    index: { type: 'integer', minimum: 0 }
+                    userId: { type: 'integer' }
                 },
-                required: ['index'],
+                required: ['userId'],
                 additionalProperties: false
             },
             response: {
-                200: {
+                201: {
                     type: 'object',
                     properties: {
                         message: { type: 'string' },
-                        url: { type: 'string' }
                     },
                     additionalProperties: false
                 },
@@ -31,80 +30,88 @@ const profilePictureRoutes = async (fastify: FastifyInstance) => {
                 500: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        error: { type: 'string' }
                     },
                     additionalProperties: false
                 }
             }
         },
-        handler: setProfilePictureIndexHandler
+        handler: likeProfileHandler
     });
-    fastify.delete('/:index', {
+
+    fastify.delete('/:userId', {
         schema: {
             params: {
                 type: 'object',
                 properties: {
-                    index: { type: 'integer', minimum: 0 }
+                    userId: { type: 'integer' }
                 },
-                required: ['index'],
+                required: ['userId'],
                 additionalProperties: false
             },
             response: {
                 200: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        message: { type: 'string' },
                     },
                     additionalProperties: false
                 },
                 400: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        message: { type: 'string', }
                     },
                     additionalProperties: false
                 },
                 500: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        error: { type: 'string' }
                     },
                     additionalProperties: false
                 }
             }
         },
-        handler: removeProfilePictureHandler
+        handler: unlikeProfile
     });
-    fastify.post('/', {
+
+    fastify.get('/', {
         schema: {
             response: {
                 200: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' },
-                        url: { type: 'string' }
+                        likes: { type: 'array', items: { 
+                            type: 'object',
+                            properties: {
+                                id: { type: 'integer' },
+                                likerId: { type: 'integer' },
+                                likedId: { type: 'integer' },
+                                createdAt: { type: 'string', format: 'date-time' }
+                            }
+                        }}
                     },
                     additionalProperties: false
                 },
                 400: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' },
+                        message: { type: 'string', }
                     },
                     additionalProperties: false
                 },
                 500: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        error: { type: 'string' }
                     },
                     additionalProperties: false
                 }
             }
         },
-        handler: addProfilePictureHandler
+        handler: getLikesHandler
     });
 }
 
-
-export default profilePictureRoutes;
+export default likeRoutes;

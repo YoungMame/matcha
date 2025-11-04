@@ -1,21 +1,32 @@
 import PasswordManager from "../utils/password";
 import User from "../classes/User";
 import UserModel from "../models/User";
+import LikeModel from "../models/Like";
+import ViewModel from "../models/View"
+// import ChatModel from "../models/Chat";
 import fp from 'fastify-plugin';
 import fs from 'fs';
 import path from "path";
 import { FastifyInstance } from 'fastify';
-import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError } from "../utils/error";
+import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError, ForbiddenError } from "../utils/error";
 import commonPasswords from '../utils/1000-most-common-passwords.json';
+import { WebSocketMessageTypes, WebSocketMessageDataTypes } from "./WebSocketService";
+import { Like } from "../models/Like"
 
 class UserService {
     private fastify: FastifyInstance;
     private userModel: UserModel;
+    private likeModel: LikeModel;
+    private viewModel: ViewModel
+    // private chatModel: ChatModel;
     UsersCache: Map<number, User>;
 
     constructor(fastify: FastifyInstance) {
         this.fastify = fastify;
         this.userModel = new UserModel(fastify);
+        this.likeModel = new LikeModel(fastify);
+        this.viewModel = new ViewModel(fastify);
+        // this.chatModel = new ChatModel(fastify);
         this.UsersCache = new Map<number, User>();
     }
 
@@ -27,8 +38,7 @@ class UserService {
             codeArray[i] = Math.random() * 10 - 1; // give a digit
 
         const code = codeArray.map(digit => Math.round(digit).toString()).join('');
-        const seconds = 600
-        console.log(`Sending verification email to ${user.email} for user ID ${user.id} with code ${code}, available for ${600 / 60} minutes`);
+        const seconds = 600;
         user.setEmailCode("emailValidation", seconds, code);
     }
 
@@ -184,7 +194,6 @@ class UserService {
         } catch (error) {
             user.profilePictures.pop();
             user.profilePictureIndex = (user.profilePictures.length === 0) ? undefined : 0;
-            fs.unlinkSync(pictureName);
             throw error;
         }
     }
@@ -215,7 +224,7 @@ class UserService {
         });
     }
 
-    async getUserPublic(id: number): Promise<{
+    async getUserPublic(viewerId: number | undefined, id: number | string): Promise<{
         id: number;
         username: string;
         profilePictureIndex: number | undefined;
@@ -230,6 +239,19 @@ class UserService {
         const user = await this.getUser(id);
         if (!user)
             throw new NotFoundError();
+        if (viewerId)
+        {
+            const existingView = await this.viewModel.getBeetweenUsers(viewerId, user.id);
+            if (!existingView)
+            {
+                const view = await this.viewModel.insert(viewerId, user.id);
+                this.fastify.webSocketService.sendProfileViewed(user.id, {
+                    id: view.id,
+                    viewerId: view.viewerId,
+                    createdAt: view.createdAt
+                });
+            }
+        }
         return {
             id: user.id,
             username: user.username,
@@ -245,6 +267,75 @@ class UserService {
                 longitude: user.location?.longitude || null
             }
         };
+    }
+
+    async sendLike(senderId: number, receiverId: number): Promise<void> {
+        if (senderId === receiverId)
+            throw new BadRequestError();
+        // TODO check if user as a pp and is verified before he can be liked
+        const existingLike = await this.likeModel.getLikeBetweenUsers(senderId, receiverId);
+        if (existingLike)
+            throw new ForbiddenError();
+        const existingLikeBack = await this.likeModel.getLikeBetweenUsers(receiverId, senderId);
+        const like = await this.likeModel.insert(senderId, receiverId)
+        if (existingLikeBack)
+        {
+            const chatId = await this.fastify.chatService.createChat([senderId, receiverId]);
+            const data: WebSocketMessageDataTypes[WebSocketMessageTypes.LIKE_BACK] = {
+                id: like.id,
+                createdChatId: chatId,
+                createdAt: like.createdAt
+            };
+            this.fastify.webSocketService.sendLikeBack(receiverId, data);
+        }
+        const data: WebSocketMessageDataTypes[WebSocketMessageTypes.LIKE] = {
+            id: like.id,
+            likerId: senderId,
+            createdAt: like.createdAt
+        };
+        this.fastify.webSocketService.sendLike(receiverId, data);
+    }
+
+    async sendUnlike(senderId: number, receiverId: number): Promise<void> {
+        if (senderId === receiverId)
+            throw new BadRequestError();
+        const like = await this.likeModel.getLikeBetweenUsers(senderId, receiverId);
+        if (!like)
+            throw new NotFoundError();
+        const likeId = like.id;
+        await this.likeModel.remove(likeId);
+        const chat = await this.fastify.chatService.getChatBetweenUsers([senderId, receiverId]);
+        let chatId: number;
+        if (chat) {
+            chatId = chat.id;
+            await this.fastify.chatService.deleteChat(chatId);
+        }  else {
+            chatId = -1;
+        }
+        const data: WebSocketMessageDataTypes[WebSocketMessageTypes.UNLIKE] = {
+            id: likeId,
+            unlikerId: senderId,
+            createdChatId: chatId,
+            removedAt: new Date()
+        };
+        this.fastify.webSocketService.sendUnlike(receiverId, data);
+    }
+
+    async getLikes(userId: number): Promise<Like[]> {
+        const like = await this.likeModel.getAllByLikedId(userId);
+        return like;
+    }
+
+    async setUserDisconnected(userId: number): Promise<void> {
+        await this.userModel.setUserConnection(userId, false, new Date());
+    }
+
+    async setUserConnected(userId: number): Promise<void> {
+        await this.userModel.setUserConnection(userId, true);
+    }
+
+    async getUserConnectionStatus(userId: number): Promise<{ isConnected: boolean; lastConnection: Date | undefined } | null> {
+        return await this.userModel.getUserConnection(userId);
     }
 }
 
