@@ -66,10 +66,10 @@ describe('Auth Integration Tests', () => {
         expect(loginResponse.statusCode).to.equal(203);
 
         const wrongPassLogin = await login(app, 'testuser1@example.com', 'ghhgdh2gdF123!');
-        expect(wrongPassLogin.statusCode).to.equal(401);
+        expect(wrongPassLogin.statusCode).to.equal(404);
 
         const wrongEmailLogin = await login(app, 'testusesfasfr1@example.com', 'ghhgdhgdF123!');
-        expect(wrongEmailLogin.statusCode).to.equal(401);
+        expect(wrongEmailLogin.statusCode).to.equal(404);
     });
 
     it('should not create duplicated username', async () => {

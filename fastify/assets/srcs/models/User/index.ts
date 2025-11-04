@@ -1,6 +1,6 @@
 import { snakeCase } from "text-case";
 import { FastifyInstance } from "fastify";
-import { ForbiddenError, InternalServerError, UnauthorizedError } from "../../utils/error";
+import { ForbiddenError, InternalServerError, NotFoundError, UnauthorizedError } from "../../utils/error";
 
 type UserProfile = {
     [key: string]: any;
@@ -63,7 +63,7 @@ export default class UserModel {
             'SELECT * FROM users WHERE id=$1', [id]
         );
         if (result.rows.length === 0) {
-            throw new UnauthorizedError;
+            throw new NotFoundError;
         }
         this.nullToUndefined(result.rows[0]);
         const location = await this.findLocationByUserId(result.rows[0].id);
@@ -76,7 +76,7 @@ export default class UserModel {
             'SELECT * FROM users WHERE email=$1', [email]
         );
         if (result.rows.length === 0) {
-            throw new UnauthorizedError;
+            throw new NotFoundError;
         }
         this.nullToUndefined(result.rows[0]);
         const location = await this.findLocationByUserId(result.rows[0].id);
@@ -89,7 +89,7 @@ export default class UserModel {
             'SELECT * FROM users WHERE username=$1', [username]
         );
         if (result.rows.length === 0) {
-            throw new UnauthorizedError;
+            throw new NotFoundError;
         }
         this.nullToUndefined(result.rows[0]);
         const location = await this.findLocationByUserId(result.rows[0].id);

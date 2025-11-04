@@ -13,10 +13,9 @@ const signupRoutes = async (fastify: FastifyInstance) => {
                     bornAt: { type: 'string', format: 'date' },
                     orientation: { type: 'string', enum: ['heterosexual', 'homosexual', 'bisexual'] },
                     gender: { type: 'string', enum: ['men', 'women'] }
-
                 },
                 required: ['email', 'password', 'username', 'bornAt', 'orientation', 'gender'],
-                additionalProperties: false
+                additionalProperties: true
             },
             response: {
                 201: {

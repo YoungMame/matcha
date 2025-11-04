@@ -53,7 +53,7 @@ export const getLikesHandler = async (
         if (!userId)
             throw new UnauthorizedError();
         const likes = await request.server.userService.getLikes(userId);
-        return reply.code(200).send(likes);
+        return reply.code(200).send({ likes });
     } catch (error) {
         if (error instanceof AppError)
             return reply.status(error.statusCode).send({ error: error.message });
