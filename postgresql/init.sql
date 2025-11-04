@@ -15,9 +15,26 @@ CREATE TABLE if not exists users (
     gender GENDER NOT NULL,
     orientation ORIENTATION NOT NULL DEFAULT 'bisexual',
     fame_rate INTEGER DEFAULT 0,
+    is_connected BOOLEAN DEFAULT FALSE,
+    last_connection TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE if not exists blocked_users (
+    id SERIAL PRIMARY KEY,
+    blocker_id INTEGER NOT NULL,
+    blocked_id INTEGER NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE blocked_users
+ADD FOREIGN KEY (blocker_id) REFERENCES users(id)
+ON DELETE CASCADE;
+
+ALTER TABLE blocked_users
+ADD FOREIGN KEY (blocked_id) REFERENCES users(id)
+ON DELETE CASCADE;
 
 CREATE TABLE if not exists likes (
     id SERIAL PRIMARY KEY,
@@ -49,7 +66,7 @@ ON DELETE CASCADE;
 
 CREATE TABLE if not exists chats (
     id SERIAL PRIMARY KEY,
-    event_id INTEGER,
+    event_id INTEGER NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -80,6 +97,7 @@ CREATE TABLE if not exists events (
     title VARCHAR(255) NOT NULL,
     location_id INTEGER ,
     chat_id INTEGER,
+    date TIMESTAMP NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -88,8 +106,8 @@ CREATE TABLE if not exists locations (
     latitude DECIMAL NOT NULL,
     longitude DECIMAL NOT NULL,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_id INTEGER,
-    event_id INTEGER
+    user_id INTEGER DEFAULT NULL,
+    event_id INTEGER DEFAULT NULL
 );
 
 ALTER TABLE chats

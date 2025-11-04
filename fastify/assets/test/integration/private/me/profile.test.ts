@@ -194,7 +194,6 @@ describe('User me profile integration tests', async () => {
         expect(meData).to.have.property('orientation', newProperties.orientation);
         expect(meData).to.have.property('location').that.deep.equals(newProperties.location);
         expect(meData).to.have.property('bornAt');
-        console.log('meData', meData);
         expect(new Date(meData.bornAt).toISOString()).to.be.equal(new Date(newProperties.bornAt).toISOString());
     });
 

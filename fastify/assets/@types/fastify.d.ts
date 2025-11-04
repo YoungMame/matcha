@@ -11,6 +11,12 @@ declare module 'fastify' {
       updateUserProfilePicture(id: number, pictureIndex: number): Promise<string>;
       addUserProfilePicture(id: number, pictureName: string): Promise<void>;
       removeUserProfilePicture(id: number, pictureIndex: number): Promise<void>;
+      sendLike(senderId: number, receiverId: number): Promise<void>;
+      sendUnlike(senderId: number, receiverId: number): Promise<void>;
+      getLikes(userId: number): Promise<Like[]>;
+      setUserConnected(userId: number): Promise<void>;
+      setUserDisconnected(userId: number): Promise<void>;
+      getUserConnectionStatus(userId: number): Promise<{ isConnected: boolean; lastConnection: Date | undefined } | null>;
       getMe(id: number): Promise<{
         id: number;
         email: string;
@@ -26,7 +32,7 @@ declare module 'fastify' {
         location: { latitude: number | null; longitude: number | null };
         createdAt: Date;
       }>;
-      getUserPublic(id: number): Promise<{
+      getUserPublic(viewerId: number | undefined, id: number | string): Promise<{
         id: number;
         username: string;
         profilePictureIndex: number | undefined;
@@ -38,6 +44,31 @@ declare module 'fastify' {
         orientation: string;
         location: { latitude: number | null; longitude: number | null };
       }>;
+    };
+    webSocketService: {
+      handleClientMessage(id: number, message: string): void;
+      addConnection(id: number, ws): void;
+      removeConnection(id: number): void;
+      closeConnection(id: number): void;
+      sendMessage(id: number, data: DataTypes[types.MESSAGE]): void;
+      sendLike(id: number, data: DataTypes[types.LIKE]): void;
+      sendLikeBack(id: number, data: DataTypes[types.LIKE_BACK]): void;
+      sendUnlike(id: number, data: DataTypes[types.UNLIKE]): void;
+      sendProfileViewed(id: number, data: DataTypes[types.VIEWED]): void;
+      sendChatEvent(id: id, data: WebSocketMessageDataTypes[WebSocketMessageTypes.CHATEVENT]): void;
+      findUserBySocket(ws): number | undefined;
+    };
+
+    chatService: {
+      createChat(userIds: number[]): Promise<number>;
+      deleteChat(id: number): Promise<void>;
+      getChat(userId: number | undefined ,id: number): Promise<Chat | null>;
+      sendMessage(senderId: number, chatId: number, content: string): Promise<void>;
+      addChatFile(senderId: number, fileURL: string, chatId: number): Promise<void>;
+      getChatBetweenUsers(userId1s: number[]): Promise<Chat | null>;
+      getChatMessages(userId: number, chatId: number, fromLast: number, toLast: number): Promise<ChatMessage[]>;
+      deleteChatEvent(userId: number, chatId: number): Promise<void>;
+      createChatEvent(userId: number, chatId: number, title: string, latitude: number, longitude: number, date: Date): Promise<ChatEvent>;
     };
     authenticate(request: any, reply: any): Promise<void>;
   }

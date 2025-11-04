@@ -4,7 +4,7 @@ import privateRoutes from './private';
 
 const indexRoutes = async (fastify: FastifyInstance) => {
     fastify.get('/', async () => {
-        return { message: 'Welcome to the API', routes: ['/auth', '/private'] };
+        return { message: 'Welcome to the API', routes: ['/auth', '/private', '/ws'] };
     });
     
     fastify.get('/hello', async () => {

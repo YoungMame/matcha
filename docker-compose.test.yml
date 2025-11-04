@@ -25,13 +25,13 @@ services:
       - 3000
     networks:
       - router
-    # develop:
-    #   watch:
-    #     - action: sync
-    #       path: ./fastify/assets
-    #       target: /usr/src/app
-    #       ignore:
-    #         - node_modules/
+    develop:
+      watch:
+        - action: sync
+          path: ./fastify/assets
+          target: /usr/src/app
+          ignore:
+            - node_modules/
 
   db:
     image: postgres:18-alpine3.22

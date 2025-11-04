@@ -1,6 +1,6 @@
 import { snakeCase } from "text-case";
 import { FastifyInstance } from "fastify";
-import { ForbiddenError, InternalServerError, UnauthorizedError } from "../../utils/error";
+import { ForbiddenError, InternalServerError, NotFoundError, UnauthorizedError } from "../../utils/error";
 
 type UserProfile = {
     [key: string]: any;
@@ -63,7 +63,7 @@ export default class UserModel {
             'SELECT * FROM users WHERE id=$1', [id]
         );
         if (result.rows.length === 0) {
-            throw new UnauthorizedError;
+            throw new NotFoundError;
         }
         this.nullToUndefined(result.rows[0]);
         const location = await this.findLocationByUserId(result.rows[0].id);
@@ -76,7 +76,7 @@ export default class UserModel {
             'SELECT * FROM users WHERE email=$1', [email]
         );
         if (result.rows.length === 0) {
-            throw new UnauthorizedError;
+            throw new NotFoundError;
         }
         this.nullToUndefined(result.rows[0]);
         const location = await this.findLocationByUserId(result.rows[0].id);
@@ -89,7 +89,7 @@ export default class UserModel {
             'SELECT * FROM users WHERE username=$1', [username]
         );
         if (result.rows.length === 0) {
-            throw new UnauthorizedError;
+            throw new NotFoundError;
         }
         this.nullToUndefined(result.rows[0]);
         const location = await this.findLocationByUserId(result.rows[0].id);
@@ -155,5 +155,36 @@ export default class UserModel {
         await this.fastify.pg.query(
             `DELETE FROM users WHERE id=${id}`
         );
-    }  
+    }
+
+    setUserConnection = async (id: number, isConnected: boolean, lastConnection?: Date) => {
+        if (lastConnection)
+        {
+            await this.fastify.pg.query(
+                `UPDATE users SET is_connected=$1, last_connection=$2 WHERE id=$3`,
+                [isConnected, lastConnection.toISOString(), id]
+            );
+        }
+        else
+        {
+            await this.fastify.pg.query(
+                `UPDATE users SET is_connected=$1 WHERE id=$2`,
+                [isConnected, id]
+            );
+        }
+    }
+
+    getUserConnection = async (id: number): Promise<{ isConnected: boolean, lastConnection: Date | undefined } | null> => {
+        const result = await this.fastify.pg.query(
+            'SELECT is_connected, last_connection FROM users WHERE id=$1', [id]
+        );
+        if (result.rows.length === 0)
+            return null;
+        const isConnected = result.rows[0].is_connected as boolean;
+        const lastConnection = !isConnected ? new Date(result.rows[0].last_connection) : undefined;
+        return {
+            isConnected,
+            lastConnection
+        };
+    }
 }
