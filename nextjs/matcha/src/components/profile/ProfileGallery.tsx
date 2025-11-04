@@ -22,7 +22,7 @@ export default function ProfileGallery({
 
   if (allImages.length === 0) {
     return (
-      <div className="w-full aspect-3/4 bg-linear-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-2xl flex items-center justify-center">
+      <div className="w-full min-w-[450px] aspect-3/4 bg-linear-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-2xl flex items-center justify-center shadow-md">
         <span className="text-6xl">📷</span>
       </div>
     );
@@ -31,7 +31,7 @@ export default function ProfileGallery({
   return (
     <div className="space-y-4">
       {/* Main Image */}
-      <div className="relative w-full aspect-3/4 rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800">
+      <div className="relative w-full min-w-[450px] aspect-3/4 rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 shadow-lg">
         <Image
           src={allImages[selectedImage]}
           alt={`Photo de ${userName}`}
@@ -78,7 +78,7 @@ export default function ProfileGallery({
 
       {/* Thumbnail Grid */}
       {allImages.length > 1 && (
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-4 gap-2 min-w-[450px]">
           {allImages.map((img, idx) => (
             <button
               key={idx}

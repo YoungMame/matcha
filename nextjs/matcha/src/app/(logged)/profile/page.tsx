@@ -7,6 +7,7 @@ import Typography from "@/components/common/Typography";
 import Button from "@/components/common/Button";
 import Alert from "@/components/common/Alert";
 import ProfileView from "@/components/profile/ProfileView";
+import MatchingModal from "@/components/browsing/MatchingModal";
 import { mockUserProfiles } from "@/mocks/browsing_mocks";
 import {
   mockProfileInteractions,
@@ -19,16 +20,33 @@ import {
 } from "@/mocks/profile_mocks";
 import { UserProfile } from "@/types/userProfile";
 import { ProfileInteraction } from "@/types/profileInteraction";
+import { useBrowsing } from "@/contexts/BrowsingContext";
 
 export default function ProfilePage() {
   const searchParams = useSearchParams();
   const userId = searchParams.get("id");
+  const { selectedMatchUserId, closeMatchModal } = useBrowsing();
 
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [interaction, setInteraction] = useState<ProfileInteraction | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  
+  // Match modal state
+  const [matchModalUser, setMatchModalUser] = useState<UserProfile | null>(null);
+  const [isMatchModalOpen, setIsMatchModalOpen] = useState(false);
+
+  // Watch for match modal state from context
+  useEffect(() => {
+    if (selectedMatchUserId) {
+      const user = mockUserProfiles.find((u) => u.id === selectedMatchUserId);
+      if (user) {
+        setMatchModalUser(user);
+        setIsMatchModalOpen(true);
+      }
+    }
+  }, [selectedMatchUserId]);
 
   useEffect(() => {
     if (!userId) {
@@ -126,65 +144,100 @@ export default function ProfilePage() {
     }
   };
 
+  const handleMatchModalClose = () => {
+    setIsMatchModalOpen(false);
+    closeMatchModal();
+    setTimeout(() => setMatchModalUser(null), 300);
+  };
+
+  const handleMatchModalLike = (userId: string) => {
+    console.log("Liked user from match modal:", userId);
+    // TODO: Implement like logic
+  };
+
+  const handleMatchModalPass = (userId: string) => {
+    console.log("Passed user from match modal:", userId);
+    // TODO: Implement pass logic
+  };
+
   if (isLoading) {
     return (
-      <Container className="py-8 h-full overflow-y-auto">
-        <div className="flex items-center justify-center h-64">
-          <Typography variant="h3" color="secondary">
-            Chargement du profil...
-          </Typography>
-        </div>
-      </Container>
+      <div className="h-full overflow-y-auto bg-gray-50 dark:bg-gray-900">
+        <Container size="xl" className="py-8">
+          <div className="flex items-center justify-center h-64">
+            <Typography variant="h3" color="secondary">
+              Chargement du profil...
+            </Typography>
+          </div>
+        </Container>
+      </div>
     );
   }
 
   if (error || !profile || !interaction || !userId) {
     return (
-      <Container className="py-8 h-full overflow-y-auto">
-        <div className="space-y-4">
-          <Alert variant="error">{error || "Profil non trouvé"}</Alert>
-          <Button variant="primary" onClick={() => (window.location.href = "/browsing")}>
-            Retour à la recherche
-          </Button>
-        </div>
-      </Container>
+      <div className="h-full overflow-y-auto bg-gray-50 dark:bg-gray-900">
+        <Container size="xl" className="py-8">
+          <div className="space-y-4 max-w-5xl mx-auto">
+            <Alert variant="error">{error || "Profil non trouvé"}</Alert>
+            <Button variant="primary" onClick={() => (window.location.href = "/browsing")}>
+              Retour à la recherche
+            </Button>
+          </div>
+        </Container>
+      </div>
     );
   }
 
   const connectionStatus = getConnectionStatus(userId);
 
   return (
-    <Container className="py-8 h-full overflow-y-auto">
-      <div className="space-y-6">
-        {/* Back Button */}
-        <Button
-          variant="secondary"
-          onClick={() => (window.location.href = "/browsing")}
-          className="mb-4"
-        >
-          ← Retour à la recherche
-        </Button>
+    <div className="h-full w-full overflow-y-auto bg-gray-50 dark:bg-gray-900">
+      <Container size="full" className="py-8">
+        <div className="space-y-6">
+          {/* Back Button */}
+          <Button
+            variant="secondary"
+            onClick={() => (window.location.href = "/browsing")}
+            className="inline-flex items-center gap-2"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Retour à la recherche
+          </Button>
 
-        {/* Success Message */}
-        {successMessage && (
-          <Alert variant="success" className="animate-fade-in">
-            {successMessage}
-          </Alert>
-        )}
+          {/* Success Message */}
+          {successMessage && (
+            <Alert variant="success" className="animate-fade-in">
+              {successMessage}
+            </Alert>
+          )}
 
-        {/* Profile View */}
-        <ProfileView
-          profile={profile}
-          connectionStatus={connectionStatus}
-          isLiked={interaction.likedByMe}
-          isOnline={interaction.isOnline}
-          lastSeenAt={interaction.lastSeenAt}
-          hasProfilePicture={CURRENT_USER_HAS_PROFILE_PICTURE}
-          onToggleLike={handleToggleLike}
-          onBlock={handleBlock}
-          onReport={handleReport}
-        />
-      </div>
-    </Container>
+          {/* Profile View */}
+          <ProfileView
+            profile={profile}
+            connectionStatus={connectionStatus}
+            isLiked={interaction.likedByMe}
+            isOnline={interaction.isOnline}
+            lastSeenAt={interaction.lastSeenAt}
+            hasProfilePicture={CURRENT_USER_HAS_PROFILE_PICTURE}
+            onToggleLike={handleToggleLike}
+            onBlock={handleBlock}
+            onReport={handleReport}
+          />
+
+          {/* Matching Modal */}
+          <MatchingModal
+            isOpen={isMatchModalOpen}
+            onClose={handleMatchModalClose}
+            user={matchModalUser}
+            onLike={handleMatchModalLike}
+            onPass={handleMatchModalPass}
+            isFromMatch={true}
+          />
+        </div>
+      </Container>
+    </div>
   );
 }

@@ -8,29 +8,23 @@ import Typography from "@/components/common/Typography";
 import Stack from "@/components/common/Stack";
 import Button from "@/components/common/Button";
 import { useGeolocation } from "@/hooks/useGeolocation";
+import { useBrowsing } from "@/contexts/BrowsingContext";
 import LocationPermissionModal from "@/components/app/LocationPermissionModal";
-import LeftDrawer from "@/components/browsing/LeftDrawer";
 import SearchBar from "@/components/browsing/SearchBar";
 import { FilterBar, FilterOptions } from "@/components/browsing/FilterBar";
 import ProfileCard from "@/components/browsing/ProfileCard";
 import MatchingModal from "@/components/browsing/MatchingModal";
-import ChatInterface from "@/components/browsing/ChatInterface";
-import ChatProfilePanel from "@/components/browsing/ChatProfilePanel";
 import {
 	generateMockProfilesWithMetadata,
 	mockConversations,
 	mockMatches,
-	mockMessages,
 } from "@/mocks/browsing_mocks";
 import { UserProfile } from "@/types/userProfile";
-import { Message } from "@/types/message";
 import {
 	parseSearchParams,
 	calculateAge,
 	filterProfiles,
 } from "@/lib/searchUtils";
-
-type Tab = "matches" | "messages";
 
 interface User {
 	id: string;
@@ -40,16 +34,10 @@ interface User {
 export default function BrowsingPage() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
+	const { selectedMatchUserId, closeMatchModal } = useBrowsing();
 	const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isFromMatch, setIsFromMatch] = useState(false);
-	const [activeTab, setActiveTab] = useState<Tab>("matches");
-	const [selectedConversationId, setSelectedConversationId] = useState<
-		string | null
-	>(null);
-	const [allMessages, setAllMessages] = useState<Record<string, Message[]>>(
-		mockMessages
-	);
 	const [filters, setFilters] = useState<FilterOptions>({
 		sortBy: "none",
 		selectedInterests: [],
@@ -134,9 +122,17 @@ export default function BrowsingPage() {
 			setIsModalOpen(true);
 		}
 	};
+	
+	// Watch for match modal state from context
+	useEffect(() => {
+		if (selectedMatchUserId) {
+			handleOpenProfile(selectedMatchUserId, true);
+		}
+	}, [selectedMatchUserId, allProfiles]);
 
 	const handleCloseModal = () => {
 		setIsModalOpen(false);
+		closeMatchModal();
 		setTimeout(() => setSelectedUser(null), 300); // Clear after animation
 	};
 
@@ -149,52 +145,6 @@ export default function BrowsingPage() {
 		console.log("Passed user:", userId);
 		// TODO: Implement pass logic
 	};
-
-	const handleConversationClick = (conversationId: string) => {
-		setSelectedConversationId(conversationId);
-	};
-
-	const handleTabChange = (tab: Tab) => {
-		setActiveTab(tab);
-		// Only clear the selected conversation when switching to matches
-		if (tab === "matches") {
-			setSelectedConversationId(null);
-		}
-		// When switching to messages, the LeftDrawer will handle opening the last conversation
-	};
-
-	const handleSendMessage = (content: string) => {
-		if (!selectedConversationId) return;
-
-		const newMessage: Message = {
-			id: `msg-${Date.now()}`,
-			senderId: "current-user",
-			content,
-			timestamp: new Date(),
-		};
-
-		setAllMessages((prev) => ({
-			...prev,
-			[selectedConversationId]: [
-				...(prev[selectedConversationId] || []),
-				newMessage,
-			],
-		}));
-	};
-
-	// Get the current conversation data
-	const selectedConversation = selectedConversationId
-		? mockConversations.find((conv) => conv.id === selectedConversationId)
-		: null;
-
-	const selectedChatUser =
-		selectedConversation && selectedConversation.userId
-			? allProfiles.find((u) => u.id === selectedConversation.userId)
-			: null;
-
-	const conversationMessages = selectedConversationId
-		? allMessages[selectedConversationId as keyof typeof allMessages] || []
-		: [];
 
 	// if (isLoading) {
 	// 	return (
@@ -239,42 +189,9 @@ export default function BrowsingPage() {
 	// }
 
 	return (
-		<Stack direction="row" className="h-full bg-gray-50 dark:bg-gray-900">
-			{/* Left Drawer */}
-			<LeftDrawer
-				currentUser={{
-					username: "User",
-					// username: data?.user.username || "User",
-					pictureUrl: "/bob.jpg",
-				}}
-				matches={mockMatches}
-				conversations={mockConversations}
-				onMatchClick={(userId) => handleOpenProfile(userId, true)}
-				onConversationClick={handleConversationClick}
-				activeTab={activeTab}
-				onTabChange={handleTabChange}
-			/>
-
-			{/* Main Content - Conditional rendering based on view */}
-			{selectedConversationId && selectedChatUser ? (
-				// Chat View
-				<Stack direction="row" className="flex-1 overflow-hidden">
-					<ChatInterface
-						conversationId={selectedConversationId}
-						otherUser={{
-							id: selectedChatUser.id,
-							name: selectedChatUser.firstName,
-							pictureUrl: selectedChatUser.profilePicture || "/bob.jpg",
-						}}
-						messages={conversationMessages}
-						currentUserId="current-user"
-						onSendMessage={handleSendMessage}
-					/>
-					<ChatProfilePanel user={selectedChatUser} />
-				</Stack>
-			) : (
-				// Browse View
-				<div className="flex-1 overflow-y-auto">
+		<>
+			{/* Main Content - Browse View */}
+			<div className="flex-1 overflow-y-auto">
 				<div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
 					{/* Search Bar */}
 					<SearchBar 
@@ -295,22 +212,23 @@ export default function BrowsingPage() {
 					<FilterBar
 						onFilterChange={handleFilterChange}
 						availableInterests={availableInterests}
-					/>						{/* Profile Grid */}
-						<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-							{filteredProfiles.map((profile) => (
-								<ProfileCard
-									key={profile.id}
-									id={profile.id}
-									name={profile.firstName}
-									age={calculateAge(profile.birthday)}
-									pictureUrl={profile.profilePicture || "/bob.jpg"}
-									onClick={() => handleOpenProfile(profile.id, false)}
-								/>
-							))}
-						</div>
+					/>
+
+					{/* Profile Grid */}
+					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+						{filteredProfiles.map((profile) => (
+							<ProfileCard
+								key={profile.id}
+								id={profile.id}
+								name={profile.firstName}
+								age={calculateAge(profile.birthday)}
+								pictureUrl={profile.profilePicture || "/bob.jpg"}
+								onClick={() => handleOpenProfile(profile.id, false)}
+							/>
+						))}
 					</div>
 				</div>
-			)}
+			</div>
 
 			{/* Matching Modal */}
 			<MatchingModal
@@ -328,6 +246,6 @@ export default function BrowsingPage() {
 				onAllow={requestPermission}
 				onDeny={denyPermission}
 			/>
-		</Stack>
+		</>
 	);
 }
