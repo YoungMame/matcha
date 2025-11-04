@@ -14,6 +14,7 @@ import userServicePlugin from './services/UserService'
 import chatServicePlugin from './services/ChatService'
 // import custom plugins
 import authenticate from './plugins/authenticate'
+import checkImageConformity from './plugins/checkImageConformity'
 
 export const buildApp = () => {
     const app = Fastify({
@@ -51,6 +52,10 @@ export const buildApp = () => {
         }
     });
 
+    app.register(authenticate);
+
+    app.register(checkImageConformity);
+
     app.register(router);
 
     app.register(userServicePlugin);
@@ -67,8 +72,6 @@ export const buildApp = () => {
         max: 200,
         timeWindow: '1 minute'
     });
-
-    app.register(authenticate);
 
     app.register(cookie, {
         secret: process.env.COOKIE_SECRET, // for cookies signature

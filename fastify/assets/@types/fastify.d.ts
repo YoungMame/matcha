@@ -71,6 +71,7 @@ declare module 'fastify' {
       createChatEvent(userId: number, chatId: number, title: string, latitude: number, longitude: number, date: Date): Promise<ChatEvent>;
     };
     authenticate(request: any, reply: any): Promise<void>;
+    checkImageConformity(request: any, reply: any): Promise<void>;
   }
 
   type FastifyRequestUser = {
