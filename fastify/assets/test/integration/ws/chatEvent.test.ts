@@ -4,8 +4,7 @@ import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
 
 // import fixtures
-import { signUpAndGetToken, quickUser, UserData } from '../fixtures/auth.fixtures';
-import { NotFoundError } from '../../../srcs/utils/error';
+import { quickUser } from '../fixtures/auth.fixtures';
 
 describe('Websocket chat event test', () => {
     let app: FastifyInstance;
@@ -225,5 +224,6 @@ describe('Websocket chat event test', () => {
             }
         });
         expect(deleteResponse.statusCode).to.equal(200);
+        // await expect(app.chatService.getChat(undefined, chatId)).to.throw(NotFoundError);
     });
 });
