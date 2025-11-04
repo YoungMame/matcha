@@ -9,7 +9,8 @@ export enum WebSocketMessageTypes {
     LIKE = "like",
     LIKE_BACK = "like_back",
     UNLIKE = "unlike",
-    VIEWED = "view"
+    VIEWED = "view",
+    CHATEVENT = "chat_event"
 }
 
 export interface WebSocketMessageDataTypes {
@@ -40,6 +41,12 @@ export interface WebSocketMessageDataTypes {
         id: id,
         viewerId: id,
         createdAt: Date
+    },
+    [WebSocketMessageTypes.CHATEVENT]: {
+        id: id,
+        chatId: id,
+        title: string,
+        createdAt: Date
     }
 }
 
@@ -64,14 +71,14 @@ class WebSocketService {
                 this.fastify.log.info(`User ${id} tried to send message to ${raw.targetId}: ${raw.content}`);
                 this.fastify.chatService.sendMessage(id, raw.targetId, raw.content);
                 break;
-            case WebSocketMessageTypes.LIKE:
-                this.fastify.log.info(`User ${id} liked user ${raw.targetId}`);
-                this.fastify.userService.sendLike(id, raw.targetId);
-                break;
-            case WebSocketMessageTypes.UNLIKE:
-                this.fastify.log.info(`User ${id} unliked user ${raw.targetId}`);
-                this.fastify.userService.sendUnlike(id, raw.targetId);
-                break;
+            // case WebSocketMessageTypes.LIKE:
+            //     this.fastify.log.info(`User ${id} liked user ${raw.targetId}`);
+            //     this.fastify.userService.sendLike(id, raw.targetId);
+            //     break;
+            // case WebSocketMessageTypes.UNLIKE:
+            //     this.fastify.log.info(`User ${id} unliked user ${raw.targetId}`);
+            //     this.fastify.userService.sendUnlike(id, raw.targetId);
+            //     break;
             // Other types will be sent from backend
             default:
                 this.fastify.log.warn(`Unknown message type from ${id}: ${raw.type}`);
@@ -159,6 +166,13 @@ class WebSocketService {
         data: WebSocketMessageDataTypes[WebSocketMessageTypes.VIEWED]
     ) {
         this.sendTo(id, WebSocketMessageTypes.VIEWED, data);
+    }
+
+    public sendChatEvent(
+        id: id,
+        data: WebSocketMessageDataTypes[WebSocketMessageTypes.CHATEVENT]
+    ) {
+        this.sendTo(id, WebSocketMessageTypes.CHATEVENT, data);
     }
 };
 

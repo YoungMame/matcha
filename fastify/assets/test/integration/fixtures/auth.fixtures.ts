@@ -34,12 +34,18 @@ export const signUpAndGetToken = async (app: FastifyInstance, userData: UserData
 let userCounter = 0; // static
 
 export const quickUser = async (app: FastifyInstance): Promise<{ userData: UserData, token: string }> => {
-    userCounter += 1;
+    let userCounterCopy = userCounter;
+    let concat = '';
     const alphabets = 'abcdefghijklmnopqrstuvwxyz';
-    const letter = alphabets[userCounter % alphabets.length];
+    while (userCounterCopy >= 0) {
+        concat = alphabets[userCounterCopy % alphabets.length] + concat;
+        userCounterCopy -= alphabets.length;
+    }
+
+    const pseudo = `qtuser${concat}`;
     const userData: UserData = {
-        username: `qtuser${letter}`,
-        email: `quicktestuser${letter}@example.com`,
+        username: `qtuser${concat}`,
+        email: `quicktestuser${concat}@example.com`,
         password: 'fsdaf!ADAasf2321!!!!',
         bornAt: '2000-01-01',
         orientation: 'heterosexual',
@@ -47,6 +53,8 @@ export const quickUser = async (app: FastifyInstance): Promise<{ userData: UserD
     };
     const token = await signUpAndGetToken(app, userData);
     if (!token) throw new Error('Failed to create quick user');
+
+    userCounter += 1;
 
     const response = await app.inject({
         method: 'GET',

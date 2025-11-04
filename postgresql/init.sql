@@ -97,6 +97,7 @@ CREATE TABLE if not exists events (
     title VARCHAR(255) NOT NULL,
     location_id INTEGER ,
     chat_id INTEGER,
+    date TIMESTAMP NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -105,8 +106,8 @@ CREATE TABLE if not exists locations (
     latitude DECIMAL NOT NULL,
     longitude DECIMAL NOT NULL,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_id INTEGER,
-    event_id INTEGER
+    user_id INTEGER DEFAULT NULL,
+    event_id INTEGER DEFAULT NULL
 );
 
 ALTER TABLE chats

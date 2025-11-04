@@ -3,8 +3,8 @@ import UserModel from "../models/User";
 import ChatModel from "../models/Chat";
 import fp from 'fastify-plugin';
 import { FastifyInstance } from 'fastify';
-import { BadRequestError, NotFoundError } from "../utils/error";
-import { Chat, ChatMessage } from "../models/Chat";
+import { BadRequestError, NotFoundError, ConflictError } from "../utils/error";
+import { Chat, ChatMessage, ChatEvent } from "../models/Chat";
 import { WebSocketMessageTypes, WebSocketMessageDataTypes } from "./WebSocketService";
 
 class ChatService {
@@ -30,6 +30,17 @@ class ChatService {
         await this.chatModel.remove(id);
     }
 
+    async getChat(userId: number | undefined ,id: number): Promise<Chat | null> {
+        const chat: Chat | null = await this.chatModel.get(id);
+        if (!chat)
+            throw new NotFoundError();
+        if (userId !== undefined) {
+            if (!chat.users.includes(userId))
+                throw new NotFoundError();
+        }
+        return chat;
+    }
+
     async sendMessage(senderId: number, chatId: number, content: string): Promise<void> {
         const result: Chat | null = await this.chatModel.get(chatId);
         if (!result)
@@ -37,14 +48,18 @@ class ChatService {
         if (!result.users.includes(senderId))
             throw new NotFoundError();
         const message = await this.chatModel.insertMessage(chatId, senderId, content);
-        const data: WebSocketMessageDataTypes[WebSocketMessageTypes.MESSAGE] = {
-            id: message.id,
-            senderId: message.senderId,
-            chatId: message.chatId,
-            content: message.content,
-            createdAt: message.createdAt
-        };
-        this.fastify.webSocketService.sendMessage(senderId, data);
+        result.users.forEach(userId => {
+            if (userId !== senderId) {
+                const data: WebSocketMessageDataTypes[WebSocketMessageTypes.MESSAGE] = {
+                    id: message.id,
+                    senderId: message.senderId,
+                    chatId: message.chatId,
+                    content: message.content,
+                    createdAt: message.createdAt
+                };
+                this.fastify.webSocketService.sendMessage(userId, data);
+            }
+        });
     }
 
     public async addChatFile(senderId: number, fileURL: string, chatId: number): Promise<void> {
@@ -71,7 +86,7 @@ class ChatService {
             throw new NotFoundError();
 
         const messages = await this.chatModel.getMessages(chatId, fromLast, toLast);
-        // const blockedUsers: number[] = this.fastify.userService.getBlockedUsers(userId);
+        // const blockedUsers: number[] = this.fastify.userService.getBlockedUsers(userId); // TODO implement blocked users
         const blockedUsers: Map<number, Date> = new Map();
         const filteredMessages = messages.filter(message => {
             if (blockedUsers.has(message.senderId) && (blockedUsers.get(message.senderId) as Date) < message.createdAt)
@@ -79,6 +94,40 @@ class ChatService {
             return true;
         });
         return (filteredMessages);
+    }
+
+    public async createChatEvent(userId: number, chatId: number, title: string, latitude: number, longitude: number, date: Date): Promise<ChatEvent> {
+        const result: Chat | null = await this.chatModel.get(chatId);
+        if (!result)
+            throw new NotFoundError();
+        if (!result.users.includes(userId))
+            throw new NotFoundError();
+        if (result.event)
+            throw new ConflictError(); // Chat already has an event
+        if (date < new Date(Date.now()))
+            throw new BadRequestError(); // Event date is in the past
+        const event: ChatEvent = await this.chatModel.insertEvent(chatId, title, latitude, longitude, date);
+        for (const user of result.users) {
+            await this.fastify.webSocketService.sendChatEvent(user, {
+                id: event.id,
+                chatId: chatId,
+                title: event.title,
+                createdAt: event.createdAt
+            });
+        }
+        return (event);
+    }
+
+    public async deleteChatEvent(userId: number, chatId: number): Promise<void> {
+        const chat: Chat | null = await this.chatModel.get(chatId);
+        if (!chat)
+            throw new NotFoundError();
+        if (!chat.users.includes(userId))
+            throw new NotFoundError();
+        if (!chat.event)
+            throw new NotFoundError();
+        const eventId = chat.event.id;
+        await this.chatModel.removeEvent(eventId);
     }
 }
 
