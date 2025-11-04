@@ -55,16 +55,20 @@ declare module 'fastify' {
       sendLikeBack(id: number, data: DataTypes[types.LIKE_BACK]): void;
       sendUnlike(id: number, data: DataTypes[types.UNLIKE]): void;
       sendProfileViewed(id: number, data: DataTypes[types.VIEWED]): void;
+      sendChatEvent(id: id, data: WebSocketMessageDataTypes[WebSocketMessageTypes.CHATEVENT]): void;
       findUserBySocket(ws): number | undefined;
     };
 
     chatService: {
       createChat(userIds: number[]): Promise<number>;
       deleteChat(id: number): Promise<void>;
+      getChat(userId: number | undefined ,id: number): Promise<Chat | null>;
       sendMessage(senderId: number, chatId: number, content: string): Promise<void>;
       addChatFile(senderId: number, fileURL: string, chatId: number): Promise<void>;
       getChatBetweenUsers(userId1s: number[]): Promise<Chat | null>;
       getChatMessages(userId: number, chatId: number, fromLast: number, toLast: number): Promise<ChatMessage[]>;
+      deleteChatEvent(userId: number, chatId: number): Promise<void>;
+      createChatEvent(userId: number, chatId: number, title: string, latitude: number, longitude: number, date: Date): Promise<ChatEvent>;
     };
     authenticate(request: any, reply: any): Promise<void>;
   }
