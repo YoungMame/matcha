@@ -36,7 +36,7 @@ export const addProfilePictureHandler = async (
         if (!userId)
             throw new UnauthorizedError();
 
-        const file = await request.file();
+        const file = request.fileMeta;
         if (!file)
             throw (new BadRequestError());
 
@@ -49,7 +49,17 @@ export const addProfilePictureHandler = async (
         const newFilePath = path.join(picturesDir, newFileName);
         const newFileURL = `https://${process.env.DOMAIN || 'localhost'}/api/private/uploads/${userId}/${newFileName}`;
         const dest = fs.createWriteStream(newFilePath);
-        pump(file.file, dest);
+        dest.write(request.fileBuffer);
+        dest.end();
+
+        dest.on('finish', () => {
+            console.log('File written successfully');
+        });
+
+        dest.on('error', (err) => {
+            throw new Error('Error saving file: ' + err.message);
+        });
+
         try {
             await request.server.userService.addUserProfilePicture(userId, newFileURL);
         } catch (error) {

@@ -24,14 +24,14 @@ const profilePictureRoutes = async (fastify: FastifyInstance) => {
                 400: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string', }
+                        error: { type: 'string', }
                     },
                     additionalProperties: false
                 },
                 500: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        error: { type: 'string' }
                     },
                     additionalProperties: false
                 }
@@ -60,14 +60,14 @@ const profilePictureRoutes = async (fastify: FastifyInstance) => {
                 400: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        error: { type: 'string' }
                     },
                     additionalProperties: false
                 },
                 500: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        error: { type: 'string' }
                     },
                     additionalProperties: false
                 }
@@ -89,19 +89,20 @@ const profilePictureRoutes = async (fastify: FastifyInstance) => {
                 400: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' },
+                        error: { type: 'string' },
                     },
                     additionalProperties: false
                 },
                 500: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        error: { type: 'string' }
                     },
                     additionalProperties: false
                 }
             }
         },
+        preValidation: fastify.checkImageConformity,
         handler: addProfilePictureHandler
     });
 }
