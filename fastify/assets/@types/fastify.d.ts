@@ -83,5 +83,11 @@ declare module 'fastify' {
 
   interface FastifyRequest {
     user?: FastifyRequestUser | undefined;
+    fileBuffer?: Buffer<ArrayBufferLike>;
+    fileMeta?: {
+      filename: string;
+      mimetype: string;
+      fields: fastifyMultipart.MultipartFields;
+    };
   }
 }

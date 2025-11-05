@@ -5,7 +5,6 @@ import { ReadableStream } from 'node:stream/web';
 
 export default fp(async function(fastify, opts) {
     fastify.decorate("checkImageConformity", async function(request: FastifyRequest, reply: FastifyReply) {
-        console.log('CHECK IMAGE CONFORMITY');
         try {
             const file = await request.file();
             if (!file)
@@ -37,13 +36,12 @@ export default fp(async function(fastify, opts) {
                 throw new Error('Wrong file dimensions');
 
             // attach buffer + meta to the request so later handlers can reuse it
-            (request as any).fileBuffer = buffer;
-            (request as any).fileMeta = {
+            request.fileBuffer = buffer;
+            request.fileMeta = {
                 filename: file.filename,
                 mimetype: file.mimetype,
                 fields: file.fields // if you need multipart fields
             };
-            console.log('Image conformity check passed');
         } catch (err) {
             console.log(err);
             if (err instanceof Error && err.message)
