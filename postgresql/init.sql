@@ -2,18 +2,31 @@ CREATE TYPE GENDER AS ENUM ('men', 'women');
 CREATE TYPE ORIENTATION AS ENUM ('heterosexual', 'homosexual', 'bisexual');
 
 CREATE TABLE if not exists users (
+-- Mandatory fields
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     username VARCHAR(255) UNIQUE NOT NULL,
-    profile_picture_index INTEGER, -- index of selected profile picture
-    profile_pictures TEXT[], -- array of image URLs
+
+-- Email Verification
+    is_verified BOOLEAN DEFAULT FALSE,
+
+-- Profile completion fields
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
     bio TEXT DEFAULT '',
     tags TEXT[], -- array of tags
-    born_at DATE NOT NULL,
-    is_verified BOOLEAN DEFAULT FALSE,
-    gender GENDER NOT NULL,
-    orientation ORIENTATION NOT NULL DEFAULT 'bisexual',
+    born_at DATE,
+    gender GENDER,
+    orientation ORIENTATION DEFAULT 'bisexual',
+
+-- Profile completion status
+    is_completed BOOLEAN DEFAULT FALSE,
+
+-- Profile picture (not mandatory on user creation)
+    profile_picture_index INTEGER, -- index of selected profile picture
+    profile_pictures TEXT[], -- array of image URLs
+
     fame_rate INTEGER DEFAULT 0,
     is_connected BOOLEAN DEFAULT FALSE,
     last_connection TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -10,12 +10,9 @@ const signupRoutes = async (fastify: FastifyInstance) => {
                     email: { type: 'string', pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$' },
                     username: { type: 'string', pattern: '^[a-zA-Z0-9._\\- ]+$' },
                     password: { type: 'string', pattern: '^(?=.*?\\d)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[!@#$%^&*?\\-])[^\\s]{10,}$' },
-                    bornAt: { type: 'string', format: 'date' },
-                    orientation: { type: 'string', enum: ['heterosexual', 'homosexual', 'bisexual'] },
-                    gender: { type: 'string', enum: ['men', 'women'] }
                 },
-                required: ['email', 'password', 'username', 'bornAt', 'orientation', 'gender'],
-                additionalProperties: true
+                required: ['email', 'password', 'username'],
+                additionalProperties: false
             },
             response: {
                 201: {

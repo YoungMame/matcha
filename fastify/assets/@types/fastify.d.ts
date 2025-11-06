@@ -3,9 +3,12 @@ import 'fastify';
 declare module 'fastify' {
   interface FastifyInstance {
     userService: {
-      createUser(email: string, password: string, username: string, bornAt: Date, gender: string, orientation: string): Promise<string | undefined>;
+      debugGetUser(idOrMail: string | number): Promise<User | null>;
+
+      createUser(email: string, password: string, username: string): Promise<string | undefined>;
       login(email: string, password: string): Promise<string | undefined>;
-      verifyEmail(id: number): Promise<void>;
+      verifyEmail(id: number, code?: string): Promise<string>;
+      completeProfile(id: number, profile: { firstName: string, lastName: string, bio: string, tags: string[], gender: string, orientation: string, bornAt: Date }): Promise<string>;
       updateUserLocation(id: number, latitude: number, longitude: number): Promise<void>;
       updateUserProfile(id: number, profile: { bio?: string, tags?: string[], gender?: string, orientation?: string, bornAt?: Date }): Promise<void>;
       updateUserProfilePicture(id: number, pictureIndex: number): Promise<string>;
@@ -72,6 +75,8 @@ declare module 'fastify' {
     };
     authenticate(request: any, reply: any): Promise<void>;
     checkImageConformity(request: any, reply: any): Promise<void>;
+    checkIsCompleted(request: any, reply: any): Promise<void>;
+    checkIsVerified(request: any, reply: any): Promise<void>;
   }
 
   type FastifyRequestUser = {
@@ -79,6 +84,7 @@ declare module 'fastify' {
     email: string;
     username: string;
     isVerified: boolean;
+    isProfileCompleted: boolean;
   }
 
   interface FastifyRequest {

@@ -49,8 +49,12 @@ describe('User picture integration tests', async () => {
     const userData: UserData = {
         username: 'userpicturetest',
         email: 'userpicturetest@example.com',
+        firstName: 'Test',
+        lastName: 'User',
         password: 'ghhgdhgdF123!',
         bornAt: '2000-01-01',
+        bio: 'Nice user bio',
+        tags: ['test', 'user'],
         orientation: 'heterosexual',
         gender: 'men'
     };

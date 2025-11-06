@@ -7,11 +7,14 @@ type UserProfile = {
     username?: string;
     email?: string;
     bio?: string;
+    firstName?: string;
+    lastName?: string;
     tags?: string[];
     profilePictureIndex?: number | null;
     profilePictures?: string[];
     string?: string[];
     gender?: string;
+    isProfileCompleted?: boolean;
     orientation?: string;
     bornAt?: Date | string;
 };
@@ -30,11 +33,11 @@ export default class UserModel {
         if (row.profilePictureIndex === null) row.profilePictureIndex = undefined;
     }
 
-    insert = async (email: string, password_hash: string, username: string, born_at: Date, gender: string, orientation: string) => {
+    insert = async (email: string, password_hash: string, username: string) => {
         try {
             const result = await this.fastify.pg.query(
-                'INSERT INTO users (email, password_hash, username, born_at, gender, orientation) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
-                [email, password_hash, username, born_at.toISOString(), gender, orientation]
+                'INSERT INTO users (email, password_hash, username) VALUES ($1, $2, $3) RETURNING id',
+                [email, password_hash, username]
             );
             return result.rows[0].id;
         } catch (error: Error | any) {

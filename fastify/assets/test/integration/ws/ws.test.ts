@@ -79,7 +79,11 @@ describe('Websocket connection main test', () => {
             username: 'wstestmulti1',
             email: 'wstestmulti1@example.com',
             password: 'ghhgdhgdF123!',
+            firstName: 'Test',
+            lastName: 'User',
             bornAt: '2000-01-01',
+            bio: 'Nice user bio',
+            tags: ['test', 'user'],
             orientation: 'heterosexual',
             gender: 'men'
         };
@@ -87,7 +91,11 @@ describe('Websocket connection main test', () => {
             username: 'wstestmulti2',
             email: 'wstestmulti2@example.com',
             password: 'ghhgdhgdF123!',
+            firstName: 'Test',
+            lastName: 'User',
             bornAt: '2000-01-01',
+            bio: 'Nice user bio',
+            tags: ['test', 'user'],
             orientation: 'heterosexual',
             gender: 'men'
         };

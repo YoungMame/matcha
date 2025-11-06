@@ -60,7 +60,11 @@ describe('User me profile integration tests', async () => {
         username: 'usermeprofiletest',
         email: 'usermeprofiletest@example.com',
         password: 'ghhgdhgdF123!',
+        firstName: 'Test',
+        lastName: 'User',
         bornAt: '2000-01-01',
+        bio: 'Nice user bio',
+        tags: ['test', 'user'],
         orientation: 'heterosexual',
         gender: 'men'
     };

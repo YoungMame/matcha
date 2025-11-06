@@ -42,7 +42,30 @@ class UserService {
         user.setEmailCode("emailValidation", seconds, code);
     }
 
+    async verifyEmail(userId: number, code?: string): Promise<string> {
+        const user = await this.getUser(userId);
+        if (!user)
+            throw new NotFoundError();
+        if (code && user.getEmailCode("emailValidation") != code)
+            throw new ForbiddenError();
+        user.clearEmailCode("emailValidation");
+        this.userModel.setVerified(userId);
+        const jwt = await this.fastify.jwt.sign({ id: user.id, email: user.email, username: user.username, isVerified: true, isCompleted: user.isProfileCompleted });
+        return (jwt);
+    }
+
     private async getUser(idOrMail: string | number): Promise<User | null> {
+        let userdata: undefined;
+        if (typeof idOrMail == 'string')
+            userdata = await this.userModel.findByEmail(idOrMail);
+        else
+            userdata = await this.userModel.findById(idOrMail);
+        if (!userdata)
+            return (null);
+        return (User.fromRow(userdata));
+    }
+
+    public async debugGetUser(idOrMail: string | number): Promise<User | null> {
         let userdata: undefined;
         if (typeof idOrMail == 'string')
             userdata = await this.userModel.findByEmail(idOrMail);
@@ -76,7 +99,7 @@ class UserService {
         return false;
     }
 
-    async createUser(email: string, password: string, username: string, bornAt: Date, gender: string, orientation: string): Promise<string | undefined> {
+    async createUser(email: string, password: string, username: string): Promise<string | undefined> {
         if (!(email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)))
             throw new BadRequestError('Invalid email format');
         if (!(username.match(/^[a-zA-Z0-9._\- ]+$/)))
@@ -84,11 +107,11 @@ class UserService {
         if (this.isPasswordCommon(password))
             throw new BadRequestError('Password is too common');
         const hashedPassword = await PasswordManager.hashPassword(password);
-        const userId = await this.userModel.insert(email, hashedPassword, username, bornAt, gender, orientation);
+        const userId = await this.userModel.insert(email, hashedPassword, username);
         const user = await this.getUser(userId);
         if (!user)
             throw new InternalServerError('User not found');
-        const jwt = await this.fastify.jwt.sign({ id: userId, email: email, username: username, isVerified: false});
+        const jwt = await this.fastify.jwt.sign({ id: userId, email: email, username: username, isVerified: false, isCompleted: false });
         this.sendVerificationEmail(user);
         return (jwt);
     }
@@ -100,15 +123,8 @@ class UserService {
         const isValid = await PasswordManager.compare(password, user.passwordHash);
         if (!isValid)
             throw new UnauthorizedError();
-        const jwt = await this.fastify.jwt.sign({ id: user.id, email: user.email, username: user.username, isVerified: user.isVerified });
+        const jwt = await this.fastify.jwt.sign({ id: user.id, email: user.email, username: user.username, isVerified: user.isVerified, isCompleted: user.isProfileCompleted });
         return (jwt);
-    }
-
-    async verifyEmail(id: number): Promise<void> {
-        const user = await this.getUser(id);
-        if (!user)
-            throw new NotFoundError();
-        user.clearEmailCode("emailValidation");
     }
 
     async getMe(id: number): Promise<{
@@ -127,7 +143,7 @@ class UserService {
         createdAt: Date;
     }> {
         const user = await this.getUser(id);
-        if (!user)
+        if (!user || !user.isProfileCompleted)
             throw new NotFoundError();
         return {
             id: user.id,
@@ -137,9 +153,9 @@ class UserService {
             profilePictures: user.profilePictures || [],
             bio: user.bio || '',
             tags: user.tags || [],
-            bornAt: user.bornAt,
-            orientation: user.orientation,
-            gender: user.gender,
+            bornAt: user.bornAt as Date,
+            orientation: user.orientation as string,
+            gender: user.gender as string,
             isVerified: user.isVerified,
             location: {
                 latitude: user.location?.latitude || null,
@@ -156,15 +172,26 @@ class UserService {
         await this.userModel.update(id, {}, { latitude, longitude });
     }
 
+    async completeProfile(id: number, profile: { firstName: string, lastName: string, bio: string, tags: string[], gender: string, orientation: string, bornAt: Date }): Promise<string> {
+        const user = await this.getUser(id);
+        if (!user)
+            throw new NotFoundError();
+        if (user.isProfileCompleted)
+            throw new BadRequestError('Profile already completed');
+        if (user.isVerified === false)
+            throw new BadRequestError('Email not verified');
+        await this.userModel.update(id, {
+            ...profile,
+            isProfileCompleted: true
+        });
+        const jwt = await this.fastify.jwt.sign({ id: user.id, email: user.email, username: user.username, isVerified: user.isVerified, isCompleted: true });
+        return jwt;
+    }
+
     async updateUserProfile(id: number, profile: { bio?: string, tags?: string[], gender?: string, orientation?: string, bornAt?: Date }): Promise<void> {
         const user = await this.getUser(id);
         if (!user)
             throw new NotFoundError();
-        Object.entries(profile).forEach(([key, value]) => {
-            if (value !== undefined) {
-                (user as any)[key] = value;
-            }
-        });
         await this.userModel.update(id, profile);
     }
 
@@ -227,6 +254,8 @@ class UserService {
     async getUserPublic(viewerId: number | undefined, id: number | string): Promise<{
         id: number;
         username: string;
+        firstName: string;
+        lastName: string;
         profilePictureIndex: number | undefined;
         profilePictures: string[] | undefined;
         bio: string;
@@ -237,7 +266,7 @@ class UserService {
         location: { latitude: number | null; longitude: number | null };
     }> {
         const user = await this.getUser(id);
-        if (!user)
+        if (!user|| !user.isProfileCompleted)
             throw new NotFoundError();
         if (viewerId)
         {
@@ -255,13 +284,15 @@ class UserService {
         return {
             id: user.id,
             username: user.username,
+            firstName: user.firstName as string,
+            lastName: user.lastName as string,
             profilePictureIndex: user.profilePictureIndex,
             profilePictures: user.profilePictures || [],
             bio: user.bio || '',
             tags: user.tags || [],
-            bornAt: user.bornAt,
-            gender: user.gender,
-            orientation: user.orientation,
+            bornAt: user.bornAt as Date,
+            gender: user.gender as string ,
+            orientation: user.orientation as string,
             location: {
                 latitude: user.location?.latitude || null,
                 longitude: user.location?.longitude || null
@@ -269,10 +300,19 @@ class UserService {
         };
     }
 
-    async sendLike(senderId: number, receiverId: number): Promise<void> {
+    private async isUserLikeable(senderId: number, receiverId: number): Promise<void> {
         if (senderId === receiverId)
             throw new BadRequestError();
-        // TODO check if user as a pp and is verified before he can be liked
+        const receiverUser = await this.getUser(receiverId);
+        if (!receiverUser || !receiverUser.isProfileCompleted)
+            throw new NotFoundError();
+        const existingProfilePicture = receiverUser.profilePictures?.[receiverUser.profilePictureIndex || 0];
+        if (!existingProfilePicture)
+            throw new BadRequestError('User has no profile picture');
+    }
+
+    async sendLike(senderId: number, receiverId: number): Promise<void> {
+        await this.isUserLikeable(senderId, receiverId);
         const existingLike = await this.likeModel.getLikeBetweenUsers(senderId, receiverId);
         if (existingLike)
             throw new ForbiddenError();
