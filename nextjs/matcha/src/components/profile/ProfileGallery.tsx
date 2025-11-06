@@ -31,7 +31,7 @@ export default function ProfileGallery({
   return (
     <div className="space-y-4">
       {/* Main Image */}
-      <div className="relative w-full min-w-[450px] aspect-3/4 rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 shadow-lg">
+      <div className="relative w-full max-w-[350px] aspect-3/4 rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 shadow-lg">
         <Image
           src={allImages[selectedImage]}
           alt={`Photo de ${userName}`}
@@ -49,7 +49,7 @@ export default function ProfileGallery({
                   prev === 0 ? allImages.length - 1 : prev - 1
                 )
               }
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-all"
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/80 hover:bg-black rounded-full flex items-center justify-center text-white transition-all text-3xl"
               aria-label="Image précédente"
             >
               ‹
@@ -60,7 +60,7 @@ export default function ProfileGallery({
                   prev === allImages.length - 1 ? 0 : prev + 1
                 )
               }
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-all"
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/80 hover:bg-black rounded-full flex items-center justify-center text-white transition-all text-3xl"
               aria-label="Image suivante"
             >
               ›

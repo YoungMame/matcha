@@ -50,23 +50,6 @@ export default function ProfileView({
               userName={profile.firstName}
             />
             
-            {/* Profile Completion */}
-            <div className="mt-4 min-w-[450px]">
-              <div className="flex items-center justify-between mb-2">
-                <Typography variant="small" color="secondary">
-                  Profil
-                </Typography>
-                <Typography variant="small" color="primary" className="font-semibold">
-                  {profile.fame}%
-                </Typography>
-              </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                <div
-                  className="bg-linear-to-r from-indigo-500 to-pink-500 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${profile.fame}%` }}
-                />
-              </div>
-            </div>
           </div>
 
           {/* Right Side - Profile Info */}
@@ -154,39 +137,7 @@ export default function ProfileView({
               </Typography>
             </div>
 
-            {/* Secret Album Section */}
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <Typography variant="h3" color="primary" className="text-lg font-semibold">
-                  Photos
-                </Typography>
-                <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  <Typography variant="small" color="secondary">
-                    {profile.additionalPictures.filter(p => p !== null).length + (profile.profilePicture ? 1 : 0)}
-                  </Typography>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-4 gap-2">
-                {profile.additionalPictures.filter((p): p is string => p !== null).slice(0, 3).map((pic, idx) => (
-                  <div key={idx} className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700">
-                    <Image
-                      src={pic}
-                      alt={`Photo ${idx + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
-                {/* Add photo placeholder */}
-                <button className="aspect-square rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
-                  <span className="text-2xl text-gray-400 dark:text-gray-500">+</span>
-                </button>
-              </div>
-            </div>
+         
 
             {/* Interests Section */}
             <div>
@@ -201,9 +152,7 @@ export default function ProfileView({
                   Ajouter
                 </button>
               </div>
-              <Typography variant="small" color="secondary" className="mb-3">
-                Les centres d&apos;intérêt aident à montrer votre personnalité et peuvent vous aider à trouver une bonne correspondance !
-              </Typography>
+
               <div className="flex flex-wrap gap-2">
                 {profile.interests.length > 0 ? (
                   profile.interests.map((interest, idx) => (

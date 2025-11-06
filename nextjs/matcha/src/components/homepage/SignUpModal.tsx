@@ -7,6 +7,8 @@ import Typography from "@/components/common/Typography";
 import TextField from "@/components/common/TextField";
 import Button from "@/components/common/Button";
 import Alert from "@/components/common/Alert";
+import { useRouter } from "next/navigation";
+
 
 interface SignInModalProps {
 	isOpen: boolean;
@@ -20,6 +22,7 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
 	const [password, setPassword] = useState("");
 	const [passwordConfirm, setPasswordConfirm] = useState("");
 	const [passwordError, setPasswordError] = useState("");
+  const router = useRouter();
 
 	const handleContinue = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -94,6 +97,10 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
 		setPasswordError("");
 		onClose();
 	};
+
+	const handleCreateProfile = () => {
+		router.push("/onboarding");
+	}
 
 	return (
 		<Modal isOpen={isOpen} onClose={handleClose}>
@@ -212,7 +219,7 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
 
 					{/* Confirmation message */}
 					<Typography variant="body" align="center" className="mb-4">
-						Un e-mail de confirmation a été envoyé à :
+						Inscription réussie !
 					</Typography>
 					<Typography variant="body" color="primary" align="center" className="font-semibold mb-6">
 						{email}
@@ -220,13 +227,12 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
 
 					{/* Instructions */}
 					<Typography variant="small" color="secondary" align="center" className="mb-6">
-						Veuillez cliquer sur le lien dans l'e-mail pour activer votre compte.
-						Si vous ne voyez pas l'e-mail, vérifiez votre dossier spam.
+N'oubliez pas de vérifier votre e-mail pour activer votre compte et commencer à utiliser Matcha !
 					</Typography>
 
 					{/* Close button */}
-					<Button onClick={handleClose} variant="primary" fullWidth>
-						Compris
+					<Button onClick={handleCreateProfile} variant="primary" fullWidth>
+						Créer mon profil
 					</Button>
 
 					{/* Resend email link */}

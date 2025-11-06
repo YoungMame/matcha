@@ -193,20 +193,7 @@ export default function ProfilePage() {
 
   return (
     <div className="h-full w-full overflow-y-auto bg-gray-50 dark:bg-gray-900">
-      <Container size="full" className="py-8">
-        <div className="space-y-6">
-          {/* Back Button */}
-          <Button
-            variant="secondary"
-            onClick={() => (window.location.href = "/browsing")}
-            className="inline-flex items-center gap-2"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Retour à la recherche
-          </Button>
-
+      <Container size="full" className="py-4">
           {/* Success Message */}
           {successMessage && (
             <Alert variant="success" className="animate-fade-in">
@@ -236,7 +223,6 @@ export default function ProfilePage() {
             onPass={handleMatchModalPass}
             isFromMatch={true}
           />
-        </div>
       </Container>
     </div>
   );

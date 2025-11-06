@@ -19,19 +19,20 @@ function decodeJWT(token: string): any {
  * Check if token is expired
  */
 function isTokenExpired(decoded: any): boolean {
-	if (!decoded || !decoded.exp) return true;
+	if (!decoded || !decoded.iat) return true;
 	const currentTime = Math.floor(Date.now() / 1000);
-	return decoded.exp < currentTime;
+	console.log('Token issued at:', decoded.iat, 'Current time:', currentTime);
+	return decoded.iat + 3600*24*7 < currentTime;
 }
 
 export function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl;
 
 	// Get token from cookies
-	const token = request.cookies.get("token")?.value;
+	const token = request.cookies.get("jwt")?.value;
 
 	// Protected routes that require authentication
-	const protectedPaths = ["/browsing"];
+	const protectedPaths = ["/browsing", '/profile', '/onboarding'];
 	const isProtectedPath = protectedPaths.some((path) =>
 		pathname.startsWith(path)
 	);

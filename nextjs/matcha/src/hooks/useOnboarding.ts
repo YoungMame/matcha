@@ -80,22 +80,61 @@ export const useOnboarding = () => {
 	const completedStepsCount = STEPS.filter((step) => isStepValid(step.id)).length;
 
 	const submitOnboarding = async () => {
-		// TODO: Implement API call to submit onboarding data
-		console.log('Submitting onboarding data:', data);
+		try {
+			// Step 1: Upload profile picture (required)
+			if (data.profilePicture) {
+				const formData = new FormData();
+				formData.append('file', data.profilePicture);
+				
+				await fetch('/api/private/user/me/profile-picture', {
+					method: 'POST',
+					body: formData,
+				});
+			}
 
-		// Placeholder for future API implementation
-		// try {
-		//   const response = await fetch('/api/onboarding', {
-		//     method: 'POST',
-		//     headers: { 'Content-Type': 'application/json' },
-		//     body: JSON.stringify(data),
-		//   });
-		//   if (!response.ok) throw new Error('Failed to submit');
-		//   return await response.json();
-		// } catch (error) {
-		//   console.error('Error submitting onboarding:', error);
-		//   throw error;
-		// }
+			// Step 2: Upload additional pictures
+			// for (const picture of data.additionalPictures) {
+			// 	if (picture) {
+			// 		const formData = new FormData();
+			// 		formData.append('file', picture);
+					
+			// 		await fetch('/api/private/user/me/profile-picture', {
+			// 			method: 'POST',
+			// 			body: formData,
+			// 		});
+			// 	}
+			// }
+
+			// Step 3: Update profile with onboarding data
+			const profileData = {
+				bio: data.biography,
+				tags: data.interests,
+				gender: data.gender.toLowerCase(), // Ensure lowercase to match backend enum
+				orientation: data.interestedInGenders.length === 2 
+					? 'bisexual' 
+					: data.interestedInGenders[0] === data.gender 
+						? 'homosexual' 
+						: 'heterosexual',
+				bornAt: new Date(data.birthday).toISOString(),
+			};
+
+			const response = await fetch('/api/private/user/me/profile', {
+				method: 'PUT',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(profileData),
+			});
+
+			if (!response.ok) {
+				const error = await response.json();
+				console.error('Failed to submit onboarding:', error);
+				throw new Error(error.message || 'Failed to submit onboarding');
+			}
+
+			return await response.json();
+		} catch (error) {
+			console.error('Error submitting onboarding:', error);
+			throw error;
+		}
 	};
 
 	return {
