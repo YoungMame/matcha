@@ -2,6 +2,23 @@ import { UserProfile } from "@/types/userProfile";
 import { FilterOptions } from "@/components/browsing/FilterBar/types";
 import { filterProfiles } from "@/lib/searchUtils";
 
+// Available profile pictures
+const FEMALE_PICTURES = [
+  "/mock_pictures/femme1.jpg",
+  "/mock_pictures/femme2.jpg",
+  "/mock_pictures/femme3.jpg",
+  "/mock_pictures/femme4.jpg",
+  "/mock_pictures/femme5.jpg",
+];
+
+const MALE_PICTURES = [
+  "/mock_pictures/homme1.jpg",
+  "/mock_pictures/homme2.jpg",
+  "/mock_pictures/homme3.jpg",
+  "/mock_pictures/homme4.jpg",
+  "/mock_pictures/homme5.jpg",
+];
+
 // Mock data with full user structure
 export const mockUserProfiles: UserProfile[] = [
   {
@@ -13,8 +30,8 @@ export const mockUserProfiles: UserProfile[] = [
 	  interests: ["Voyages", "Photographie", "Cuisine", "Yoga"],
 	  gender: "female",
 	  interestedInGenders: ["male"],
-	  profilePicture: "/bob.jpg",
-	  additionalPictures: ["/bob.jpg", "/bob.jpg", null, null],
+	  profilePicture: "/mock_pictures/femme1.jpg",
+	  additionalPictures: ["/mock_pictures/femme2.jpg", "/mock_pictures/femme3.jpg", null, null],
 	  fame: 85,
 	  distance: 2
   },
@@ -27,8 +44,8 @@ export const mockUserProfiles: UserProfile[] = [
 	  interests: ["Architecture", "Art", "Musique", "Randonnée"],
 	  gender: "female",
 	  interestedInGenders: ["male"],
-	  profilePicture: "/bob.jpg",
-	  additionalPictures: ["/bob.jpg", null, null, null],
+	  profilePicture: "/mock_pictures/femme2.jpg",
+	  additionalPictures: ["/mock_pictures/femme1.jpg", null, null, null],
 	  fame: 62,
 	  distance: 5
   },
@@ -41,8 +58,8 @@ export const mockUserProfiles: UserProfile[] = [
 	  interests: ["Médecine", "Animaux", "Lecture", "Sport"],
 	  gender: "female",
 	  interestedInGenders: ["male"],
-	  profilePicture: "/bob.jpg",
-	  additionalPictures: ["/bob.jpg", "/bob.jpg", "/bob.jpg", null],
+	  profilePicture: "/mock_pictures/femme3.jpg",
+	  additionalPictures: ["/mock_pictures/femme4.jpg", "/mock_pictures/femme5.jpg", "/mock_pictures/femme1.jpg", null],
 	  fame: 45,
 	  distance: 3
   },
@@ -55,8 +72,8 @@ export const mockUserProfiles: UserProfile[] = [
 	  interests: ["Technologie", "Gaming", "Cinéma", "Running"],
 	  gender: "female",
 	  interestedInGenders: ["male"],
-	  profilePicture: "/bob.jpg",
-	  additionalPictures: ["/bob.jpg", null, null, null],
+	  profilePicture: "/mock_pictures/femme4.jpg",
+	  additionalPictures: ["/mock_pictures/femme5.jpg", null, null, null],
 	  fame: 15,
 	  distance: 8
   },
@@ -69,8 +86,8 @@ export const mockUserProfiles: UserProfile[] = [
 	  interests: ["Danse", "Musique", "Fitness", "Mode"],
 	  gender: "female",
 	  interestedInGenders: ["male"],
-	  profilePicture: "/bob.jpg",
-	  additionalPictures: ["/bob.jpg", "/bob.jpg", null, null],
+	  profilePicture: "/mock_pictures/femme5.jpg",
+	  additionalPictures: ["/mock_pictures/femme1.jpg", "/mock_pictures/femme2.jpg", null, null],
 	  fame: 0,
 	  distance: 0
   },
@@ -83,7 +100,7 @@ export const mockUserProfiles: UserProfile[] = [
 	  interests: ["Marketing", "Réseaux sociaux", "Café", "Voyage"],
 	  gender: "female",
 	  interestedInGenders: ["male"],
-	  profilePicture: "/bob.jpg",
+	  profilePicture: "/mock_pictures/femme1.jpg",
 	  additionalPictures: [null, null, null, null],
 	  fame: 0,
 	  distance: 0
@@ -97,8 +114,8 @@ export const mockUserProfiles: UserProfile[] = [
 	  interests: ["Cuisine", "Gastronomie", "Vin", "Pâtisserie"],
 	  gender: "female",
 	  interestedInGenders: ["male"],
-	  profilePicture: "/bob.jpg",
-	  additionalPictures: ["/bob.jpg", "/bob.jpg", "/bob.jpg", "/bob.jpg"],
+	  profilePicture: "/mock_pictures/femme2.jpg",
+	  additionalPictures: ["/mock_pictures/femme3.jpg", "/mock_pictures/femme4.jpg", "/mock_pictures/femme5.jpg", "/mock_pictures/femme1.jpg"],
 	  fame: 0,
 	  distance: 0
   },
@@ -111,8 +128,8 @@ export const mockUserProfiles: UserProfile[] = [
 	  interests: ["Design", "Nature", "Randonnée", "Photographie"],
 	  gender: "female",
 	  interestedInGenders: ["male"],
-	  profilePicture: "/bob.jpg",
-	  additionalPictures: ["/bob.jpg", null, null, null],
+	  profilePicture: "/mock_pictures/femme3.jpg",
+	  additionalPictures: ["/mock_pictures/femme2.jpg", null, null, null],
 	  fame: 0,
 	  distance: 0
   },
@@ -125,8 +142,8 @@ export const mockUserProfiles: UserProfile[] = [
 	  interests: ["Sport", "Nature", "Camping", "Vélo"],
 	  gender: "female",
 	  interestedInGenders: ["male"],
-	  profilePicture: "/bob.jpg",
-	  additionalPictures: ["/bob.jpg", "/bob.jpg", null, null],
+	  profilePicture: "/mock_pictures/femme4.jpg",
+	  additionalPictures: ["/mock_pictures/femme5.jpg", "/mock_pictures/femme1.jpg", null, null],
 	  fame: 0,
 	  distance: 0
   },
@@ -139,8 +156,8 @@ export const mockUserProfiles: UserProfile[] = [
 	  interests: ["Musique", "Concert", "Guitare", "Chant"],
 	  gender: "female",
 	  interestedInGenders: ["male"],
-	  profilePicture: "/bob.jpg",
-	  additionalPictures: ["/bob.jpg", null, null, null],
+	  profilePicture: "/mock_pictures/femme5.jpg",
+	  additionalPictures: ["/mock_pictures/femme3.jpg", null, null, null],
 	  fame: 0,
 	  distance: 0
   },
@@ -150,7 +167,7 @@ export const mockUserProfiles: UserProfile[] = [
 export const mockMatches = mockUserProfiles.slice(0, 3).map((user) => ({
   id: user.id,
   name: user.firstName,
-  pictureUrl: user.profilePicture || "/bob.jpg",
+  pictureUrl: user.profilePicture,
 }));
 
 // Mock conversations with user IDs matching mockUserProfiles
@@ -159,14 +176,14 @@ export const mockConversations = [
     id: "conv-1",
     userId: "1", // Alice
     name: "Alice",
-    pictureUrl: "/bob.jpg",
+    pictureUrl: "/mock_pictures/femme1.jpg",
     lastMessage: "Salut ! Comment ça va ?",
   },
   {
     id: "conv-2",
     userId: "2", // Marie
     name: "Marie",
-    pictureUrl: "/bob.jpg",
+    pictureUrl: "/mock_pictures/femme2.jpg",
     lastMessage: "On se voit quand ?",
   },
 ];
@@ -353,10 +370,14 @@ export function generateMockUserProfiles(n: number): UserProfile[] {
     const gender = Math.random() > 0.5 ? "female" : "male";
     const interestedInGenders = gender === "female" ? ["male"] : ["female"];
 
+    // Select pictures based on gender
+    const picturePool = gender === "female" ? FEMALE_PICTURES : MALE_PICTURES;
+    const profilePicture = picturePool[Math.floor(Math.random() * picturePool.length)];
+
     // Generate random additional pictures (0-4 pictures, some can be null)
     const additionalPictures: (string | null)[] = Array(4)
       .fill(null)
-      .map(() => (Math.random() > 0.3 ? "/bob.jpg" : null));
+      .map(() => (Math.random() > 0.3 ? picturePool[Math.floor(Math.random() * picturePool.length)] : null));
 
     profiles.push({
 		id: String(i + 1),
@@ -367,7 +388,7 @@ export function generateMockUserProfiles(n: number): UserProfile[] {
 		interests,
 		gender,
 		interestedInGenders,
-		profilePicture: "/bob.jpg",
+		profilePicture,
 		additionalPictures,
 		fame: 0,
 		distance: 0

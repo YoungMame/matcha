@@ -222,7 +222,7 @@ export default function BrowsingPage() {
 								id={profile.id}
 								name={profile.firstName}
 								age={calculateAge(profile.birthday)}
-								pictureUrl={profile.profilePicture || "/bob.jpg"}
+								pictureUrl={profile.profilePicture || "/mock_pictures/femme1.jpg"}
 								onClick={() => handleOpenProfile(profile.id, false)}
 							/>
 						))}

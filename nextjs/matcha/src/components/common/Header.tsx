@@ -6,9 +6,9 @@ import Image from "next/image";
 import Button from "./Button";
 import Typography from "./Typography";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import SignInModal from "@/components/homepage/SignUpModal";
+import SignUpModal from "@/components/homepage/SignUpModal";
 
 interface User {
   id: string;
@@ -18,7 +18,8 @@ interface User {
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [showSignInModal, setShowSignInModal] = useState(false);
   const [language, setLanguage] = useState("FR");
 
   // Determine which page we're on
@@ -28,17 +29,17 @@ export default function Header() {
   const showLanguage = isOnboarding || isBrowsing;
 
   // Fetch current user data
-//   const { data: userData } = useQuery<{ user: User }>({
-//     queryKey: ["user"],
-//     queryFn: async () => {
-//       const response = await axios.get("/api/auth/me");
-//       return response.data;
-//     },
-//     retry: false,
-//     enabled: !isHomePage, // Only fetch if not on home page
-//   });
+  //   const { data: userData } = useQuery<{ user: User }>({
+  //     queryKey: ["user"],
+  //     queryFn: async () => {
+  //       const response = await axios.get("/api/auth/me");
+  //       return response.data;
+  //     },
+  //     retry: false,
+  //     enabled: !isHomePage, // Only fetch if not on home page
+  //   });
 
-	const userData:any = undefined;
+  const userData: any = undefined;
 
   const handleLogout = async () => {
     try {
@@ -83,14 +84,14 @@ export default function Header() {
               {isHomePage && (
                 <>
                   <Button
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={() => setShowSignUpModal(true)}
                     variant="outline"
                     size="small"
                   >
                     S'inscrire
                   </Button>
                   <Button
-                    onClick={() => router.push("/login")}
+                    onClick={() => setShowSignInModal(true)}
                     variant="gradient"
                     size="small"
                   >
@@ -102,7 +103,8 @@ export default function Header() {
               {!isHomePage && userData?.user && (
                 <>
                   <Typography color="secondary" className="hidden sm:block">
-                    Welcome, <strong>{userData?.user?.username ?? "username"}</strong>
+                    Welcome,{" "}
+                    <strong>{userData?.user?.username ?? "username"}</strong>
                   </Typography>
                   <Button
                     onClick={handleLogout}
@@ -143,7 +145,14 @@ export default function Header() {
       </header>
 
       {/* Sign In Modal */}
-      <SignInModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <SignInModal
+        isOpen={showSignInModal}
+        onClose={() => setShowSignInModal(false)}
+      />
+      <SignUpModal
+        isOpen={showSignUpModal}
+        onClose={() => setShowSignUpModal(false)}
+      />
     </>
   );
 }
