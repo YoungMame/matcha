@@ -61,7 +61,8 @@ export default function OnboardingPage() {
 		}
 
 		try {
-			await submitOnboarding();
+			const res = await submitOnboarding();
+			console.log("Onboarding submitted successfully:", res);
 			// TODO: Navigate to app after successful submission
 			router.push("/browsing");
 		} catch (error) {

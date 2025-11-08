@@ -80,6 +80,7 @@ export const useOnboarding = () => {
 	const completedStepsCount = STEPS.filter((step) => isStepValid(step.id)).length;
 
 	const submitOnboarding = async () => {
+		console.log("Submitting onboarding with data:", data);
 		try {
 			// Step 1: Upload profile picture (required)
 			if (data.profilePicture) {
@@ -105,20 +106,26 @@ export const useOnboarding = () => {
 			// 	}
 			// }
 
-			// Step 3: Update profile with onboarding data
-			const profileData = {
-				bio: data.biography,
-				tags: data.interests,
-				gender: data.gender.toLowerCase(), // Ensure lowercase to match backend enum
-				orientation: data.interestedInGenders.length === 2 
-					? 'bisexual' 
-					: data.interestedInGenders[0] === data.gender 
-						? 'homosexual' 
-						: 'heterosexual',
-				bornAt: new Date(data.birthday).toISOString(),
-			};
+		// Map gender from UI values to backend enum ("men"/"women")
+		const genderMap: Record<string, string> = {
+			'Men': 'men',
+			'Women': 'women',
+			'male': 'men',
+			'female': 'women'
+		};
 
-			const response = await fetch('/api/private/user/me/profile', {
+		// Step 3: Update profile with onboarding data
+		const profileData = {
+			bio: data.biography,
+			tags: data.interests,
+			gender: genderMap[data.gender] || data.gender,
+			orientation: data.interestedInGenders.length === 2 
+				? 'bisexual' 
+				: data.interestedInGenders.map(g => genderMap[g] || g).includes(genderMap[data.gender] || data.gender)
+					? 'homosexual' 
+					: 'heterosexual',
+			bornAt: new Date(data.birthday).toISOString(),
+		};			const response = await fetch('/api/private/user/me/profile', {
 				method: 'PUT',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(profileData),

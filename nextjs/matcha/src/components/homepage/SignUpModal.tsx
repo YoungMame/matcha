@@ -65,23 +65,23 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
         gender: "men" as const, // Default gender
       };
 
-      // const response = await fetch("/api/auth/signup", {
-      // 	method: "POST",
-      // 	headers: {
-      // 		"Content-Type": "application/json",
-      // 	},
-      // 	body: JSON.stringify(signupData),
-      // });
+      const response = await fetch("/api/auth/signup", {
+      	method: "POST",
+      	headers: {
+      		"Content-Type": "application/json",
+      	},
+      	body: JSON.stringify(signupData),
+      });
 
-      //   console.log("Signup response:", response.body);
+        console.log("Signup response:", response.body);
 
-      //   if (!response.ok) {
-      //     const errorData = await response.json();
-      //     setPasswordError(
-      //       errorData.error || "Une erreur est survenue lors de l'inscription"
-      //     );
-      //     return;
-      //   }
+        if (!response.ok) {
+          const errorData = await response.json();
+          setPasswordError(
+            errorData.error || "Une erreur est survenue lors de l'inscription"
+          );
+          return;
+        }
 
       // Move to confirmation step on success
       setStep("confirmation");
