@@ -11,9 +11,9 @@ import { signUpAndGetToken, UserData } from '../../fixtures/auth.fixtures';
 
 const addPicture = async(app: FastifyInstance, token: string) => {
     const form = new FormData();
-    const filePath = path.join(__dirname, 'test.jpeg');
+    const filePath = path.join(__dirname, 'test.jpg');
     form.append('file', fs.createReadStream(filePath), {
-        filename: 'test.jpeg',
+        filename: 'test.jpg',
         contentType: 'image/jpeg'
     });
 
