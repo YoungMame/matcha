@@ -97,7 +97,6 @@ export const createChatEventHandler = async (
         const event = await request.server.chatService.createChatEvent(userId, chatId, title, latitude, longitude, date);
         return reply.status(201).send(event);
     } catch (error) {
-        console.error(error);
         if (error instanceof AppError)
             return reply.status(error.statusCode).send({ error: error.message });
         return reply.status(500).send({ error: 'Internal server error' });

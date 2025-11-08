@@ -1,4 +1,7 @@
 import { FastifyInstance } from "fastify";
+import path from "path";
+import fs from "fs";
+import FormData from "form-data";
 
 export type UserData = {
     id?: number;
@@ -15,14 +18,6 @@ export type UserData = {
 }
 
 export const signUpAndGetToken = async (app: FastifyInstance, userData: UserData): Promise<string | undefined> => {
-    try {
-        return await _signUpAndGetToken(app, userData);
-    } catch (error) {
-        console.error('Error during sign up:', error);
-    }
-}
-
-const _signUpAndGetToken = async (app: FastifyInstance, userData: UserData): Promise<string | undefined> => {
     const signUpResponse = await app.inject({
         method: 'POST',
         url: '/auth/signup',
@@ -39,8 +34,16 @@ const _signUpAndGetToken = async (app: FastifyInstance, userData: UserData): Pro
 
     const createdUser = await app.userService.debugGetUser(userData.email);
     const userId = createdUser.id;
-    const verifiedJwt = await app.userService.verifyEmail(userId);
-    console.log(`Verified JWT: ${verifiedJwt}`);
+    await app.userService.verifyEmail(userId);
+    const verifiedJwtResponse = await app.inject({
+        method: 'POST',
+        url: '/auth/login',
+        payload: {
+            email: userData.email,
+            password: userData.password
+        }
+    });
+    const verifiedJwt = verifiedJwtResponse.cookies?.find((c: any) => c.name === 'jwt')?.value;
 
     const completedProfileResponse = await app.inject({
         method: 'POST',
@@ -58,7 +61,6 @@ const _signUpAndGetToken = async (app: FastifyInstance, userData: UserData): Pro
             bornAt: new Date(userData.bornAt)
         }
     });
-    console.log(`Completed profile response: ${completedProfileResponse.statusCode} - ${completedProfileResponse.body}`);
     const jwtCookie2 = completedProfileResponse.cookies?.find((c: any) => c.name === 'jwt')?.value;
 
     if (jwtCookie2)
@@ -72,7 +74,6 @@ export const quickUser = async (app: FastifyInstance): Promise<{ userData: UserD
     let userCounterCopy = userCounter;
     let concat = '';
     const alphabets = 'abcdefghijklmnopqrstuvwxyz';
-    console.log('userCounterCopy', userCounterCopy);
     while (userCounterCopy >= 0) {
         concat = alphabets[userCounterCopy % alphabets.length] + concat;
         userCounterCopy -= alphabets.length;
@@ -92,19 +93,34 @@ export const quickUser = async (app: FastifyInstance): Promise<{ userData: UserD
         gender: 'men'
     };
     const token = await signUpAndGetToken(app, userData);
-    console.log(`Created quick user: ${token}`);
     if (!token) throw new Error('Failed to create quick user');
 
-    const response = await app.inject({
+    const response2 = await app.inject({
         method: 'GET',
         url: '/private/user/me/profile',
         headers: {
             'Cookie': `jwt=${token}`
         }
     });
-    console.log(response);
-    if (response.statusCode !== 200)
-        throw new Error(`Failed to get user data for quick user: ${response.body}`);
-    const data = JSON.parse(response.body) as UserData;
+    if (response2.statusCode !== 200)
+        throw new Error(`Failed to get user data for quick user: ${response2.body}`);
+    const form = new FormData();
+    const filePath = path.join(__dirname, '../../files/test.jpg');
+    form.append('file', fs.createReadStream(filePath), {
+        filename: 'test.jpg',
+        contentType: 'image/jpeg'
+    });
+
+    const headers = form.getHeaders();
+    headers['Cookie'] = `jwt=${token}`;
+
+    await app.inject({
+        method: 'POST',
+        url: '/private/user/me/profile-picture',
+        headers,
+        payload: form
+    });
+
+    const data = JSON.parse(response2.body) as UserData;
     return { userData: data, token };
 }

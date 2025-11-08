@@ -52,9 +52,8 @@ export const addProfilePictureHandler = async (
         dest.write(request.fileBuffer);
         dest.end();
 
-        dest.on('finish', () => {
-            console.log('File written successfully');
-        });
+        // dest.on('finish', () => {
+        // });
 
         dest.on('error', (err) => {
             throw new Error('Error saving file: ' + err.message);

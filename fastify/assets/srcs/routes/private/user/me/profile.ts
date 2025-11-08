@@ -67,6 +67,7 @@ const profileRoutes = async (fastify: FastifyInstance) => {
                         gender: { type: 'string', enum: ['male', 'female'] },
                         orientation: { type: 'string', enum: ['heterosexual', 'homosexual', 'bisexual'] },
                         isVerified: { type: 'boolean' },
+                        isProfileCompleted: { type: 'boolean' },
                         location: {
                             type: 'object',
                             properties: {
@@ -83,14 +84,14 @@ const profileRoutes = async (fastify: FastifyInstance) => {
                 400: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        error: { type: 'string' }
                     },
                     additionalProperties: false
                 },
                 500: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        error: { type: 'string' }
                     },
                     additionalProperties: false
                 }

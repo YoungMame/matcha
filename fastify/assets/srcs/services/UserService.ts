@@ -42,7 +42,7 @@ class UserService {
         user.setEmailCode("emailValidation", seconds, code);
     }
 
-    async verifyEmail(userId: number, code?: string): Promise<string> {
+    async verifyEmail(userId: number, code?: string): Promise<void> {
         const user = await this.getUser(userId);
         if (!user)
             throw new NotFoundError();
@@ -50,8 +50,6 @@ class UserService {
             throw new ForbiddenError();
         user.clearEmailCode("emailValidation");
         this.userModel.setVerified(userId);
-        const jwt = await this.fastify.jwt.sign({ id: user.id, email: user.email, username: user.username, isVerified: true, isCompleted: user.isProfileCompleted });
-        return (jwt);
     }
 
     private async getUser(idOrMail: string | number): Promise<User | null> {
@@ -139,6 +137,7 @@ class UserService {
         orientation: string;
         gender: string;
         isVerified: boolean;
+        isProfileCompleted: boolean;
         location: { latitude: number | null; longitude: number | null };
         createdAt: Date;
     }> {
@@ -157,6 +156,7 @@ class UserService {
             orientation: user.orientation as string,
             gender: user.gender as string,
             isVerified: user.isVerified,
+            isProfileCompleted: user.isProfileCompleted,
             location: {
                 latitude: user.location?.latitude || null,
                 longitude: user.location?.longitude || null

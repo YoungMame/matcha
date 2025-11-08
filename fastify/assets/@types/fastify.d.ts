@@ -7,7 +7,7 @@ declare module 'fastify' {
 
       createUser(email: string, password: string, username: string): Promise<string | undefined>;
       login(email: string, password: string): Promise<string | undefined>;
-      verifyEmail(id: number, code?: string): Promise<string>;
+      verifyEmail(id: number, code?: string): Promise<void>;
       completeProfile(id: number, profile: { firstName: string, lastName: string, bio: string, tags: string[], gender: string, orientation: string, bornAt: Date }): Promise<string>;
       updateUserLocation(id: number, latitude: number, longitude: number): Promise<void>;
       updateUserProfile(id: number, profile: { bio?: string, tags?: string[], gender?: string, orientation?: string, bornAt?: Date }): Promise<void>;
@@ -32,6 +32,7 @@ declare module 'fastify' {
         gender: string;
         orientation: string;
         isVerified: boolean;
+        isProfileCompleted: boolean;
         location: { latitude: number | null; longitude: number | null };
         createdAt: Date;
       }>;

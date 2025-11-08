@@ -21,7 +21,7 @@ CREATE TABLE if not exists users (
     orientation ORIENTATION DEFAULT 'bisexual',
 
 -- Profile completion status
-    is_completed BOOLEAN DEFAULT FALSE,
+    is_profile_completed BOOLEAN DEFAULT FALSE,
 
 -- Profile picture (not mandatory on user creation)
     profile_picture_index INTEGER, -- index of selected profile picture
