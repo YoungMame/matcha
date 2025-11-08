@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Run the development server:
 
-## Getting Started
-
-First, run the development server:
-
-```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+or
+npx next dev
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+For auth : JWT
 
-To learn more about Next.js, take a look at the following resources:
+"@tanstack/react-query": "^5.32.1",
+"jwt-decode": "^4.0.0", ???
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Axios is a popular HTTP client library for JavaScript that simplifies making HTTP requests from both browsers and Node.js environments.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+TanStack is a family of libraries, with TanStack Query being the most popular. It's a powerful data-fetching and state management library.
 
-## Deploy on Vercel
+// Axios makes the request
+const fetchUser = (id) => axios.get(`/api/users/${id}`).then(res => res.data);
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+// TanStack Query manages caching, refetching, and state
+const { data: user } = useQuery({
+queryKey: ['user', id],
+queryFn: () => fetchUser(id),
+staleTime: 5 *60* 1000, // Cache for 5 minutes
+});
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For Geolocation =>
+better handle special cases :
+when chrome has not been allowed to access location,
+
+manage error : User has not allowed access to system location

@@ -1,103 +1,207 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import Button from "@/components/common/Button";
+import Typography from "@/components/common/Typography";
+import Stack from "@/components/common/Stack";
+import SignUpModal from "@/components/homepage/SignUpModal";
+import SignInModal from "@/components/homepage/SignInModal";
+import AnimatedBackground from "@/components/homepage/AnimatedBackground";
 
 export default function Home() {
-	return (
-		<div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-			<main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-				<Image
-					className="dark:invert"
-					src="/next.svg"
-					alt="Next.js logo"
-					width={180}
-					height={38}
-					priority
-				/>
-				<ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-					<li className="mb-2 tracking-[-.01em]">
-						Get started by editing{" "}
-						<code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-							src/app/page.tsx
-						</code>
-						.
-					</li>
-					<li className="tracking-[-.01em]">
-						Save and see your changes instantly.
-					</li>
-				</ol>
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [showSignInModal, setShowSignInModal] = useState(false);
+  return (
+    <div className="font-sans h-full overflow-y-auto bg-linear-to-br from-pink-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-purple-900 dark:to-gray-900">
+      {/* Hero Section with Animated Background */}
+      <div className="relative min-h-[calc(100vh-4rem)] overflow-hidden">
+        {/* Animated Background */}
+        <AnimatedBackground />
 
-				<div className="flex gap-4 items-center flex-col sm:flex-row">
-					<a
-						className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-						href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						<Image
-							className="dark:invert"
-							src="/vercel.svg"
-							alt="Vercel logomark"
-							width={20}
-							height={20}
-						/>
-						Deploy now
-					</a>
-					<a
-						className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-						href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						Read our docs
-					</a>
-				</div>
-			</main>
-			<footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-				<a
-					className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-					href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<Image
-						aria-hidden
-						src="/file.svg"
-						alt="File icon"
-						width={16}
-						height={16}
-					/>
-					Learn
-				</a>
-				<a
-					className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-					href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<Image
-						aria-hidden
-						src="/window.svg"
-						alt="Window icon"
-						width={16}
-						height={16}
-					/>
-					Examples
-				</a>
-				<a
-					className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-					href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<Image
-						aria-hidden
-						src="/globe.svg"
-						alt="Globe icon"
-						width={16}
-						height={16}
-					/>
-					Go to nextjs.org →
-				</a>
-			</footer>
-		</div>
-	);
+        {/* Main Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <Stack spacing="2xl" align="center">
+            <Stack
+              spacing="md"
+              align="center"
+              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-2xl p-8 shadow-xl"
+            >
+              <Typography variant="h1" align="center">
+                Bienvenue sur Matcha
+              </Typography>
+              <Typography
+                variant="body"
+                color="secondary"
+                align="center"
+                className="max-w-xl text-xl"
+              >
+                Trouvez votre match parfait
+              </Typography>
+            </Stack>
+
+            <Stack direction="row" spacing="md" justify="center" wrap>
+              <Button
+                variant="gradient"
+                onClick={() => setShowSignUpModal(true)}
+              >
+                S'inscrire
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => setShowSignInModal(true)}
+              >
+                Se connecter
+              </Button>
+              <Link href="/browsing">
+                <Button variant="secondary">Browsing (Protected)</Button>
+              </Link>
+            </Stack>
+          </Stack>
+        </div>
+      </div>
+
+      {/* Additional Content Section */}
+      <div className="relative z-10 bg-white dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <Stack spacing="xl" align="center">
+            <Typography variant="h2" align="center">
+              Comment Matcha fonctionne ?
+            </Typography>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full mt-8">
+              <Stack
+                spacing="md"
+                align="center"
+                className="p-6 rounded-xl bg-pink-50 dark:bg-gray-700"
+              >
+                <div className="text-5xl">👤</div>
+                <Typography variant="h3" align="center">
+                  Créez votre profil
+                </Typography>
+                <Typography color="secondary" align="center">
+                  Partagez vos intérêts, photos et ce qui vous rend unique
+                </Typography>
+              </Stack>
+
+              <Stack
+                spacing="md"
+                align="center"
+                className="p-6 rounded-xl bg-purple-50 dark:bg-gray-700"
+              >
+                <div className="text-5xl">🔍</div>
+                <Typography variant="h3" align="center">
+                  Découvrez des Matchs
+                </Typography>
+                <Typography color="secondary" align="center">
+                  Parcourez les profils qui correspondent à vos préférences et intérêts
+                </Typography>
+              </Stack>
+
+              <Stack
+                spacing="md"
+                align="center"
+                className="p-6 rounded-xl bg-blue-50 dark:bg-gray-700"
+              >
+                <div className="text-5xl">💬</div>
+                <Typography variant="h3" align="center">
+                  Commencez à discuter
+                </Typography>
+                <Typography color="secondary" align="center">
+                  Connectez-vous avec vos matchs et commencez des conversations qui ont du sens
+                </Typography>
+              </Stack>
+            </div>
+          </Stack>
+        </div>
+      </div>
+
+      {/* Features Section */}
+      <div className="relative z-10 bg-linear-to-br from-pink-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-purple-900 dark:to-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <Stack spacing="xl">
+            <Typography variant="h2" align="center">
+              Pourquoi choisir Matcha ?
+            </Typography>
+
+            <Stack spacing="lg" className="mt-8">
+              <div className="flex items-start gap-4 p-6 rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                <div className="text-3xl">✨</div>
+                <Stack spacing="sm">
+                  <Typography variant="h3">Algorithme de Match Intelligent</Typography>
+                  <Typography color="secondary">
+                    Notre algorithme avancé prend en compte vos intérêts
+                    et vos préférences pour trouver les correspondances les plus compatibles.
+                  </Typography>
+                </Stack>
+              </div>
+
+			  <div className="flex items-start gap-4 p-6 rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                <div className="text-3xl">🎯</div>
+                <Stack spacing="sm">
+                  <Typography variant="h3">Experience Personnalisée</Typography>
+                  <Typography color="secondary">
+                    Personnalisez votre profil, définissez vos préférences et obtenez
+                    des recommandations adaptées juste pour vous.
+                  </Typography>
+                </Stack>
+              </div>
+
+              <div className="flex items-start gap-4 p-6 rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                <div className="text-3xl">🔒</div>
+                <Stack spacing="sm">
+                  <Typography variant="h3">Sécurisé et Fiable</Typography>
+                  <Typography color="secondary">
+                    Votre vie privée et votre sécurité sont nos principales priorités. Tous
+                    les profils sont vérifiés et vos mots de passe sont cryptées.
+                  </Typography>
+                </Stack>
+              </div>
+
+            </Stack>
+          </Stack>
+        </div>
+      </div>
+
+      <div className="relative z-10 bg-white dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <Stack spacing="lg" align="center">
+            <Typography variant="h2" align="center">
+              Prêt à trouver votre match ?
+            </Typography>
+            <Typography
+              variant="body"
+              color="secondary"
+              align="center"
+              className="max-w-2xl"
+            >
+              Rejoignez des milliers de personnes qui ont trouvé des connexions significatives sur
+              Matcha. Votre match parfait n'est qu'à un clic.
+            </Typography>
+            <Button
+              variant="gradient"
+              size="large"
+              onClick={() => setShowSignUpModal(true)}
+            >
+              S'inscrire Maintenant
+            </Button>
+          </Stack>
+        </div>
+      </div>
+
+      {/* Modals */}
+      <SignUpModal
+        isOpen={showSignUpModal}
+        onClose={() => setShowSignUpModal(false)}
+      />
+      <SignInModal
+        isOpen={showSignInModal}
+        onClose={() => setShowSignInModal(false)}
+        onSwitchToSignUp={() => {
+          setShowSignInModal(false);
+          setShowSignUpModal(true);
+        }}
+      />
+    </div>
+  );
 }
