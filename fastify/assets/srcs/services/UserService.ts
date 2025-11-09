@@ -31,15 +31,23 @@ class UserService {
     }
 
     private async sendVerificationEmail(user: User): Promise<void> {
-        // Implementation for sending verification email
         const codeLenght = 6;
         let codeArray: number[] = [];
         for (let i = 0; i < codeLenght; i++)
             codeArray[i] = Math.random() * 10 - 1; // give a digit
 
-        const code = codeArray.map(digit => Math.round(digit).toString()).join('');
+        const code: string = codeArray.map(digit => Math.round(digit).toString()).join('');
         const seconds = 600;
         user.setEmailCode("emailValidation", seconds, code);
+        this.fastify.mailService.sendEmailVerification(user.email, user.id, code);
+    }
+
+    async askForEmailVerification(userId: number): Promise<void> {
+        const user = await this.getUser(userId);
+        if (!user)
+            throw new NotFoundError();
+
+        this.sendVerificationEmail(user);
     }
 
     async verifyEmail(userId: number, code?: string): Promise<void> {
@@ -72,6 +80,13 @@ class UserService {
         if (!userdata)
             return (null);
         return (User.fromRow(userdata));
+    }
+
+    public async debugGetUserEmailCode(userId: number, codeType: "emailValidation" | "dfaValidation" | "passwordResetValidation"): Promise<string | number | undefined> {
+        const user = await this.getUser(userId);
+        if (!user)
+            throw new NotFoundError();
+        return user.getEmailCode(codeType);
     }
 
     private isPasswordCommon(password: string): boolean {

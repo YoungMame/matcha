@@ -12,6 +12,7 @@ import router from './routes'
 import websocketServicePlugin from './services/WebSocketService'
 import userServicePlugin from './services/UserService'
 import chatServicePlugin from './services/ChatService'
+import mailServicePlugin from './services/MailService'
 // import custom plugins
 import authenticate from './plugins/authenticate'
 import checkImageConformity from './plugins/checkImageConformity'
@@ -57,6 +58,8 @@ export const buildApp = () => {
     app.register(checkImageConformity);
 
     app.register(router);
+
+    app.register(mailServicePlugin);
 
     app.register(userServicePlugin);
 

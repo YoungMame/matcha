@@ -17,6 +17,9 @@ services:
       RUN_SEED: ${RUN_SEED}
       JWT_SECRET: ${JWT_SECRET}
       COOKIE_SECRET: ${COOKIE_SECRET}
+      GMAIL_USER: ${GMAIL_USER}
+      GMAIL_APP_PASSWORD: ${GMAIL_APP_PASSWORD}
+      DOMAIN: matcha.fr
     build: 
         context: ./fastify
         args:

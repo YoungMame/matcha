@@ -4,9 +4,11 @@ declare module 'fastify' {
   interface FastifyInstance {
     userService: {
       debugGetUser(idOrMail: string | number): Promise<User | null>;
+      debugGetUserEmailCode(userId: number, codeType: "emailValidation" | "dfaValidation" | "passwordResetValidation"): Promise<string | number | undefined>;
 
       createUser(email: string, password: string, username: string): Promise<string | undefined>;
       login(email: string, password: string): Promise<string | undefined>;
+      askForEmailVerification(userId: number): Promise<void>
       verifyEmail(id: number, code?: string): Promise<void>;
       completeProfile(id: number, profile: { firstName: string, lastName: string, bio: string, tags: string[], gender: string, orientation: string, bornAt: Date }): Promise<string>;
       updateUserLocation(id: number, latitude: number, longitude: number): Promise<void>;
@@ -74,6 +76,15 @@ declare module 'fastify' {
       deleteChatEvent(userId: number, chatId: number): Promise<void>;
       createChatEvent(userId: number, chatId: number, title: string, latitude: number, longitude: number, date: Date): Promise<ChatEvent>;
     };
+
+    mailService: {
+      send2faCode(to: string, code: string): Promise<void>;
+      sendEmailVerification(to: string, userId: number, code: string): Promise<void>;
+      sendPasswordResetCode(to: string, code: string): Promise<void>;
+    };
+
+    nodemailer: any;
+
     authenticate(request: any, reply: any): Promise<void>;
     checkImageConformity(request: any, reply: any): Promise<void>;
     checkIsCompleted(request: any, reply: any): Promise<void>;

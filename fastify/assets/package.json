@@ -13,6 +13,7 @@
 		"@fastify/websocket": "^11.2.0",
 		"bcrypt": "^6.0.0",
 		"fastify": "^5.6.1",
+		"fastify-nodemailer": "^5.0.0",
 		"fastify-plugin": "^5.1.0",
 		"image-dimensions": "^2.5.0",
 		"pg": "^8.16.3",
