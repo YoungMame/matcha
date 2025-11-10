@@ -1,5 +1,5 @@
 import chai from 'chai';
-const expect = chai.expect;
+import { expect } from 'chai';
 import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
 
@@ -14,9 +14,6 @@ const testWeakPassword = async (app: FastifyInstance, passwordToTest: string) =>
             username: 'weakpassworduser',
             email: 'weakpassworduser@example.com',
             password: passwordToTest,
-            bornAt: '2000-01-01',
-            orientation: 'heterosexual',
-            gender: 'men'
         }
     });
 
@@ -43,23 +40,22 @@ describe('Auth Integration Tests', () => {
         app = buildApp();
         await app.ready();
     });
-    
-    afterEach(async () => {
-        await app.close();
-    });
 
     it('should sign up a new user and login', async () => {
         const userData: UserData = {
             username: 'testuser1',
             email: 'testuser1@example.com',
             password: 'ghhgdhgdF123!',
+            firstName: 'Test',
+            lastName: 'User',
+            bio: 'This is a test user.',
+            tags: ['test', 'user'],
             bornAt: '2000-01-01',
             orientation: 'heterosexual',
-            gender: 'men'
+            gender: 'men',
         };
 
         const token = await signUpAndGetToken(app, userData);
-
         expect(token).to.be.a('string');
 
         const loginResponse = await login(app, 'testuser1@example.com', 'ghhgdhgdF123!');
@@ -77,6 +73,10 @@ describe('Auth Integration Tests', () => {
             username: 'testuser2',
             email: 'testuser2@example.com',
             password: 'ghhgdhgdF123!',
+            firstName: 'Test',
+            lastName: 'User',
+            bio: 'This is a test user.',
+            tags: ['test', 'user'],
             bornAt: '2000-01-01',
             orientation: 'heterosexual',
             gender: 'men'
@@ -89,6 +89,10 @@ describe('Auth Integration Tests', () => {
             username: 'testuser2',
             email: 'testuser2notduplicate@example.com',
             password: 'ghhgdhgdF123!',
+            firstName: 'Test',
+            lastName: 'User',
+            bio: 'This is a test user.',
+            tags: ['test', 'user'],
             bornAt: '2000-01-01',
             orientation: 'heterosexual',
             gender: 'men'
@@ -108,6 +112,10 @@ describe('Auth Integration Tests', () => {
             username: 'testuser3',
             email: 'testuser3@example.com',
             password: 'ghhgdhgdF123!',
+            firstName: 'Test',
+            lastName: 'User',
+            bio: 'This is a test user.',
+            tags: ['test', 'user'],
             bornAt: '2000-01-01',
             orientation: 'heterosexual',
             gender: 'men'
@@ -120,6 +128,10 @@ describe('Auth Integration Tests', () => {
             username: 'testuser3notduplicate',
             email: 'testuser3@example.com',
             password: 'ghhgdhgdF123!',
+            firstName: 'Test',
+            lastName: 'User',
+            bio: 'This is a test user.',
+            tags: ['test', 'user'],
             bornAt: '2000-01-01',
             orientation: 'heterosexual',
             gender: 'men'

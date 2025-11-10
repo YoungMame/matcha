@@ -41,7 +41,6 @@ export const getProfileHandler = async (
         const profile = await request.server.userService.getMe(userId);
         return reply.code(200).send(profile);
     } catch (error) {
-        console.error(error);
         if (error instanceof AppError)
             return reply.status(error.statusCode).send({ error: error.message });
         return reply.status(500).send({ error: 'Internal server error' });

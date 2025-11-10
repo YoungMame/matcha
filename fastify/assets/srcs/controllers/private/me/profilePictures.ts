@@ -2,7 +2,6 @@ import { FastifyRequest, FastifyReply, FastifyRequestUser } from 'fastify';
 import { AppError, UnauthorizedError, ForbiddenError, NotFoundError, BadRequestError } from '../../../utils/error';
 import path from 'path';
 import fs from 'fs';
-import pump from 'pump';
 
 export const setProfilePictureIndexHandler = async (
     request: FastifyRequest,
@@ -52,9 +51,8 @@ export const addProfilePictureHandler = async (
         dest.write(request.fileBuffer);
         dest.end();
 
-        dest.on('finish', () => {
-            console.log('File written successfully');
-        });
+        // dest.on('finish', () => {
+        // });
 
         dest.on('error', (err) => {
             throw new Error('Error saving file: ' + err.message);
@@ -68,6 +66,7 @@ export const addProfilePictureHandler = async (
         }
         return reply.code(200).send({ message: 'User profile picture updated successfully', url: newFileURL });
     } catch (error) {
+        console.error('Error in addProfilePictureHandler:', error);
         if (error instanceof AppError)
             return reply.status(error.statusCode).send({ error: error.message });
         return reply.status(500).send({ error: 'Internal server error' });

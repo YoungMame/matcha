@@ -1,5 +1,5 @@
 import chai from 'chai';
-const expect = chai.expect;
+import { expect } from 'chai';
 import { buildApp } from '../../../../srcs/app';
 import { FastifyInstance } from 'fastify';
 
@@ -60,7 +60,11 @@ describe('User me profile integration tests', async () => {
         username: 'usermeprofiletest',
         email: 'usermeprofiletest@example.com',
         password: 'ghhgdhgdF123!',
+        firstName: 'Test',
+        lastName: 'User',
         bornAt: '2000-01-01',
+        bio: 'Nice user bio',
+        tags: ['test', 'user'],
         orientation: 'heterosexual',
         gender: 'men'
     };
@@ -105,11 +109,12 @@ describe('User me profile integration tests', async () => {
         expect(meData).to.have.property('email', userData.email);
         expect(meData).to.have.property('username', userData.username);
         expect(meData).to.have.property('profilePictures').that.is.an('array').that.is.empty;
-        expect(meData).to.have.property('bio', '');
-        expect(meData).to.have.property('tags').that.is.an('array').that.is.empty;
+        expect(meData).to.have.property('bio', 'Nice user bio');
+        expect(meData).to.have.property('tags').that.is.an('array');
         expect(meData).to.have.property('bornAt');
         expect(new Date(meData.bornAt).toISOString().split('T')[0]).to.equal(userData.bornAt);
-        expect(meData).to.have.property('isVerified', false);
+        expect(meData).to.have.property('isVerified', true);
+        expect(meData).to.have.property('isProfileCompleted', true);
         expect(meData).to.have.property('location').that.is.an('object');
         expect(meData.location).to.have.property('latitude', null);
         expect(meData.location).to.have.property('longitude', null);

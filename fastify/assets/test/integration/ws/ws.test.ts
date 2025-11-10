@@ -1,5 +1,5 @@
 import chai from 'chai';
-const expect = chai.expect;
+import { expect } from 'chai';
 import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
 
@@ -14,9 +14,7 @@ describe('Websocket connection main test', () => {
         await app.ready();
     });
     
-    afterEach(async () => {
-        await app.close();
-    });
+    
 
     // TODO adapt this test to the real chat system
     // it('should get connected to ws and deliver a message to the target user', async function (this: any) {
@@ -79,7 +77,11 @@ describe('Websocket connection main test', () => {
             username: 'wstestmulti1',
             email: 'wstestmulti1@example.com',
             password: 'ghhgdhgdF123!',
+            firstName: 'Test',
+            lastName: 'User',
             bornAt: '2000-01-01',
+            bio: 'Nice user bio',
+            tags: ['test', 'user'],
             orientation: 'heterosexual',
             gender: 'men'
         };
@@ -87,7 +89,11 @@ describe('Websocket connection main test', () => {
             username: 'wstestmulti2',
             email: 'wstestmulti2@example.com',
             password: 'ghhgdhgdF123!',
+            firstName: 'Test',
+            lastName: 'User',
             bornAt: '2000-01-01',
+            bio: 'Nice user bio',
+            tags: ['test', 'user'],
             orientation: 'heterosexual',
             gender: 'men'
         };

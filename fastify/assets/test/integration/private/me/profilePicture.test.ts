@@ -1,5 +1,5 @@
 import chai from 'chai';
-const expect = chai.expect;
+import { expect } from 'chai';
 import { buildApp } from '../../../../srcs/app';
 import { FastifyInstance } from 'fastify';
 
@@ -11,7 +11,7 @@ import { signUpAndGetToken, UserData } from '../../fixtures/auth.fixtures';
 
 const addPicture = async(app: FastifyInstance, token: string) => {
     const form = new FormData();
-    const filePath = path.join(__dirname, 'test.jpg');
+    const filePath = path.join(__dirname, '../../../files/test.jpg');
     form.append('file', fs.createReadStream(filePath), {
         filename: 'test.jpg',
         contentType: 'image/jpeg'
@@ -49,8 +49,12 @@ describe('User picture integration tests', async () => {
     const userData: UserData = {
         username: 'userpicturetest',
         email: 'userpicturetest@example.com',
+        firstName: 'Test',
+        lastName: 'User',
         password: 'ghhgdhgdF123!',
         bornAt: '2000-01-01',
+        bio: 'Nice user bio',
+        tags: ['test', 'user'],
         orientation: 'heterosexual',
         gender: 'men'
     };

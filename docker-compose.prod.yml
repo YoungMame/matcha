@@ -12,6 +12,9 @@ services:
       PG_PASSWORD: ${POSTGRES_PASSWORD}
       PG_DB: ${POSTGRES_DB}
       RUN_SEED: ${RUN_SEED}
+      GMAIL_USER: ${GMAIL_USER}
+      GMAIL_APP_PASSWORD: ${GMAIL_APP_PASSWORD}
+      DOMAIN: matcha.fr
     restart: on-failure
     build: 
         context: ./fastify

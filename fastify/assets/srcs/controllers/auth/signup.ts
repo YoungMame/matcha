@@ -9,25 +9,13 @@ export const signUpHandler = async (
         email,
         password,
         username,
-        bornAt,
-        gender,
-        orientation
     } = request.body as any;
 
-    const bornAtDate = new Date(bornAt);
-
-    try {        
-        if (!request.server.userService) {
-            throw new Error('UserService not available on server instance');
-        }
-        
+    try {
         const jwt: string | undefined = await request.server.userService.createUser(
             email,
             password,
             username,
-            bornAtDate,
-            gender,
-            orientation
         );
 
         if (jwt == undefined) {

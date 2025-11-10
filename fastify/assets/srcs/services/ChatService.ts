@@ -22,6 +22,8 @@ class ChatService {
     }
 
     async createChat(userIds: number[]): Promise<number> {
+        if (userIds.length < 2)
+            throw new BadRequestError();
         const chat: Chat = await this.chatModel.insert(userIds);
         return chat.id;
     }

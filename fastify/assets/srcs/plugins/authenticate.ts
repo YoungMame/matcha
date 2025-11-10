@@ -23,12 +23,13 @@ export default fp(async function(fastify, opts) {
             }
 
             const token = result.value;
-            const payload = fastify.jwt.verify(token) as { id: string, username: string, email: string , isVerified: string };
+            const payload = fastify.jwt.verify(token) as { id: string, username: string, email: string , isVerified: boolean, isProfileCompleted: boolean};
             request.user = {
                 id: Number(payload.id),
                 username: payload.username,
                 email: payload.email,
-                isVerified: payload.isVerified === 'true'
+                isVerified: payload.isVerified,
+                isProfileCompleted: payload.isProfileCompleted
             };
         } catch (err) {
             return reply.status(401).send({ error: 'Unauthorized' });

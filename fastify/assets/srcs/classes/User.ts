@@ -14,14 +14,17 @@ export default class User {
     email: string;
     passwordHash: string;
     username: string;
+    isVerified: boolean;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    bio: string | undefined;
+    tags: string[] | undefined;
+    bornAt: Date | undefined;
+    gender: 'men' | 'women' | undefined;
+    orientation: 'heterosexual' | 'homosexual' | 'bisexual' | undefined;
+    isProfileCompleted: boolean;
     profilePictureIndex: number | undefined;
     profilePictures: string[];
-    bio: string;
-    tags: string[];
-    bornAt: Date;
-    isVerified: boolean;
-    gender: 'men' | 'women';
-    orientation: 'heterosexual' | 'homosexual' | 'bisexual';
     location: Location | undefined;
     createdAt: Date;
 
@@ -34,14 +37,17 @@ export default class User {
         email: string,
         passwordHash: string,
         username: string,
-        profilePictureIndex: number | undefined,
-        profilePictures: string[],
+        isVerified: boolean = false,
+        firstName: string ,
+        lastName: string,
         bio: string = '',
         tags: string[] = [],
         bornAt: Date,
-        isVerified: boolean = false,
         gender: 'men' | 'women' = 'men',
         orientation: 'heterosexual' | 'homosexual' | 'bisexual' = 'bisexual',
+        isProfileCompleted: boolean = false,
+        profilePictureIndex: number | undefined,
+        profilePictures: string[],
         location: Location | undefined = undefined,
         createdAt: Date,
     ) {
@@ -49,14 +55,17 @@ export default class User {
         this.email = email;
         this.passwordHash = passwordHash;
         this.username = username;
-        this.profilePictureIndex = profilePictureIndex;
-        this.profilePictures = profilePictures;
+        this.isVerified = isVerified;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.bio = bio;
         this.tags = tags;
         this.bornAt = bornAt;
-        this.isVerified = isVerified;
         this.gender = gender;
         this.orientation = orientation;
+        this.isProfileCompleted = isProfileCompleted;
+        this.profilePictureIndex = profilePictureIndex;
+        this.profilePictures = profilePictures;
         this.location = location;
         this.createdAt = createdAt;
     }
@@ -67,14 +76,17 @@ export default class User {
             row.email,
             row.password_hash,
             row.username,
-            row.profile_picture_index,
-            row.profile_pictures,
+            row.is_verified,
+            row.first_name,
+            row.last_name,
             row.bio,
             row.tags,
             new Date(row.born_at),
-            row.is_verified,
             row.gender,
             row.orientation,
+            row.is_profile_completed,
+            row.profile_picture_index,
+            row.profile_pictures,
             row.location,
             new Date(row.created_at)
         );

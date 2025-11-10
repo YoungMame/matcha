@@ -1,33 +1,75 @@
 import { FastifyInstance } from "fastify";
+import path from "path";
+import fs from "fs";
+import FormData from "form-data";
 
 export type UserData = {
     id?: number;
     username: string;
     email: string;
+    firstName: string;
+    lastName: string;
     password: string;
     bornAt: string;
     orientation: string;
     gender: string;
+    bio?: string;
+    tags?: string[];
 }
 
 export const signUpAndGetToken = async (app: FastifyInstance, userData: UserData): Promise<string | undefined> => {
     const signUpResponse = await app.inject({
         method: 'POST',
         url: '/auth/signup',
-        payload: userData
+        payload: {
+            username: userData.username,
+            email: userData.email,
+            password: userData.password,
+        }
     });
 
     if (signUpResponse.statusCode !== 201) {
         throw new Error(`Failed to sign up user: ${signUpResponse.body}, code: ${signUpResponse.statusCode}`);
     }
 
-    const createdUser = await app.userService.getUserPublic(undefined, userData.email);
+    const createdUser = await app.userService.debugGetUser(userData.email);
     const userId = createdUser.id;
-    app.userService.verifyEmail(userId);
+    const emailCode: string = await app.userService.debugGetUserEmailCode(userId, "emailValidation") as string; // User should receive this code by email in real life
+    const verifyEmailResponse = await app.inject({
+        method: 'GET',
+        url: `/auth/verify-email/${userId}/${emailCode}`
+    });
 
-    const jwtCookie = signUpResponse.cookies?.find((c: any) => c.name === 'jwt')?.value;
-    if (jwtCookie)
-        return jwtCookie;
+    const verifiedJwtResponse = await app.inject({
+        method: 'POST',
+        url: '/auth/login',
+        payload: {
+            email: userData.email,
+            password: userData.password
+        }
+    });
+    const verifiedJwt = verifiedJwtResponse.cookies?.find((c: any) => c.name === 'jwt')?.value;
+
+    const completedProfileResponse = await app.inject({
+        method: 'POST',
+        url: '/private/user/me/complete-profile',
+        headers: {
+            'Cookie': `jwt=${verifiedJwt}`
+        },
+        payload: {
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            bio: userData.bio,
+            tags: userData.tags,
+            gender: userData.gender,
+            orientation: userData.orientation,
+            bornAt: new Date(userData.bornAt)
+        }
+    });
+    const jwtCookie2 = completedProfileResponse.cookies?.find((c: any) => c.name === 'jwt')?.value;
+
+    if (jwtCookie2)
+        return jwtCookie2;
     return undefined;
 }
 
@@ -41,12 +83,16 @@ export const quickUser = async (app: FastifyInstance): Promise<{ userData: UserD
         concat = alphabets[userCounterCopy % alphabets.length] + concat;
         userCounterCopy -= alphabets.length;
     }
+    userCounter += 1;
 
-    const pseudo = `qtuser${concat}`;
     const userData: UserData = {
         username: `qtuser${concat}`,
         email: `quicktestuser${concat}@example.com`,
         password: 'fsdaf!ADAasf2321!!!!',
+        firstName: `Quick${concat}`,
+        lastName: 'TestUser',
+        bio: `Nice description for quick user ${concat}`,
+        tags: ['quick', 'test', 'user'],
         bornAt: '2000-01-01',
         orientation: 'heterosexual',
         gender: 'men'
@@ -54,17 +100,32 @@ export const quickUser = async (app: FastifyInstance): Promise<{ userData: UserD
     const token = await signUpAndGetToken(app, userData);
     if (!token) throw new Error('Failed to create quick user');
 
-    userCounter += 1;
-
-    const response = await app.inject({
+    const response2 = await app.inject({
         method: 'GET',
         url: '/private/user/me/profile',
         headers: {
             'Cookie': `jwt=${token}`
         }
     });
-    if (response.statusCode !== 200)
-        throw new Error(`Failed to get user data for quick user: ${response.body}`);
-    const data = JSON.parse(response.body) as UserData;
+    if (response2.statusCode !== 200)
+        throw new Error(`Failed to get user data for quick user: ${response2.body}`);
+    const form = new FormData();
+    const filePath = path.join(__dirname, '../../files/test.jpg');
+    form.append('file', fs.createReadStream(filePath), {
+        filename: 'test.jpg',
+        contentType: 'image/jpeg'
+    });
+
+    const headers = form.getHeaders();
+    headers['Cookie'] = `jwt=${token}`;
+
+    await app.inject({
+        method: 'POST',
+        url: '/private/user/me/profile-picture',
+        headers,
+        payload: form
+    });
+
+    const data = JSON.parse(response2.body) as UserData;
     return { userData: data, token };
 }

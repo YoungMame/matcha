@@ -1,5 +1,5 @@
 import chai from 'chai';
-const expect = chai.expect;
+import { expect } from 'chai';
 import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
 
@@ -14,9 +14,7 @@ describe('Chat test', () => {
         await app.ready();
     });
     
-    afterEach(async () => {
-        await app.close();
-    });
+    
 
     it('should not get connected if not in chat', async function (this: any) {
         this.timeout(5000);
@@ -85,7 +83,6 @@ describe('Chat test', () => {
         const { userData: data1, token: token1 } = await quickUser(app);
         const { userData: data2, token: token2 } = await quickUser(app);
 
-
         const ws1 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token1}` } });
         const ws2 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token2}` } });
 
@@ -105,7 +102,7 @@ describe('Chat test', () => {
         ws1.on('message', (data: Buffer) => {
             resolveMsg2(data.toString());
         });
-
+    
         const chatId = await app.chatService.createChat([user1id, user2id]);
 
         ws1.send(JSON.stringify({
