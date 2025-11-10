@@ -8,10 +8,10 @@ import fp from 'fastify-plugin';
 import fs from 'fs';
 import path from "path";
 import { FastifyInstance } from 'fastify';
-import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError, ForbiddenError } from "../utils/error";
+import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError, ForbiddenError, ConflictError } from "../utils/error";
 import commonPasswords from '../utils/1000-most-common-passwords.json';
 import { WebSocketMessageTypes, WebSocketMessageDataTypes } from "./WebSocketService";
-import { Like } from "../models/Like"
+import { Like } from "../models/Like";
 
 class UserService {
     private fastify: FastifyInstance;
@@ -288,6 +288,9 @@ class UserService {
             throw new NotFoundError();
         if (viewerId)
         {
+            const isBlocking = await this.isUserBlockedBy(viewerId, user.id);
+            if (isBlocking)
+                throw new NotFoundError();
             const existingView = await this.viewModel.getBeetweenUsers(viewerId, user.id);
             if (!existingView)
             {
@@ -321,6 +324,12 @@ class UserService {
     private async isUserLikeable(senderId: number, receiverId: number): Promise<void> {
         if (senderId === receiverId)
             throw new BadRequestError();
+        const isBlocking = await this.isUserBlockedBy(senderId, receiverId);
+        if (isBlocking)
+            throw new NotFoundError();
+        const isBlocked = await this.isUserBlockedBy(receiverId, senderId);
+        if (isBlocked)
+            throw new NotFoundError();
         const receiverUser = await this.getUser(receiverId);
         if (!receiverUser || !receiverUser.isProfileCompleted)
             throw new NotFoundError();
@@ -380,8 +389,8 @@ class UserService {
     }
 
     async getLikes(userId: number): Promise<Like[]> {
-        const like = await this.likeModel.getAllByLikedId(userId);
-        return like;
+        const likes = await this.likeModel.getAllByLikedId(userId);
+        return likes;
     }
 
     async setUserDisconnected(userId: number): Promise<void> {
@@ -392,8 +401,53 @@ class UserService {
         await this.userModel.setUserConnection(userId, true);
     }
 
-    async getUserConnectionStatus(userId: number): Promise<{ isConnected: boolean; lastConnection: Date | undefined } | null> {
-        return await this.userModel.getUserConnection(userId);
+    async getUserConnectionStatus(userId: number, targetId: number): Promise<{ isConnected: boolean; lastConnection: Date | undefined } | null> {
+        const connection = await this.userModel.getUserConnection(userId);
+        const isBlocking = await this.isUserBlockedBy(userId, targetId);
+        if (isBlocking)
+            return null;
+        const isBlocked = await this.isUserBlockedBy(targetId, userId);
+        if (isBlocked)
+            return null;
+        return connection;
+    }
+
+    async isUserBlockedBy(blockedId: number, blockerId: number): Promise<boolean> {
+        const result = await this.userModel.getBlockedUser(blockedId, blockerId);
+        if (result)
+            return true;
+        return false;
+    }
+
+    async blockUser(userId: number, targetId: number): Promise<void> {
+        const isRecBlocked = await this.isUserBlockedBy(userId, targetId);
+        if (isRecBlocked)
+            throw new BadRequestError();
+        const isAlreadyBlocked = await this.isUserBlockedBy(targetId, userId);
+        if (isAlreadyBlocked)
+            throw new ConflictError();
+
+        this.userModel.insertBlockedUser(userId, targetId);
+        return ;
+    }
+
+    async unblockUser(userId: number, targetId: number): Promise<void> {
+        const isAlreadyBlocked = await this.isUserBlockedBy(targetId, userId);
+        if (!isAlreadyBlocked)
+            throw new ConflictError();
+
+        this.userModel.removeBlockedUser(userId, targetId);
+        return ;
+    }
+
+    async getBlockedUsers(userId: number): Promise<Map<number, Date>> {
+        const blockedUsers = await this.userModel.getBlockedUsersByBlockerId(userId);
+        return blockedUsers;
+    }
+
+    async getBlockerUsers(userId: number): Promise<Map<number, Date>> {
+        const blockerUsers = await this.userModel.getBlockerUsersByBlockedId(userId);
+        return blockerUsers;
     }
 }
 

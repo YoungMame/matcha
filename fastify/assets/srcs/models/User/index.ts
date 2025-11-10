@@ -24,6 +24,12 @@ type UserLocation = {
     longitude: number;
 };
 
+type BlockedUser = {
+    id: number;
+    blockerId: number;
+    blockedId: number;
+}
+
 export default class UserModel {
     constructor(private fastify: FastifyInstance) {}
 
@@ -189,5 +195,60 @@ export default class UserModel {
             isConnected,
             lastConnection
         };
+    }
+
+    insertBlockedUser = async (blockerId: number, blockedId: number): Promise<number | undefined> => {
+        const result = await this.fastify.pg.query(
+            'INSERT INTO blocked_users (blocker_id, blocked_id) VALUES ($1, $2) RETURNING id',
+            [blockerId, blockedId]
+        );
+        if (!(result.rows[0]))
+            return undefined;
+        return (result.rows[0].id as number);
+    }
+
+    getBlockedUser = async (userId: number, blockerId: number): Promise<BlockedUser | undefined> => {
+        const result = await this.fastify.pg.query(
+            'SELECT * FROM blocked_users WHERE blocked_id=$1 AND blocker_id=$2',
+            [userId, blockerId]
+        );
+        if (!(result.rows[0]))
+            return undefined;
+        return ({
+            id: result.rows[0].id as number,
+            blockerId: result.rows[0].blocker_id as number,
+            blockedId: result.rows[0].blocked_id as number
+        });
+    }
+
+    getBlockedUsersByBlockerId = async (blockerId: number): Promise<Map<number, Date>> => {
+        const result = await this.fastify.pg.query(
+            'SELECT blocked_id FROM blocked_users WHERE blocker_id=$1',
+            [blockerId]
+        );
+        let map = new Map<number, Date>();
+        result.rows.forEach(row => {
+            map.set(row.blocked_id as number, new Date(row.created_at as string));
+        });
+        return map;
+    }
+
+    getBlockerUsersByBlockedId = async (blockedId: number): Promise<Map<number, Date>> => {
+        const result = await this.fastify.pg.query(
+            'SELECT blocker_id, created_at FROM blocked_users WHERE blocked_id = $1',
+            [blockedId]
+        );
+        let map = new Map<number, Date>();
+        result.rows.forEach(row => {
+            map.set(row.blocker_id as number, new Date(row.created_at as string));
+        });
+        return map;
+    }
+
+    removeBlockedUser = async (blockerId: number, blockedId: number) => {
+        await this.fastify.pg.query(
+            'DELETE FROM blocked_users WHERE blocker_id=$1 AND blocked_id=$2',
+            [blockerId, blockedId]
+        );
     }
 }
