@@ -223,7 +223,7 @@ export default class UserModel {
 
     getBlockedUsersByBlockerId = async (blockerId: number): Promise<Map<number, Date>> => {
         const result = await this.fastify.pg.query(
-            'SELECT blocked_id FROM blocked_users WHERE blocker_id=$1',
+            'SELECT blocked_id, created_at FROM blocked_users WHERE blocker_id=$1',
             [blockerId]
         );
         let map = new Map<number, Date>();

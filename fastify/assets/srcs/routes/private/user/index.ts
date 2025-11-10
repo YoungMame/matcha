@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify';
 import meRoutes from './me';
 import likeRoutes from './like';
 import viewRoutes from './view';
+import blockRoutes from './block';
 
 const userRoutes = async (fastify: FastifyInstance) => {
     fastify.get('/', async () => {
@@ -9,6 +10,7 @@ const userRoutes = async (fastify: FastifyInstance) => {
     });
     fastify.register(likeRoutes, { prefix: '/like', preHandler: fastify.checkIsCompleted });
     fastify.register(viewRoutes, { prefix: '/view', preHandler: fastify.checkIsCompleted });
+    fastify.register(blockRoutes, { prefix: '/block', preHandler: fastify.checkIsCompleted });
     fastify.register(meRoutes, { prefix: '/me' });
 }
 

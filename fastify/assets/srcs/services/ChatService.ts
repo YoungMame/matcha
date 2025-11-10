@@ -95,10 +95,13 @@ class ChatService {
         const blockedUsers: Map<number, Date> = await this.fastify.userService.getBlockedUsers(userId);
         const blockerUsers: Map<number, Date> = await this.fastify.userService.getBlockerUsers(userId);
         const filteredMessages = messages.filter(message => {
-            if (blockedUsers.has(message.senderId) && (blockedUsers.get(message.senderId) as Date) < message.createdAt && (blockerUsers.get(message.senderId) as Date) < message.createdAt)
+            if ((blockedUsers.has(message.senderId) && (blockedUsers.get(message.senderId) as Date) < message.createdAt) || (blockerUsers.has(message.senderId) && (blockerUsers.get(message.senderId) as Date) < message.createdAt))
                 return false;
             return true;
         });
+        console.log('Blocker users:', blockerUsers);
+        console.log('Blocked users:', blockedUsers);
+        console.log('Filtered messages:', filteredMessages);
         return (filteredMessages);
     }
 
