@@ -1,5 +1,5 @@
 import chai from 'chai';
-const expect = chai.expect;
+import { expect } from 'chai';
 import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
 
@@ -14,9 +14,7 @@ describe('Websocket view test', () => {
         await app.ready();
     });
     
-    afterEach(async () => {
-        await app.close();
-    });
+    
 
     it('should get connected to ws and deliver a view to the target user', async function (this: any) {
         this.timeout(5000);

@@ -1,7 +1,6 @@
 import fp from 'fastify-plugin'
 import { FastifyRequest, FastifyReply } from 'fastify'
-import idim from 'image-dimensions'
-import { ReadableStream } from 'node:stream/web';
+import { imageDimensionsFromData } from 'image-dimensions'
 
 export default fp(async function(fastify, opts) {
     fastify.decorate("checkImageConformity", async function(request: FastifyRequest, reply: FastifyReply) {
@@ -26,7 +25,7 @@ export default fp(async function(fastify, opts) {
             const minWidth = 150;
             const maxWidth = 1080;
 
-            const currentSize = await idim.imageDimensionsFromData(buffer);
+            const currentSize = await imageDimensionsFromData(buffer);
             if (!currentSize)
                 throw new Error('Unrecognized file format');
 
@@ -43,6 +42,7 @@ export default fp(async function(fastify, opts) {
                 fields: file.fields // if you need multipart fields
             };
         } catch (err) {
+            console.error('Error in checkImageConformity:', err);
             if (err instanceof Error && err.message)
                 return reply.status(400).send({ error: err.message });
             return reply.status(400).send({ error: 'Bad request' });

@@ -1,5 +1,5 @@
 import chai from 'chai';
-const expect = chai.expect;
+import { expect } from 'chai';
 import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
 
@@ -14,9 +14,7 @@ describe('Websocket connection main test', () => {
         await app.ready();
     });
     
-    afterEach(async () => {
-        await app.close();
-    });
+    
 
     // TODO adapt this test to the real chat system
     // it('should get connected to ws and deliver a message to the target user', async function (this: any) {

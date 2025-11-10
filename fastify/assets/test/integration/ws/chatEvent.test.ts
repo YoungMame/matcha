@@ -1,5 +1,5 @@
 import chai from 'chai';
-const expect = chai.expect;
+import { expect } from 'chai';
 import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
 
@@ -13,10 +13,6 @@ describe('Websocket chat event test', () => {
         app = buildApp();
         await app.ready();
     });
-    
-    afterEach(async () => {
-        await app.close();
-    });
 
     it('should get connected to ws and create an event and send it to the users', async function (this: any) {
         this.timeout(5000);
@@ -24,7 +20,6 @@ describe('Websocket chat event test', () => {
         const { userData: data1, token: token1 } = await quickUser(app);
         const { userData: data2, token: token2 } = await quickUser(app);
         const { userData: data3, token: token3 } = await quickUser(app);
-
 
         const ws1 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token1}` } });
         const ws2 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token2}` } });

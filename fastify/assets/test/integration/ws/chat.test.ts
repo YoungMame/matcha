@@ -1,5 +1,5 @@
 import chai from 'chai';
-const expect = chai.expect;
+import { expect } from 'chai';
 import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
 
@@ -14,9 +14,7 @@ describe('Chat test', () => {
         await app.ready();
     });
     
-    afterEach(async () => {
-        await app.close();
-    });
+    
 
     it('should not get connected if not in chat', async function (this: any) {
         this.timeout(5000);

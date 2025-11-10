@@ -1,5 +1,5 @@
 import chai from 'chai';
-const expect = chai.expect;
+import { expect } from 'chai';
 import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
 
@@ -39,10 +39,6 @@ describe('Auth Integration Tests', () => {
     beforeEach(async () => {
         app = buildApp();
         await app.ready();
-    });
-    
-    afterEach(async () => {
-        await app.close();
     });
 
     it('should sign up a new user and login', async () => {

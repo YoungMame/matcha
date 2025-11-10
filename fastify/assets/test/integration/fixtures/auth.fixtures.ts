@@ -39,7 +39,6 @@ export const signUpAndGetToken = async (app: FastifyInstance, userData: UserData
         method: 'GET',
         url: `/auth/verify-email/${userId}/${emailCode}`
     });
-    console.log('Email verification response:', verifyEmailResponse.statusCode, verifyEmailResponse.body);
 
     const verifiedJwtResponse = await app.inject({
         method: 'POST',

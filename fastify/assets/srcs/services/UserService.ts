@@ -34,7 +34,7 @@ class UserService {
         const codeLenght = 6;
         let codeArray: number[] = [];
         for (let i = 0; i < codeLenght; i++)
-            codeArray[i] = Math.random() * 10 - 1; // give a digit
+            codeArray[i] = Math.abs(Math.random() * (10 - 1)); // give a digit
 
         const code: string = codeArray.map(digit => Math.round(digit).toString()).join('');
         const seconds = 600;
@@ -53,7 +53,9 @@ class UserService {
     async verifyEmail(userId: number, code?: string): Promise<void> {
         const user = await this.getUser(userId);
         if (!user)
+        {
             throw new NotFoundError();
+        }
         if (code && user.getEmailCode("emailValidation") != code)
             throw new ForbiddenError();
         user.clearEmailCode("emailValidation");
@@ -68,7 +70,8 @@ class UserService {
             userdata = await this.userModel.findById(idOrMail);
         if (!userdata)
             return (null);
-        return (User.fromRow(userdata));
+        const user: User = User.fromRow(userdata);
+        return (user);
     }
 
     public async debugGetUser(idOrMail: string | number): Promise<User | null> {

@@ -24,12 +24,12 @@ const verifyEmailHandler = async (request: FastifyRequest, reply: FastifyReply) 
 };
 
 const verifyEmailRoutes = async (fastify: FastifyInstance) => {
-    fastify.post('/:userId/:code', {
+    fastify.get('/:userId/:code', {
         schema: {
             params: {
                 type: 'object',
                 properties: {
-                    userId: { type: 'string', format: 'uuid' },
+                    userId: { type: 'string', format: 'int32' },
                     code: { type: 'string', minLength: 6, maxLength: 6 }
                 },
                 required: ['userId', 'code'],

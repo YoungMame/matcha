@@ -1,6 +1,7 @@
 #!/bin/sh
 
 if [ "$NODE_ENV" = "dev" ]; then
+    sleep 1 # wait for the database to be ready
     if [ "$RUN_SEED" = "true" ]; then
         echo "Running database seed..."
         pnpm run seed
@@ -8,6 +9,7 @@ if [ "$NODE_ENV" = "dev" ]; then
     fi
     exec pnpm dev
 elif [ "$NODE_ENV" = "test" ]; then
+    sleep 1 # wait for the database to be ready
     echo "Running unit tests"
     # pnpm test:unit
     exec pnpm test:integration
