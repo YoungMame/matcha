@@ -99,9 +99,6 @@ class ChatService {
                 return false;
             return true;
         });
-        console.log('Blocker users:', blockerUsers);
-        console.log('Blocked users:', blockedUsers);
-        console.log('Filtered messages:', filteredMessages);
         return (filteredMessages);
     }
 

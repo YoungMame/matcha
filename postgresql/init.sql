@@ -41,6 +41,12 @@ CREATE TABLE if not exists blocked_users (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE VIEW blocked_with_username AS
+SELECT bu.*, u_origin.username AS blocker_username, u_target.username AS blocked_username
+FROM blocked_users bu
+JOIN users u_origin ON u_origin.id = bu.blocker_id
+JOIN users u_target ON u_target.id = bu.blocked_id;
+
 ALTER TABLE blocked_users
 ADD FOREIGN KEY (blocker_id) REFERENCES users(id)
 ON DELETE CASCADE;

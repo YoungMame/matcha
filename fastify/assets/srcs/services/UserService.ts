@@ -291,6 +291,11 @@ class UserService {
             const isBlocking = await this.isUserBlockedBy(viewerId, user.id);
             if (isBlocking)
                 throw new NotFoundError();
+            const isBlocked = await this.isUserBlockedBy(user.id, viewerId);
+            if (isBlocked)
+                throw new NotFoundError();
+            const blockedUsersMap = await this.getBlockedUsers(viewerId);
+            const blockerUsersMap = await this.getBlockerUsers(viewerId);
             const existingView = await this.viewModel.getBeetweenUsers(viewerId, user.id);
             if (!existingView)
             {
@@ -426,8 +431,9 @@ class UserService {
         const isAlreadyBlocked = await this.isUserBlockedBy(targetId, userId);
         if (isAlreadyBlocked)
             throw new ConflictError();
-
-        this.userModel.insertBlockedUser(userId, targetId);
+        const result = await this.userModel.insertBlockedUser(userId, targetId);
+        if (!result)
+            throw new InternalServerError();
         return ;
     }
 
@@ -436,13 +442,17 @@ class UserService {
         if (!isAlreadyBlocked)
             throw new ConflictError();
 
-        this.userModel.removeBlockedUser(userId, targetId);
+        await this.userModel.removeBlockedUser(userId, targetId);
         return ;
     }
 
+    async getBlockedUsersDetails(userId: number): Promise<{ id: number; username: string; createdAt: Date }[]> {
+        return await this.userModel.getBlockedUsersByBlockerIdDetails(userId);
+    }
+
+
     async getBlockedUsers(userId: number): Promise<Map<number, Date>> {
-        const blockedUsers = await this.userModel.getBlockedUsersByBlockerId(userId);
-        return blockedUsers;
+        return await this.userModel.getBlockedUsersByBlockerId(userId);
     }
 
     async getBlockerUsers(userId: number): Promise<Map<number, Date>> {

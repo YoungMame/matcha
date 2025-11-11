@@ -54,6 +54,7 @@ declare module 'fastify' {
         blockUser(userId: number, targetId: number): Promise<void>;
         unblockUser(userId: number, targetId: number): Promise<void>;
         getBlockerUsers(userId: number): Promise<Map<number, Date>>;
+        getBlockedUsersDetails(userId: number): Promise<{ id: number; username: string; createdAt: Date }[]>;
         getBlockedUsers(userId: number): Promise<Map<number, Date>>;
     };
     webSocketService: {

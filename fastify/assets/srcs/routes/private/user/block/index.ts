@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { blockUserHandler, unblockUserHandler } from '../../../../controllers/private/block';
+import { blockUserHandler, unblockUserHandler, getBlockedUsersHandler } from '../../../../controllers/private/block';
 
 const blockRoutes = async (fastify: FastifyInstance) => {
     fastify.post('/:userId', {
@@ -74,6 +74,45 @@ const blockRoutes = async (fastify: FastifyInstance) => {
             }
         },
         handler: unblockUserHandler
+    });
+
+    fastify.get('/', {
+        schema: {
+            response: {
+                200: {
+                    type: 'object',
+                    properties: {
+                        users: { 
+                            type: 'array', 
+                            items: { 
+                                type: 'object', 
+                                properties: {
+                                    id: { type: 'integer' },
+                                    username: { type: 'string' },
+                                    createdAt: { type: 'string', format: 'date-time' },
+                                }
+                            }
+                        }
+                    },
+                    additionalProperties: false
+                },
+                400: {
+                    type: 'object',
+                    properties: {
+                        error: { type: 'string', }
+                    },
+                    additionalProperties: false
+                },
+                500: {
+                    type: 'object',
+                    properties: {
+                        error: { type: 'string' }
+                    },
+                    additionalProperties: false
+                }
+            }
+        },
+        handler: getBlockedUsersHandler
     });
 }
 

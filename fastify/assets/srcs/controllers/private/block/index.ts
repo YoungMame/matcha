@@ -42,3 +42,22 @@ export const unblockUserHandler = async (
         return reply.status(500).send({ error: 'Internal server error' });
     } 
 }
+
+export const getBlockedUsersHandler = async (
+    request: FastifyRequest,
+    reply: FastifyReply
+) => {
+    try {
+        const user = request.user as FastifyRequestUser | undefined;
+        const userId = user?.id;
+        if (!userId)
+            throw new UnauthorizedError();
+        const blockedUsers = await request.server.userService.getBlockedUsersDetails(userId);
+        return reply.code(200).send({ users: blockedUsers });
+    }
+    catch (error) {
+        if (error instanceof AppError)
+            return reply.status(error.statusCode).send({ error: error.message });
+        return reply.status(500).send({ error: 'Internal server error' });
+    }
+}

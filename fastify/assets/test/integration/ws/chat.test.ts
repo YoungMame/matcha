@@ -1,10 +1,12 @@
-import chai from 'chai';
 import { expect } from 'chai';
 import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
 
 // import fixtures
 import { quickUser } from '../fixtures/auth.fixtures';
+
+// import utils
+import { wait } from '../utils/wait';
 
 function getMessages(app: FastifyInstance, chatId: number, userToken: string, fromLast: number, toLast: number) {
     return app.inject({
@@ -15,6 +17,7 @@ function getMessages(app: FastifyInstance, chatId: number, userToken: string, fr
         }
     });
 }
+
 
 describe('Chat test', () => {
     let app: FastifyInstance;
@@ -211,7 +214,7 @@ describe('Chat test', () => {
 
         ws2.on('message', (data: Buffer) => {
             const object = JSON.parse(data.toString());
-            if (object.type === 'message' && object.data.content === 'World')
+            if (object?.type === 'message' && object?.data?.content && object.data?.content === 'World')
                 resolveMsg(false);
         });
 
@@ -226,6 +229,8 @@ describe('Chat test', () => {
             targetId: chatId,
             content: 'Hello'
         }));
+
+        await wait(500); // wait for message to be processed
 
         const blockResponse = await app.inject({
             method: 'POST',
@@ -244,7 +249,7 @@ describe('Chat test', () => {
 
         const tmOut = setTimeout(() => {
             resolveMsg(true);
-        }, 2000);
+        }, 1000);
 
         const value = await promise;
 
@@ -252,10 +257,79 @@ describe('Chat test', () => {
         expect(value).to.equal(true);
 
         const getMessagesResponse = await getMessages(app, chatId, token2, 0, 10);
-        console.log(getMessagesResponse.body);
         const rawBody = JSON.parse(getMessagesResponse.body);
         const messages = rawBody.messages;
-        expect(messages[0].content).to.equal('Hello');
+        expect(messages[0]?.content).to.equal('Hello');
+        expect(messages).to.have.lengthOf(1); // message should not be stored
+
+        ws1.terminate();
+        ws2.terminate();
+    });
+
+    it('should not send message to someone who has been blocked', async function (this: any) {
+        this.timeout(5000);
+
+        const { userData: data1, token: token1 } = await quickUser(app);
+        const { userData: data2, token: token2 } = await quickUser(app);
+
+
+        const ws1 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token1}` } });
+        const ws2 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token2}` } });
+
+        const user2id = data2.id as number;
+        const user1id = data1.id as number;
+
+        let resolveMsg: (value: boolean) => void = () => {};
+        const promise = new Promise<boolean>(r => { resolveMsg = r; });
+
+        ws2.on('message', (data: Buffer) => {
+            const object = JSON.parse(data.toString());
+            if (object.type === 'message' && object.data?.content && object.data?.content === 'World')
+                resolveMsg(false);
+        });
+
+        await app.userService.sendLike(user1id, user2id); // make user1 like user2
+        await app.userService.sendLike(user2id, user1id); // make user2 like user1
+
+        const chat = await app.chatService.getChatBetweenUsers([user1id, user2id]);
+        const chatId = chat.id;
+
+        ws1.send(JSON.stringify({
+            type: 'message',
+            targetId: chatId,
+            content: 'Hello'
+        }));
+
+        await wait(500); // wait for message to be processed
+
+        const blockResponse = await app.inject({
+            method: 'POST',
+            url: `/private/user/block/${user2id}`,
+            headers: {
+                'Cookie': `jwt=${token1}`
+            }
+        });
+        expect(blockResponse.statusCode).to.equal(201);
+
+        ws1.send(JSON.stringify({
+            type: 'message',
+            targetId: chatId,
+            content: 'World'
+        }));
+
+        const tmOut = setTimeout(() => {
+            resolveMsg(true);
+        }, 1000);
+
+        const value = await promise;
+
+        clearTimeout(tmOut);
+        expect(value).to.equal(true);
+
+        const getMessagesResponse = await getMessages(app, chatId, token2, 0, 10);
+        const rawBody = JSON.parse(getMessagesResponse.body);
+        const messages = rawBody.messages;
+        expect(messages[0]?.content).to.equal('Hello');
         expect(messages).to.have.lengthOf(1); // message should not be stored
 
         ws1.terminate();
