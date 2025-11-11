@@ -13,6 +13,7 @@ import websocketServicePlugin from './services/WebSocketService'
 import userServicePlugin from './services/UserService'
 import chatServicePlugin from './services/ChatService'
 import mailServicePlugin from './services/MailService'
+import notificationService from './services/NotificationsServices'
 // import custom plugins
 import authenticate from './plugins/authenticate'
 import checkImageConformity from './plugins/checkImageConformity'
@@ -66,6 +67,8 @@ export const buildApp = () => {
     app.register(websocketServicePlugin);
 
     app.register(chatServicePlugin);
+
+    app.register(notificationService);
 
     app.register(pg, {
         connectionString: process.env.PG

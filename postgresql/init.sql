@@ -34,16 +34,21 @@ CREATE TABLE if not exists users (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TYPE NOTIFICATION_TYPE AS ENUM ('like', 'view', 'unlike', 'like_back', 'message', 'event');
+CREATE TYPE NOTIFICATION_TYPE AS ENUM ('like', 'view', 'unlike', 'like_back', 'message', 'chat_event');
 
 CREATE TABLE if not exists notifications (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL,
     author_id INTEGER NOT NULL,
     notification_type NOTIFICATION_TYPE NOT NULL,
-    is_read BOOLEAN DEFAULT FALSE,
+    target_id INTEGER NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE VIEW notifications_details AS
+SELECT bu.*, u_author.username AS author_username
+FROM notifications bu
+JOIN users u_author ON u_author.id = bu.author_id;
 
 ALTER TABLE notifications
 ADD FOREIGN KEY (user_id) REFERENCES users(id)

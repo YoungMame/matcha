@@ -1,6 +1,5 @@
 import { FastifyInstance } from "fastify";
 import { ForbiddenError, InternalServerError, NotFoundError } from "../../utils/error";
-import { get } from "http";
 
 export interface Like {
     id: number;

@@ -89,6 +89,11 @@ declare module 'fastify' {
       sendPasswordResetCode(to: string, code: string): Promise<void>;
     };
 
+    notificationService: {
+      createNotification(userId: number, authorId: number, notificationType: NotificationType, targetId: number): Promise<void>;  
+      getNotifications(userId: number): Promise<Notification[]>;
+    };
+
     nodemailer: any;
 
     authenticate(request: any, reply: any): Promise<void>;
