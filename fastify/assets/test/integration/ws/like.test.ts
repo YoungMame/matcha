@@ -4,7 +4,7 @@ import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
 
 // import fixtures
-import { signUpAndGetToken, quickUser, UserData } from '../fixtures/auth.fixtures';
+import { quickUser } from '../fixtures/auth.fixtures';
 
 describe('Websocket like test', () => {
     let app: FastifyInstance;
@@ -13,8 +13,6 @@ describe('Websocket like test', () => {
         app = buildApp();
         await app.ready();
     });
-    
-    
 
     it('should get connected to ws and deliver a like to the target user then unlike', async function (this: any) {
         this.timeout(5000);
@@ -263,6 +261,65 @@ describe('Websocket like test', () => {
         expect(chat.id).to.be.a('number').and.equal(chatId);
     });
 
+    it('should not be able to like a user who blocked me', async function (this: any) {
+        this.timeout(5000);
 
-    // TODO not validated or not pp user should not be able to like another user or be liked
+        const { userData: userAData, token: tokenA } = await quickUser(app);
+        const { userData: userBData, token: tokenB } = await quickUser(app);
+
+        const blockResponse = await app.inject({
+            method: 'POST',
+            url: `/private/user/block/${userAData.id}`,
+            headers: {
+                'Cookie': `jwt=${tokenB}`
+            },
+        });
+        expect(blockResponse.statusCode).to.equal(201);
+
+        const likeResponse1 = await sendLike(app, tokenB, userAData?.id as number);
+        expect(likeResponse1.statusCode).to.equal(404);
+
+        const getLikesResponse = await app.inject({
+            method: 'GET',
+            url: `/private/user/like/`,
+            headers: {
+                'Cookie': `jwt=${tokenB}`
+            }
+        });
+        const getLikesData = JSON.parse(getLikesResponse.body);
+        const likes = getLikesData.likes;
+        const likerIds = likes.map((like: any) => like.likerId);
+        expect(likerIds).to.not.include(userAData.id);
+    });
+
+    it('should not be able to like a user i blocked', async function (this: any) {
+        this.timeout(5000);
+
+        const { userData: userAData, token: tokenA } = await quickUser(app);
+        const { userData: userBData, token: tokenB } = await quickUser(app);
+
+        const blockResponse = await app.inject({
+            method: 'POST',
+            url: `/private/user/block/${userBData.id}`,
+            headers: {
+                'Cookie': `jwt=${tokenA}`
+            },
+        });
+        expect(blockResponse.statusCode).to.equal(201);
+
+        const likeResponse1 = await sendLike(app, tokenA, userBData?.id as number);
+        expect(likeResponse1.statusCode).to.equal(404);
+
+        const getLikesResponse = await app.inject({
+            method: 'GET',
+            url: `/private/user/like/`,
+            headers: {
+                'Cookie': `jwt=${tokenB}`
+            }
+        });
+        const getLikesData = JSON.parse(getLikesResponse.body);
+        const likes = getLikesData.likes;
+        const likerIds = likes.map((like: any) => like.likerId);
+        expect(likerIds).to.not.include(userAData.id);
+    });
 });

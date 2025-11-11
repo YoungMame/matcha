@@ -21,7 +21,7 @@ declare module 'fastify' {
       getLikes(userId: number): Promise<Like[]>;
       setUserConnected(userId: number): Promise<void>;
       setUserDisconnected(userId: number): Promise<void>;
-      getUserConnectionStatus(userId: number): Promise<{ isConnected: boolean; lastConnection: Date | undefined } | null>;
+      getUserConnectionStatus(userId: number, targetId: number): Promise<{ isConnected: boolean; lastConnection: Date | undefined } | null>;
       getMe(id: number): Promise<{
         id: number;
         email: string;
@@ -50,6 +50,12 @@ declare module 'fastify' {
         orientation: string;
         location: { latitude: number | null; longitude: number | null };
       }>;
+        isUserBlockedBy(blockedId: number, blockerId: number): Promise<boolean>;
+        blockUser(userId: number, targetId: number): Promise<void>;
+        unblockUser(userId: number, targetId: number): Promise<void>;
+        getBlockerUsers(userId: number): Promise<Map<number, Date>>;
+        getBlockedUsersDetails(userId: number): Promise<{ id: number; username: string; createdAt: Date }[]>;
+        getBlockedUsers(userId: number): Promise<Map<number, Date>>;
     };
     webSocketService: {
       handleClientMessage(id: number, message: string): void;

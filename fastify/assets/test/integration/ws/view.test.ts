@@ -6,6 +6,9 @@ import { FastifyInstance } from 'fastify';
 // import fixtures
 import { signUpAndGetToken, quickUser, UserData } from '../fixtures/auth.fixtures';
 
+// import utils
+import { wait } from '../utils/wait';
+
 describe('Websocket view test', () => {
     let app: FastifyInstance;
 
@@ -13,8 +16,6 @@ describe('Websocket view test', () => {
         app = buildApp();
         await app.ready();
     });
-    
-    
 
     it('should get connected to ws and deliver a view to the target user', async function (this: any) {
         this.timeout(5000);
@@ -157,5 +158,68 @@ describe('Websocket view test', () => {
 
         ws1.terminate();
         ws2.terminate();
+    });
+
+    it('Should not see someone i blocked or who blocked me', async function (this: any) {
+        this.timeout(5000);
+
+        const { userData: data1, token: token1 } = await quickUser(app);
+        const { userData: data2, token: token2 } = await quickUser(app);
+
+        const blockResponse = await app.inject({
+            method: 'POST',
+            url: `/private/user/block/${data2.id}`,
+            headers: {
+                'Cookie': `jwt=${token1}`
+            }
+        });
+        expect(blockResponse.statusCode).to.equal(201);
+
+        const response = await app.inject({
+            method: 'GET',
+            url: `/private/user/view/${data2.id}`,
+            headers: {
+                'Cookie': `jwt=${token1}`
+            },
+            body: {}
+        });
+        expect(response.statusCode).to.equal(404);
+
+        const response2 = await app.inject({
+            method: 'GET',
+            url: `/private/user/view/${data1.id}`,
+            headers: {
+                'Cookie': `jwt=${token2}`
+            },
+            body: {}
+        });
+        expect(response2.statusCode).to.equal(404);
+
+        const unblockResponse = await app.inject({
+            method: 'DELETE',
+            url: `/private/user/block/${data2.id}`,
+            headers: {
+                'Cookie': `jwt=${token1}`
+            },
+        });
+        expect(unblockResponse.statusCode).to.equal(200);
+
+        const response3 = await app.inject({
+            method: 'GET',
+            url: `/private/user/view/${data2.id}`,
+            headers: {
+                'Cookie': `jwt=${token1}`
+            },
+        });
+        expect(response3.statusCode).to.equal(200);
+
+        const response4 = await app.inject({
+            method: 'GET',
+            url: `/private/user/view/${data1.id}`,
+            headers: {
+                'Cookie': `jwt=${token2}`
+            },
+        });
+        expect(response4.statusCode).to.equal(200);
     });
 });

@@ -50,8 +50,12 @@ class ChatService {
         if (!result.users.includes(senderId))
             throw new NotFoundError();
         const message = await this.chatModel.insertMessage(chatId, senderId, content);
+
+        const blockedUsers: Map<number, Date> = await this.fastify.userService.getBlockedUsers(senderId);
+        const blockerUsers: Map<number, Date> = await this.fastify.userService.getBlockerUsers(senderId);
+
         result.users.forEach(userId => {
-            if (userId !== senderId) {
+            if (userId !== senderId && !blockedUsers.has(userId) && !blockerUsers.has(userId)) {
                 const data: WebSocketMessageDataTypes[WebSocketMessageTypes.MESSAGE] = {
                     id: message.id,
                     senderId: message.senderId,
@@ -88,10 +92,10 @@ class ChatService {
             throw new NotFoundError();
 
         const messages = await this.chatModel.getMessages(chatId, fromLast, toLast);
-        // const blockedUsers: number[] = this.fastify.userService.getBlockedUsers(userId); // TODO implement blocked users
-        const blockedUsers: Map<number, Date> = new Map();
+        const blockedUsers: Map<number, Date> = await this.fastify.userService.getBlockedUsers(userId);
+        const blockerUsers: Map<number, Date> = await this.fastify.userService.getBlockerUsers(userId);
         const filteredMessages = messages.filter(message => {
-            if (blockedUsers.has(message.senderId) && (blockedUsers.get(message.senderId) as Date) < message.createdAt)
+            if ((blockedUsers.has(message.senderId) && (blockedUsers.get(message.senderId) as Date) < message.createdAt) || (blockerUsers.has(message.senderId) && (blockerUsers.get(message.senderId) as Date) < message.createdAt))
                 return false;
             return true;
         });
