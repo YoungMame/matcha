@@ -34,6 +34,25 @@ CREATE TABLE if not exists users (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TYPE NOTIFICATION_TYPE AS ENUM ('like', 'view', 'unlike', 'like_back', 'message', 'event');
+
+CREATE TABLE if not exists notifications (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    author_id INTEGER NOT NULL,
+    notification_type NOTIFICATION_TYPE NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE notifications
+ADD FOREIGN KEY (user_id) REFERENCES users(id)
+ON DELETE CASCADE;
+
+ALTER TABLE notifications
+ADD FOREIGN KEY (author_id) REFERENCES users(id)
+ON DELETE CASCADE;
+
 CREATE TABLE if not exists blocked_users (
     id SERIAL PRIMARY KEY,
     blocker_id INTEGER NOT NULL,
