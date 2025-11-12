@@ -22,6 +22,8 @@ type UserProfile = {
 type UserLocation = {
     latitude: number;
     longitude: number;
+    city: string;
+    country: string;
 };
 
 type BlockedUser = {
@@ -55,7 +57,7 @@ export default class UserModel {
 
     }
 
-    findLocationByUserId = async (userId: number): Promise<{ latitude?: number | undefined; longitude?: number | undefined; updatedAt?: Date | undefined }> => {
+    findLocationByUserId = async (userId: number): Promise<{ latitude?: number | undefined; longitude?: number | undefined; city: string | undefined, country: string | undefined, updatedAt?: Date | undefined }> => {
         const result = await this.fastify.pg.query(
             'SELECT * FROM locations WHERE user_id=$1 ORDER BY updated_at DESC LIMIT 1', [userId]
         );
@@ -63,6 +65,8 @@ export default class UserModel {
         return {
             latitude: row ? row.latitude : undefined,
             longitude: row ? row.longitude : undefined,
+            city: row ? row.city : undefined,
+            country: row ? row.country : undefined,
             updatedAt: row && row.updated_at ? new Date(row.updated_at) : undefined
         };
     }
@@ -147,14 +151,14 @@ export default class UserModel {
             if (rows.rows.length === 0)
             {
                 await this.fastify.pg.query(
-                    `INSERT INTO locations (user_id, latitude, longitude) VALUES (${id}, ${location.latitude}, ${location.longitude});`,
+                    `INSERT INTO locations (user_id, latitude, longitude, city, country) VALUES (${id}, ${location.latitude}, ${location.longitude}, \'${location.city}\', \'${location.country}\');`,
                 );
                 return;
             }
             else
             {
                 await this.fastify.pg.query(
-                    `UPDATE locations SET latitude=${location.latitude}, longitude=${location.longitude} WHERE user_id=${id};`,
+                    `UPDATE locations SET latitude=${location.latitude}, longitude=${location.longitude}, city=\'${location.city}\', country=\'${location.country}\' WHERE user_id=${id};`,
                 );
             }
         }

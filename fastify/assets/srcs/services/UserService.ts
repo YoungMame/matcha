@@ -12,6 +12,7 @@ import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError,
 import commonPasswords from '../utils/1000-most-common-passwords.json';
 import { WebSocketMessageTypes, WebSocketMessageDataTypes } from "./WebSocketService";
 import { Like } from "../models/Like";
+import { getCityAndCountryFromCoords } from "../utils/geoloc";
 
 class UserService {
     private fastify: FastifyInstance;
@@ -63,26 +64,20 @@ class UserService {
     }
 
     private async getUser(idOrMail: string | number): Promise<User | null> {
-        let userdata: undefined;
+        let userdata: undefined | User = undefined;
         if (typeof idOrMail == 'string')
             userdata = await this.userModel.findByEmail(idOrMail);
         else
             userdata = await this.userModel.findById(idOrMail);
         if (!userdata)
             return (null);
-        const user: User = User.fromRow(userdata);
+        let user: User = User.fromRow(userdata);
         return (user);
     }
 
     public async debugGetUser(idOrMail: string | number): Promise<User | null> {
-        let userdata: undefined;
-        if (typeof idOrMail == 'string')
-            userdata = await this.userModel.findByEmail(idOrMail);
-        else
-            userdata = await this.userModel.findById(idOrMail);
-        if (!userdata)
-            return (null);
-        return (User.fromRow(userdata));
+        const user = await this.getUser(idOrMail);
+        return (user);
     }
 
     public async debugGetUserEmailCode(userId: number, codeType: "emailValidation" | "dfaValidation" | "passwordResetValidation"): Promise<string | number | undefined> {
@@ -156,7 +151,7 @@ class UserService {
         gender: string;
         isVerified: boolean;
         isProfileCompleted: boolean;
-        location: { latitude: number | null; longitude: number | null };
+        location: { latitude: number | null; longitude: number | null, city: string | null; country: string | null };
         createdAt: Date;
     }> {
         const user = await this.getUser(id);
@@ -177,7 +172,9 @@ class UserService {
             isProfileCompleted: user.isProfileCompleted,
             location: {
                 latitude: user.location?.latitude || null,
-                longitude: user.location?.longitude || null
+                longitude: user.location?.longitude || null,
+                city: user.location?.city || null,
+                country: user.location?.country || null
             },
             createdAt: user.createdAt
         };
@@ -187,7 +184,8 @@ class UserService {
         const user = await this.getUser(id);
         if (!user)
             throw new NotFoundError();
-        await this.userModel.update(id, {}, { latitude, longitude });
+        const { city, country } = await getCityAndCountryFromCoords(latitude, longitude);
+        return await this.userModel.update(id, {}, { latitude, longitude, city, country });
     }
 
     async completeProfile(id: number, profile: { firstName: string, lastName: string, bio: string, tags: string[], gender: string, orientation: string, bornAt: Date }): Promise<string> {
@@ -281,7 +279,7 @@ class UserService {
         bornAt: Date;
         gender: string;
         orientation: string;
-        location: { latitude: number | null; longitude: number | null };
+        location: { latitude: number | null; longitude: number | null, city: string | null; country: string | null };
     }> {
         const user = await this.getUser(id);
         if (!user|| !user.isProfileCompleted)
@@ -320,7 +318,9 @@ class UserService {
             orientation: user.orientation as string,
             location: {
                 latitude: user.location?.latitude || null,
-                longitude: user.location?.longitude || null
+                longitude: user.location?.longitude || null,
+                city: user.location?.city || null,
+                country: user.location?.country || null
             }
         };
     }

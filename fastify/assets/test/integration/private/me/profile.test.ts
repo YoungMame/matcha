@@ -197,7 +197,12 @@ describe('User me profile integration tests', async () => {
         expect(meData).to.have.property('tags').that.includes.members(newProperties.tags);
         expect(meData).to.have.property('gender', newProperties.gender);
         expect(meData).to.have.property('orientation', newProperties.orientation);
-        expect(meData).to.have.property('location').that.deep.equals(newProperties.location);
+        expect(meData).to.have.property('location').that.deep.equals({
+            latitude: newProperties.location.latitude,
+            longitude: newProperties.location.longitude,
+            city: 'New York',
+            country: 'United States'
+        });
         expect(meData).to.have.property('bornAt');
         expect(new Date(meData.bornAt).toISOString()).to.be.equal(new Date(newProperties.bornAt).toISOString());
     });
@@ -205,7 +210,12 @@ describe('User me profile integration tests', async () => {
     it('Should edit location a second time', async () => {
         const newLocation = { latitude: 34.0522, longitude: -118.2437 };
         const meData = await editProperties(app, token, { location: newLocation });
-        expect(meData).to.have.property('location').that.deep.equals(newLocation);
+        expect(meData).to.have.property('location').that.deep.equals({
+            latitude: newLocation.latitude,
+            longitude: newLocation.longitude,
+            city: 'Los Angeles',
+            country: 'United States'
+        });
     });
 
     it('Should not edit any property with full invalid data', async () => {
