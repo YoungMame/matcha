@@ -1,4 +1,4 @@
-import Fastify, { FastifyRequest } from 'fastify'
+import Fastify, { FastifyRequest, FastifyError } from 'fastify'
 import type { FastifyCookieOptions } from '@fastify/cookie'
 import cookie from '@fastify/cookie'
 import pg from '@fastify/postgres'
@@ -14,6 +14,7 @@ import userServicePlugin from './services/UserService'
 import chatServicePlugin from './services/ChatService'
 import mailServicePlugin from './services/MailService'
 import notificationService from './services/NotificationsServices'
+import reportService from './services/ReportService'
 // import custom plugins
 import authenticate from './plugins/authenticate'
 import checkImageConformity from './plugins/checkImageConformity'
@@ -70,6 +71,8 @@ export const buildApp = () => {
 
     app.register(notificationService);
 
+    app.register(reportService);
+
     app.register(pg, {
         connectionString: process.env.PG
     });
@@ -84,7 +87,7 @@ export const buildApp = () => {
         parseOptions: {}  // options for parsing cookies
     } as FastifyCookieOptions);
 
-    app.setErrorHandler((err, request, reply) => {
+    app.setErrorHandler((err: FastifyError, request: FastifyRequest, reply) => {
         if (err.validation) {
             // err.validation est le tableau d'erreurs Ajv
             const messages = err.validation.map(e => {

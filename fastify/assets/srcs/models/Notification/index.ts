@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { ForbiddenError, InternalServerError, NotFoundError } from "../../utils/error";
+import { InternalServerError, NotFoundError } from "../../utils/error";
 
 export type Notification = {
     id: number;

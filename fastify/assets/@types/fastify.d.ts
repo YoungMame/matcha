@@ -94,6 +94,10 @@ declare module 'fastify' {
       getNotifications(userId: number): Promise<Notification[]>;
     };
 
+    reportService: {
+      reportUser(reportedId: number, reporterId: number): Promise<void>;
+    };
+
     nodemailer: any;
 
     authenticate(request: any, reply: any): Promise<void>;

@@ -14,13 +14,11 @@ describe('Block users test', () => {
         await app.ready();
     });
 
-    it('should be able to get blocked users list', async function (this: any) {
+    it('should be able to block user list', async function (this: any) {
         this.timeout(5000);
 
         const { userData: data1, token: token1 } = await quickUser(app);
         const { userData: data2, token: token2 } = await quickUser(app);
-        const { userData: data3, token: token3 } = await quickUser(app);
-        const { userData: data4, token: token4 } = await quickUser(app);
 
         let response = await app.inject({
             method: 'POST',
