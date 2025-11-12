@@ -26,6 +26,9 @@ export const signUpHandler = async (
             domain: process.env.DOMAIN || 'localhost',
             path: '/',
             signed: true,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
             maxAge: 3600 * 24 * 7
         }).send({ message: 'User created successfully' });
     } catch (error) {

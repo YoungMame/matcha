@@ -110,7 +110,7 @@ async function seed() {
 
             if (locRows.length > 0) {
                 const insertLocSql = `
-                INSERT INTO locations (user_id, latitude, longitude, city, longitude)
+                INSERT INTO locations (user_id, latitude, longitude, city, country)
                 VALUES ${locRows.join(',')}
                 `;
                 await client.query(insertLocSql, locValues);

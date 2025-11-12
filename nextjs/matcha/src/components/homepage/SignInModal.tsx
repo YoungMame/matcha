@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import axios from "@/lib/axios";
 import Image from "next/image";
 import Modal from "@/components/common/Modal";
 import Typography from "@/components/common/Typography";

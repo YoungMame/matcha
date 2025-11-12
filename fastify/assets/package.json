@@ -35,7 +35,7 @@
 		"typescript": "^5.9.3"
 	},
 	"scripts": {
-		"dev": "tsx watch ./srcs/**/* ./srcs/server.ts",
+		"dev": "tsx watch ./srcs/server.ts",
 		"build": "tsc -p tsconfig.json",
 		"start": "node ./srcs/server.js",
 		"test:unit": "mocha -r tsx 'test/unit/**/*.test.ts'",

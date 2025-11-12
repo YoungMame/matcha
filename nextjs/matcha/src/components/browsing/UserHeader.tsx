@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import Typography from "@/components/common/Typography";
 import Stack from "@/components/common/Stack";
 import IconButton from "@/components/common/IconButton";
@@ -16,7 +17,7 @@ export default function UserHeader({ username, pictureUrl }: UserHeaderProps) {
 			justify="between"
 			className="p-4 border-b border-gray-200 dark:border-gray-700"
 		>
-			<Stack direction="row" align="center" spacing="md">
+			<Link href="/me" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
 				<div className="relative w-10 h-10 rounded-full overflow-hidden">
 					<Image
 						src={pictureUrl}
@@ -28,7 +29,7 @@ export default function UserHeader({ username, pictureUrl }: UserHeaderProps) {
 				<Typography variant="body" className="font-semibold">
 					Vous
 				</Typography>
-			</Stack>
+			</Link>
 			
 			<IconButton
 				variant="secondary"

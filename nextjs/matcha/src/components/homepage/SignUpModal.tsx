@@ -8,6 +8,7 @@ import TextField from "@/components/common/TextField";
 import Button from "@/components/common/Button";
 import Alert from "@/components/common/Alert";
 import { useRouter } from "next/navigation";
+import axios from "@/lib/axios";
 
 interface SignInModalProps {
   isOpen: boolean;
@@ -65,20 +66,22 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
         gender: "men" as const, // Default gender
       };
 
-      const response = await fetch("/api/auth/signup", {
-      	method: "POST",
-      	headers: {
-      		"Content-Type": "application/json",
-      	},
-      	body: JSON.stringify(signupData),
-      });
+    //   const response = await fetch("/api/auth/signup", {
+    //   	method: "POST",
+    //   	headers: {
+    //   		"Content-Type": "application/json",
+    //   	},
+    //   	body: JSON.stringify(signupData),
+    //   });
 
-        console.log("Signup response:", response.body);
+      const response = await axios.post("/api/auth/signup", signupData);
 
-        if (!response.ok) {
-          const errorData = await response.json();
+
+        console.log("Signup response:", response.data);
+
+        if (response.status !== 201) {
           setPasswordError(
-            errorData.error || "Une erreur est survenue lors de l'inscription"
+            response.data?.error || "Une erreur est survenue lors de l'inscription"
           );
           return;
         }

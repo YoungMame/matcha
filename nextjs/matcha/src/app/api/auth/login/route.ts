@@ -20,15 +20,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(data, { status: response.status });
     }
 
-    // Extract the JWT cookie from Fastify response
-    const setCookieHeader = response.headers.get("set-cookie");
+    // Extract ALL Set-Cookie headers from Fastify response
+    const cookies = response.headers.getSetCookie();
     
     // Create success response
     const nextResponse = NextResponse.json(data, { status: response.status });
 
-    // Forward the cookie from Fastify to the client
-    if (setCookieHeader) {
-      nextResponse.headers.set("set-cookie", setCookieHeader);
+    // Forward all cookies from Fastify to the client
+    if (cookies && cookies.length > 0) {
+      cookies.forEach(cookie => {
+        nextResponse.headers.append("set-cookie", cookie);
+      });
     }
 
     return nextResponse;
