@@ -12,6 +12,7 @@ import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError,
 import commonPasswords from '../utils/1000-most-common-passwords.json';
 import { WebSocketMessageTypes, WebSocketMessageDataTypes } from "./WebSocketService";
 import { Like } from "../models/Like";
+import { getCityAndCountryFromCoords } from "../utils/geoloc";
 
 class UserService {
     private fastify: FastifyInstance;
@@ -150,7 +151,7 @@ class UserService {
         gender: string;
         isVerified: boolean;
         isProfileCompleted: boolean;
-        location: { latitude: number | null; longitude: number | null };
+        location: { latitude: number | null; longitude: number | null, city: string | null; country: string | null };
         createdAt: Date;
     }> {
         const user = await this.getUser(id);
@@ -171,33 +172,20 @@ class UserService {
             isProfileCompleted: user.isProfileCompleted,
             location: {
                 latitude: user.location?.latitude || null,
-                longitude: user.location?.longitude || null
+                longitude: user.location?.longitude || null,
+                city: user.location?.city || null,
+                country: user.location?.country || null
             },
             createdAt: user.createdAt
         };
-    }
-
-    private async getLocationComponent(data: {
-        address_components: {
-            long_name: string,
-            short_name: string,
-            types: string[]
-        }[]
-    }, type: string): Promise<string | undefined> {
-        const component = data.address_components.find(c => c.types.includes(type));
-        console.log('component', component);
-        return component?.long_name;
     }
 
     async updateUserLocation(id: number, latitude: number, longitude: number): Promise<void> {
         const user = await this.getUser(id);
         if (!user)
             throw new NotFoundError();
-        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=YOUR_API_KEY`);
-        const responseData = await response.json();
-        let city: string | undefined = responseData;
-        let country: string | undefined = undefined;
-        await this.userModel.update(id, {}, { latitude, longitude });
+        const { city, country } = await getCityAndCountryFromCoords(latitude, longitude);
+        return await this.userModel.update(id, {}, { latitude, longitude, city, country });
     }
 
     async completeProfile(id: number, profile: { firstName: string, lastName: string, bio: string, tags: string[], gender: string, orientation: string, bornAt: Date }): Promise<string> {
@@ -291,7 +279,7 @@ class UserService {
         bornAt: Date;
         gender: string;
         orientation: string;
-        location: { latitude: number | null; longitude: number | null };
+        location: { latitude: number | null; longitude: number | null, city: string | null; country: string | null };
     }> {
         const user = await this.getUser(id);
         if (!user|| !user.isProfileCompleted)
@@ -330,7 +318,9 @@ class UserService {
             orientation: user.orientation as string,
             location: {
                 latitude: user.location?.latitude || null,
-                longitude: user.location?.longitude || null
+                longitude: user.location?.longitude || null,
+                city: user.location?.city || null,
+                country: user.location?.country || null
             }
         };
     }

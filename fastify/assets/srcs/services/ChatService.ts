@@ -6,6 +6,7 @@ import { FastifyInstance } from 'fastify';
 import { BadRequestError, NotFoundError, ConflictError } from "../utils/error";
 import { Chat, ChatMessage, ChatEvent } from "../models/Chat";
 import { WebSocketMessageTypes, WebSocketMessageDataTypes } from "./WebSocketService";
+import { getCityAndCountryFromCoords } from "../utils/geoloc";
 
 class ChatService {
     private fastify: FastifyInstance;
@@ -113,7 +114,8 @@ class ChatService {
             throw new ConflictError(); // Chat already has an event
         if (date < new Date(Date.now()))
             throw new BadRequestError(); // Event date is in the past
-        const event: ChatEvent = await this.chatModel.insertEvent(chatId, title, latitude, longitude, date);
+        const { city, country } = await getCityAndCountryFromCoords(latitude, longitude);
+        const event: ChatEvent = await this.chatModel.insertEvent(chatId, title, latitude, longitude, city, country, date);
         for (const user of result.users) {
             await this.fastify.webSocketService.sendChatEvent(user, {
                 id: event.id,

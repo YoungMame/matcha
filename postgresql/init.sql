@@ -159,6 +159,8 @@ CREATE TABLE if not exists locations (
     id SERIAL PRIMARY KEY,
     latitude DECIMAL NOT NULL,
     longitude DECIMAL NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    country VARCHAR(255) NOT NULL,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     user_id INTEGER DEFAULT NULL,
     event_id INTEGER DEFAULT NULL

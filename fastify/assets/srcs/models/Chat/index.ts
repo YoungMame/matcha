@@ -7,6 +7,8 @@ export interface ChatEvent {
     location: {
         latitude: number;
         longitude: number;
+        city: string;
+        country: string;
     }
     date: Date;
     createdAt: Date;
@@ -68,11 +70,11 @@ export default class ChatModel {
         );
     }
 
-    insertEvent = async (chatId: number, title: string, latitude: number, longitude: number, date: Date): Promise<ChatEvent> => {
+    insertEvent = async (chatId: number, title: string, latitude: number, longitude: number, city: string, country: string, date: Date): Promise<ChatEvent> => {
         try {
             const locationResult = await this.fastify.pg.query(
-                'INSERT INTO locations (latitude, longitude) VALUES ($1, $2) RETURNING *',
-                [latitude, longitude]
+                'INSERT INTO locations (latitude, longitude, city, country) VALUES ($1, $2, $3, $4) RETURNING *',
+                [latitude, longitude, city, country]
             );
             const results = await this.fastify.pg.query(
                 'INSERT INTO events (chat_id, title, location_id, date) VALUES ($1, $2, $3, $4) RETURNING *',
@@ -97,7 +99,9 @@ export default class ChatModel {
                 title: result.title,
                 location: {
                     latitude: result.latitude,
-                    longitude: result.longitude
+                    longitude: result.longitude,
+                    city: result.city,
+                    country: result.country
                 },
                 date: result.date,
                 createdAt: result.created_at
@@ -168,7 +172,9 @@ export default class ChatModel {
                         title: eventRow.title as string,
                         location: {
                             latitude: eventRow.latitude as number,
-                            longitude: eventRow.longitude as number
+                            longitude: eventRow.longitude as number,
+                            city: eventRow.city as string,
+                            country: eventRow.country as string
                         },
                         date: eventRow.date as Date,
                         createdAt: eventRow.created_at as Date
@@ -210,7 +216,9 @@ export default class ChatModel {
                         title: eventRow.title as string,
                         location: {
                             latitude: eventRow.latitude as number,
-                            longitude: eventRow.longitude as number
+                            longitude: eventRow.longitude as number,
+                            city: eventRow.city as string,
+                            country: eventRow.country as string
                         },
                         date: eventRow.date as Date,
                         createdAt: eventRow.created_at as Date

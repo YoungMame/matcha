@@ -33,7 +33,7 @@ const viewRoutes = async (fastify: FastifyInstance) => {
                                 city: { type: 'string', nullable: true },
                                 country: { type: 'string', nullable: true }
                             },
-                            required: ['latitude', 'longitude']
+                            required: ['latitude', 'longitude', 'city', 'country'],
                         },
                     },
                     required: ['id', 'username', 'profilePictures', 'bio', 'tags', 'bornAt', 'location'],

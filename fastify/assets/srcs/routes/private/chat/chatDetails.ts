@@ -30,7 +30,9 @@ export default async function chatDetailsRoutes(fastify: FastifyInstance) {
                                             type: 'object',
                                             properties: {
                                                 latitude: { type: 'number' },
-                                                longitude: { type: 'number' }
+                                                longitude: { type: 'number' },
+                                                city: { type: 'string' },
+                                                country: { type: 'string' }
                                             }
                                         },
                                         date: { type: 'string', format: 'date-time' },

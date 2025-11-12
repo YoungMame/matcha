@@ -76,7 +76,7 @@ const profileRoutes = async (fastify: FastifyInstance) => {
                                 city: { type: 'string', nullable: true },
                                 country: { type: 'string', nullable: true }
                             },
-                            required: ['latitude', 'longitude']
+                            required: ['latitude', 'longitude', 'city', 'country']
                         },
                         createdAt: { type: 'string', format: 'date-time' }
                     },

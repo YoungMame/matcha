@@ -104,13 +104,13 @@ async function seed() {
                 if (!id) return; // skip if user still missing
                 const [lat, lon] = u.location.split(',').map(s => parseFloat(s.trim()));
                 const base = locValues.length + 1;
-                locValues.push(id, lat, lon);
-                locRows.push(`($${base}, $${base + 1}, $${base + 2})`);
+                locValues.push(id, lat, lon, 'Paris', 'Le Havre'); // city and country as '...' for seed
+                locRows.push(`($${base}, $${base + 1}, $${base + 2}, $${base + 3}, $${base + 4})`);
             });
 
             if (locRows.length > 0) {
                 const insertLocSql = `
-                INSERT INTO locations (user_id, latitude, longitude)
+                INSERT INTO locations (user_id, latitude, longitude, city, longitude)
                 VALUES ${locRows.join(',')}
                 `;
                 await client.query(insertLocSql, locValues);

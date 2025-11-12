@@ -20,6 +20,7 @@ services:
       GMAIL_USER: ${GMAIL_USER}
       GMAIL_APP_PASSWORD: ${GMAIL_APP_PASSWORD}
       IPSTACK_API_KEY: ${IPSTACK_API_KEY}
+      GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY}
       DOMAIN: matcha.fr
     build: 
         context: ./fastify
