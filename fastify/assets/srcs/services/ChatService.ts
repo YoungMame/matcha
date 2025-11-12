@@ -64,6 +64,7 @@ class ChatService {
                     createdAt: message.createdAt
                 };
                 this.fastify.webSocketService.sendMessage(userId, data);
+                this.fastify.notificationService.createNotification(userId, senderId, 'message', message.chatId);
             }
         });
     }

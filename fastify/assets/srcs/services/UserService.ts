@@ -294,8 +294,6 @@ class UserService {
             const isBlocked = await this.isUserBlockedBy(user.id, viewerId);
             if (isBlocked)
                 throw new NotFoundError();
-            const blockedUsersMap = await this.getBlockedUsers(viewerId);
-            const blockerUsersMap = await this.getBlockerUsers(viewerId);
             const existingView = await this.viewModel.getBeetweenUsers(viewerId, user.id);
             if (!existingView)
             {
@@ -305,6 +303,7 @@ class UserService {
                     viewerId: view.viewerId,
                     createdAt: view.createdAt
                 });
+                await this.fastify.notificationService.createNotification(user.id, view.viewerId, 'view', view.id);
             }
         }
         return {
@@ -359,6 +358,8 @@ class UserService {
                 createdAt: like.createdAt
             };
             this.fastify.webSocketService.sendLikeBack(receiverId, data);
+            await this.fastify.notificationService.createNotification(receiverId, senderId, 'like_back', chatId);
+
         }
         const data: WebSocketMessageDataTypes[WebSocketMessageTypes.LIKE] = {
             id: like.id,
@@ -366,6 +367,7 @@ class UserService {
             createdAt: like.createdAt
         };
         this.fastify.webSocketService.sendLike(receiverId, data);
+        await this.fastify.notificationService.createNotification(receiverId, senderId, 'like', like.id);
     }
 
     async sendUnlike(senderId: number, receiverId: number): Promise<void> {
@@ -391,6 +393,7 @@ class UserService {
             removedAt: new Date()
         };
         this.fastify.webSocketService.sendUnlike(receiverId, data);
+        await this.fastify.notificationService.createNotification(receiverId, senderId, 'unlike', like.id);
     }
 
     async getLikes(userId: number): Promise<Like[]> {
