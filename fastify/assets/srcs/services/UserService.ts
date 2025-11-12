@@ -63,26 +63,20 @@ class UserService {
     }
 
     private async getUser(idOrMail: string | number): Promise<User | null> {
-        let userdata: undefined;
+        let userdata: undefined | User = undefined;
         if (typeof idOrMail == 'string')
             userdata = await this.userModel.findByEmail(idOrMail);
         else
             userdata = await this.userModel.findById(idOrMail);
         if (!userdata)
             return (null);
-        const user: User = User.fromRow(userdata);
+        let user: User = User.fromRow(userdata);
         return (user);
     }
 
     public async debugGetUser(idOrMail: string | number): Promise<User | null> {
-        let userdata: undefined;
-        if (typeof idOrMail == 'string')
-            userdata = await this.userModel.findByEmail(idOrMail);
-        else
-            userdata = await this.userModel.findById(idOrMail);
-        if (!userdata)
-            return (null);
-        return (User.fromRow(userdata));
+        const user = await this.getUser(idOrMail);
+        return (user);
     }
 
     public async debugGetUserEmailCode(userId: number, codeType: "emailValidation" | "dfaValidation" | "passwordResetValidation"): Promise<string | number | undefined> {
@@ -183,10 +177,26 @@ class UserService {
         };
     }
 
+    private async getLocationComponent(data: {
+        address_components: {
+            long_name: string,
+            short_name: string,
+            types: string[]
+        }[]
+    }, type: string): Promise<string | undefined> {
+        const component = data.address_components.find(c => c.types.includes(type));
+        console.log('component', component);
+        return component?.long_name;
+    }
+
     async updateUserLocation(id: number, latitude: number, longitude: number): Promise<void> {
         const user = await this.getUser(id);
         if (!user)
             throw new NotFoundError();
+        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=YOUR_API_KEY`);
+        const responseData = await response.json();
+        let city: string | undefined = responseData;
+        let country: string | undefined = undefined;
         await this.userModel.update(id, {}, { latitude, longitude });
     }
 

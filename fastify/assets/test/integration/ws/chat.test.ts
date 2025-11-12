@@ -34,10 +34,10 @@ describe('Chat test', () => {
         const { userData: data2, token: token2 } = await quickUser(app);
         const { userData: data3, token: token3 } = await quickUser(app);
 
-        const ws1 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token1}` } });
+        const ws1 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token1}` }, });
         const ws2 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token2}` } });
         const ws3 = await app.injectWS('/private/ws', { headers: { cookie: `jwt=${token3}` } });
-
+        
         const user1id = data1.id as number;
         const user2id = data2.id as number;
 
