@@ -58,6 +58,17 @@ ALTER TABLE notifications
 ADD FOREIGN KEY (author_id) REFERENCES users(id)
 ON DELETE CASCADE;
 
+CREATE TABLE if not exists reported_users (
+    id SERIAL PRIMARY KEY,
+    reporter_id INTEGER NOT NULL,
+    reported_id INTEGER NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE reported_users
+ADD FOREIGN KEY (reported_id) REFERENCES users(id)
+ON DELETE CASCADE;
+
 CREATE TABLE if not exists blocked_users (
     id SERIAL PRIMARY KEY,
     blocker_id INTEGER NOT NULL,
