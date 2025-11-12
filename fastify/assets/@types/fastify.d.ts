@@ -35,7 +35,7 @@ declare module 'fastify' {
         orientation: string;
         isVerified: boolean;
         isProfileCompleted: boolean;
-        location: { latitude: number | null; longitude: number | null };
+        location: { latitude: number | null; longitude: number | null, city: string | null, country: string | null };
         createdAt: Date;
       }>;
       getUserPublic(viewerId: number | undefined, id: number | string): Promise<{
@@ -48,7 +48,11 @@ declare module 'fastify' {
         bornAt: Date;
         gender: string;
         orientation: string;
-        location: { latitude: number | null; longitude: number | null };
+        location: { latitude: number | null; longitude: number | null, city: string | null, country: string | null};
+        isConnectedWithMe: boolean;
+        chatIdWithMe: number | null;
+        hasLikedMe: boolean;
+        haveILiked: boolean;
       }>;
         isUserBlockedBy(blockedId: number, blockerId: number): Promise<boolean>;
         blockUser(userId: number, targetId: number): Promise<void>;
