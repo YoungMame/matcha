@@ -35,11 +35,38 @@ const viewRoutes = async (fastify: FastifyInstance) => {
                             },
                             required: ['latitude', 'longitude', 'city', 'country'],
                         },
+
+                        // Relation infos
+                        isConnectedWithMe: { type: 'boolean' },
+                        chatIdWithMe: { type: ['integer'], nullable: true },
+                        hasLikedMe: { type: 'boolean' },
+                        haveILiked: { type: 'boolean' },
                     },
                     required: ['id', 'username', 'profilePictures', 'bio', 'tags', 'bornAt', 'location'],
                     additionalProperties: false,
                 },
                 400: {
+                    type: 'object',
+                    properties: {
+                        error: { type: 'string', }
+                    },
+                    additionalProperties: false
+                },
+                401: {
+                    type: 'object',
+                    properties: {
+                        error: { type: 'string', }
+                    },
+                    additionalProperties: false
+                },
+                403: {
+                    type: 'object',
+                    properties: {
+                        error: { type: 'string', }
+                    },
+                    additionalProperties: false
+                },
+                404: {
                     type: 'object',
                     properties: {
                         error: { type: 'string', }

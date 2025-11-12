@@ -13,6 +13,7 @@ import commonPasswords from '../utils/1000-most-common-passwords.json';
 import { WebSocketMessageTypes, WebSocketMessageDataTypes } from "./WebSocketService";
 import { Like } from "../models/Like";
 import { getCityAndCountryFromCoords } from "../utils/geoloc";
+import { log } from "console";
 
 class UserService {
     private fastify: FastifyInstance;
@@ -280,6 +281,10 @@ class UserService {
         gender: string;
         orientation: string;
         location: { latitude: number | null; longitude: number | null, city: string | null; country: string | null };
+        isConnectedWithMe: boolean;
+        chatIdWithMe: number | null;
+        haveILiked: boolean;
+        hasLikedMe: boolean;
     }> {
         const user = await this.getUser(id);
         if (!user|| !user.isProfileCompleted)
@@ -304,6 +309,14 @@ class UserService {
                 await this.fastify.notificationService.createNotification(user.id, view.viewerId, 'view', view.id);
             }
         }
+        const chatWithMe = viewerId ?  (await this.fastify.chatService.getChatBetweenUsers([viewerId || -1, user.id])) : null;
+        console.log('chatWithMe', chatWithMe);
+        const chatIdWithMe = chatWithMe ? chatWithMe.id : null;
+        console.log('chatIdWithMe', chatIdWithMe);
+        const isConnectedWithMe = chatIdWithMe ? true : false;
+        const hasLikedMe = viewerId ? (await this.likeModel.getLikeBetweenUsers(user.id, viewerId) ? true : false) : false;
+        const haveILiked = viewerId ? (await this.likeModel.getLikeBetweenUsers(viewerId, user.id) ? true : false) : false;
+        console.log('getUserPublic', 'viewerId', viewerId, 'userId', user.id, 'isConnectedWithMe', isConnectedWithMe, 'chatIdWithMe', chatIdWithMe, 'haveILiked', haveILiked, 'hasLikedMe', hasLikedMe);
         return {
             id: user.id,
             username: user.username,
@@ -321,7 +334,11 @@ class UserService {
                 longitude: user.location?.longitude || null,
                 city: user.location?.city || null,
                 country: user.location?.country || null
-            }
+            },
+            isConnectedWithMe,
+            chatIdWithMe,
+            haveILiked,
+            hasLikedMe
         };
     }
 

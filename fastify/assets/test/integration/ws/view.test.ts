@@ -57,7 +57,6 @@ describe('Websocket view test', () => {
             resolveMsg2(data.toString());
         });
 
-
         const response2 = await app.inject({
             method: 'GET',
             url: `/private/user/view/${data1.id}`,
@@ -221,5 +220,75 @@ describe('Websocket view test', () => {
             },
         });
         expect(response4.statusCode).to.equal(200);
+    });
+
+    it('Should be able to see social infos with the user', async function (this: any) {
+        this.timeout(5000);
+
+        const { userData: data1, token: token1 } = await quickUser(app);
+        const { userData: data2, token: token2 } = await quickUser(app);
+
+        const response = await app.inject({
+            method: 'GET',
+            url: `/private/user/view/${data2.id}`,
+            headers: {
+                'Cookie': `jwt=${token1}`
+            },
+        });
+
+        expect(response.statusCode).to.equal(200);
+        const body = response.json();
+        expect(body).to.have.property('isConnectedWithMe').that.equals(false);
+        expect(body).to.have.property('chatIdWithMe').that.equals(null);
+        expect(body).to.have.property('haveILiked').that.equals(false);
+        expect(body).to.have.property('hasLikedMe').that.equals(false);
+
+        const likeResponse = await app.inject({
+            method: 'POST',
+            url: `/private/user/like/${data2.id}`,
+            headers: {
+                'Cookie': `jwt=${token1}`
+            }
+        });
+        expect(likeResponse.statusCode).to.equal(201);
+
+        const response2 = await app.inject({
+            method: 'GET',
+            url: `/private/user/view/${data2.id}`,
+            headers: {
+                'Cookie': `jwt=${token1}`
+            },
+        });
+        expect(response2.statusCode).to.equal(200);
+        const body2 = response2.json();
+        expect(body2).to.have.property('isConnectedWithMe').that.equals(false);
+        expect(body2).to.have.property('chatIdWithMe').that.equals(null);
+        expect(body2).to.have.property('haveILiked').that.equals(true);
+        expect(body2).to.have.property('hasLikedMe').that.equals(false);
+
+        const likeResponse2 = await app.inject({
+            method: 'POST',
+            url: `/private/user/like/${data1.id}`,
+            headers: {
+                'Cookie': `jwt=${token2}`
+            }
+        });
+        expect(likeResponse2.statusCode).to.equal(201);
+
+        await wait(300);
+
+        const response3 = await app.inject({
+            method: 'GET',
+            url: `/private/user/view/${data2.id}`,
+            headers: {
+                'Cookie': `jwt=${token1}`
+            },
+        });
+        expect(response3.statusCode).to.equal(200);
+        const body3 = response3.json();
+        expect(body3).to.have.property('isConnectedWithMe').that.equals(true);
+        expect(body3).to.have.property('chatIdWithMe').that.is.a('number');
+        expect(body3).to.have.property('haveILiked').that.equals(true);
+        expect(body3).to.have.property('hasLikedMe').that.equals(true);
     });
 });
