@@ -1,4 +1,5 @@
 import 'fastify';
+import { BrowsingFilter, BrowsingSort } from '../srcs/services/BrowsingService';
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -105,7 +106,7 @@ declare module 'fastify' {
     };
 
     browsingService: {
-      browseUsers(userId: number, limit?: number, offset?: number, radius?: number): Promise<Array<any>>;
+      browseUsers(userId: number, limit: number = 5, offset: number = 0, radius: number = 25, filters?: BrowsingFilter, sort?: BrowsingSort): Promise<Array<any>>
     };
 
     nodemailer: any;

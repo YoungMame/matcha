@@ -8,7 +8,7 @@ import fp from 'fastify-plugin';
 import { FastifyInstance } from 'fastify';
 import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError, ForbiddenError, ConflictError } from "../utils/error";
 
-type BrowsingFilter = {
+export type BrowsingFilter = {
     age?: {
         min: number;
         max: number;
@@ -24,7 +24,7 @@ type BrowsingFilter = {
     tags?: Array<string>;
 }
 
-type BrowsingSort = 'distance' | 'age' | 'fameRate' | 'tags';
+export type BrowsingSort = 'distance' | 'age' | 'fameRate' | 'tags';
 
 class BrowsingService {
     private fastify: FastifyInstance;
@@ -72,6 +72,33 @@ class BrowsingService {
         return rows.rows;
     }
 
+    private getSimilarTagsCount(userTags: Array<string>, otherUserTags: Array<string>): number {
+        let count = 0;
+
+        for (const tag of userTags) {
+            if (otherUserTags.includes(tag)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private sortByDistance(userRows: Array<any>): Array<any> {
+        return userRows.sort((a, b) => a.distance - b.distance);
+    }
+
+    private sortByAge(userRows: Array<any>): Array<any> {
+        return userRows.sort((a, b) => a.age - b.age);
+    }
+
+    private sortByFameRate(userRows: Array<any>): Array<any> {
+        return userRows.sort((a, b) => a.fame_rate - b.fame_rate);
+    }
+
+    private sortByTags(userRows: Array<any>, userTags: Array<string>): Array<any> {
+        return userRows.sort((a, b) => this.getSimilarTagsCount(userTags, b.tags || []) - this.getSimilarTagsCount(userTags, a.tags || []));
+    }
+
     public async browseUsers(userId: number, limit: number = 5, offset: number = 0, radius: number = 25, filters?: BrowsingFilter, sort?: BrowsingSort): Promise<Array<any>> {
         const user = await this.fastify.userService.getMe(userId);
         const lat = filters?.location?.latitude ?? user.location?.latitude;
@@ -80,7 +107,18 @@ class BrowsingService {
         if (lat === undefined || lgn === undefined)
             throw new BadRequestError();
         const userRows = await this.getUsersFromCoordsAndRadius(userId, lat, lgn, limit, offset, radius);
-        return userRows;
+        switch (sort) {
+            case 'distance':
+                return this.sortByDistance(userRows);
+            case 'age':
+                return this.sortByAge(userRows);
+            case 'fameRate':
+                return this.sortByFameRate(userRows);
+            case 'tags':
+                return this.sortByTags(userRows, user.tags || []);
+            default:
+                return userRows;
+        }
     }
 }
 
