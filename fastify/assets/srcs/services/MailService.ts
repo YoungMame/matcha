@@ -26,7 +26,13 @@ class MailService {
         };
 
         try {
-            const info = await this.fastify.nodemailer.sendMail(mailOptions);
+            if (process.env.NODE_ENV !== 'production') {
+                this.fastify.log.info(`Sending email to: ${to}`);
+                this.fastify.log.info(`Subject: ${subject}`);
+                this.fastify.log.info(`HTML: ${html}`);
+                return;
+            }
+            await this.fastify.nodemailer.sendMail(mailOptions);
         } catch (error) {
             this.fastify.log.error(`Error sending email: ${error}`);
             throw error;

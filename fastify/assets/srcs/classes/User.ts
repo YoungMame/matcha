@@ -27,6 +27,7 @@ export default class User {
     isProfileCompleted: boolean;
     profilePictureIndex: number | undefined;
     profilePictures: string[];
+    fameRate: number | undefined;
     location: Location | undefined;
     createdAt: Date;
 
@@ -50,6 +51,7 @@ export default class User {
         isProfileCompleted: boolean = false,
         profilePictureIndex: number | undefined,
         profilePictures: string[],
+        fameRate: number | undefined,
         location: Location | undefined = undefined,
         createdAt: Date,
     ) {
@@ -68,6 +70,7 @@ export default class User {
         this.isProfileCompleted = isProfileCompleted;
         this.profilePictureIndex = profilePictureIndex;
         this.profilePictures = profilePictures;
+        this.fameRate = fameRate;
         this.location = location;
         this.createdAt = createdAt;
     }
@@ -89,6 +92,7 @@ export default class User {
             row.is_profile_completed,
             row.profile_picture_index,
             row.profile_pictures,
+            row.fame_rate,
             row.location,
             new Date(row.created_at)
         );

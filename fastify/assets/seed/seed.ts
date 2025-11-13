@@ -75,7 +75,7 @@ async function seed() {
                 u.gender,
                 u.orientation,
                 parseTags(u.tags),
-                Math.floor(u.fame_rate / 1000),
+                u.fame_rate,
                 [pp], // profile_pictures as SQL array
                 0, // profile_pictures_index
                 new Date(u.born_at).toISOString()
