@@ -38,13 +38,13 @@ describe('Block users test', () => {
             method: 'PUT',
             url: `/private/user/me/profile`,
             headers: {
-                'Cookie': `jwt=${token2}`
+            'Cookie': `jwt=${token2}`
             },
             payload: {
-                location: {
-                    latitude: 48.8566,
-                    longitude: 2.3522
-                }
+            location: {
+                latitude: 48.94705,
+                longitude: 2.3522
+            }
             }
         });
 
