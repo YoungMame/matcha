@@ -104,6 +104,10 @@ declare module 'fastify' {
       reportUser(reportedId: number, reporterId: number): Promise<void>;
     };
 
+    browsingService: {
+      browseUsers(userId: number, limit?: number, offset?: number, radius?: number): Promise<Array<any>>;
+    };
+
     nodemailer: any;
 
     authenticate(request: any, reply: any): Promise<void>;
