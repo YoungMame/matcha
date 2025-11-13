@@ -239,7 +239,7 @@ describe('Websocket view test', () => {
         expect(response.statusCode).to.equal(200);
         const body = response.json();
         expect(body).to.have.property('isConnectedWithMe').that.equals(false);
-        expect(body).to.have.property('chatIdWithMe').that.equals(null);
+        expect(body).to.not.have.property('chatIdWithMe');
         expect(body).to.have.property('haveILiked').that.equals(false);
         expect(body).to.have.property('hasLikedMe').that.equals(false);
 
@@ -262,7 +262,7 @@ describe('Websocket view test', () => {
         expect(response2.statusCode).to.equal(200);
         const body2 = response2.json();
         expect(body2).to.have.property('isConnectedWithMe').that.equals(false);
-        expect(body2).to.have.property('chatIdWithMe').that.equals(null);
+        expect(body2).to.not.have.property('chatIdWithMe');
         expect(body2).to.have.property('haveILiked').that.equals(true);
         expect(body2).to.have.property('hasLikedMe').that.equals(false);
 

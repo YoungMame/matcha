@@ -42,7 +42,6 @@ export default fp(async function(fastify, opts) {
                 fields: file.fields // if you need multipart fields
             };
         } catch (err) {
-            console.error('Error in checkImageConformity:', err);
             if (err instanceof Error && err.message)
                 return reply.status(400).send({ error: err.message });
             return reply.status(400).send({ error: 'Bad request' });

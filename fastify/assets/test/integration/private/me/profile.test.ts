@@ -116,8 +116,8 @@ describe('User me profile integration tests', async () => {
         expect(meData).to.have.property('isVerified', true);
         expect(meData).to.have.property('isProfileCompleted', true);
         expect(meData).to.have.property('location').that.is.an('object');
-        expect(meData.location).to.have.property('latitude', null);
-        expect(meData.location).to.have.property('longitude', null);
+        expect(meData.location).to.not.have.property('latitude');
+        expect(meData.location).to.not.have.property('longitude');
         expect(meData).to.have.property('createdAt');
     });
 

@@ -10,8 +10,9 @@ type UserProfile = {
     firstName?: string;
     lastName?: string;
     tags?: string[];
-    profilePictureIndex?: number | null;
+    profilePictureIndex?: number | undefined;
     profilePictures?: string[];
+    fameRate?: number | undefined;
     string?: string[];
     gender?: string;
     isProfileCompleted?: boolean;

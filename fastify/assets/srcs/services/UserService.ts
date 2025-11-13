@@ -13,7 +13,6 @@ import commonPasswords from '../utils/1000-most-common-passwords.json';
 import { WebSocketMessageTypes, WebSocketMessageDataTypes } from "./WebSocketService";
 import { Like } from "../models/Like";
 import { getCityAndCountryFromCoords } from "../utils/geoloc";
-import { log } from "console";
 
 class UserService {
     private fastify: FastifyInstance;
@@ -152,7 +151,8 @@ class UserService {
         gender: string;
         isVerified: boolean;
         isProfileCompleted: boolean;
-        location: { latitude: number | null; longitude: number | null, city: string | null; country: string | null };
+        fameRate: number | undefined;
+        location: { latitude: number | undefined; longitude: number | undefined, city: string | undefined; country: string | undefined };
         createdAt: Date;
     }> {
         const user = await this.getUser(id);
@@ -171,11 +171,12 @@ class UserService {
             gender: user.gender as string,
             isVerified: user.isVerified,
             isProfileCompleted: user.isProfileCompleted,
+            fameRate: user.fameRate,
             location: {
-                latitude: user.location?.latitude || null,
-                longitude: user.location?.longitude || null,
-                city: user.location?.city || null,
-                country: user.location?.country || null
+                latitude: user.location?.latitude,
+                longitude: user.location?.longitude,
+                city: user.location?.city,
+                country: user.location?.country
             },
             createdAt: user.createdAt
         };
@@ -264,7 +265,7 @@ class UserService {
         }
         await this.userModel.update(user.id, {
            profilePictures: user.profilePictures,
-           profilePictureIndex: (user.profilePictureIndex == undefined ? null : user.profilePictureIndex)
+           profilePictureIndex: user.profilePictureIndex
         });
     }
 
@@ -280,9 +281,10 @@ class UserService {
         bornAt: Date;
         gender: string;
         orientation: string;
-        location: { latitude: number | null; longitude: number | null, city: string | null; country: string | null };
+        fameRate: number | undefined;
+        location: { latitude: number | undefined; longitude: number | undefined, city: string | undefined; country: string | undefined };
         isConnectedWithMe: boolean;
-        chatIdWithMe: number | null;
+        chatIdWithMe: number | undefined;
         haveILiked: boolean;
         hasLikedMe: boolean;
     }> {
@@ -301,6 +303,7 @@ class UserService {
             if (!existingView)
             {
                 const view = await this.viewModel.insert(viewerId, user.id);
+                await this.updateFameRate(user.id);
                 this.fastify.webSocketService.sendProfileViewed(user.id, {
                     id: view.id,
                     viewerId: view.viewerId,
@@ -310,13 +313,10 @@ class UserService {
             }
         }
         const chatWithMe = viewerId ?  (await this.fastify.chatService.getChatBetweenUsers([viewerId || -1, user.id])) : null;
-        console.log('chatWithMe', chatWithMe);
-        const chatIdWithMe = chatWithMe ? chatWithMe.id : null;
-        console.log('chatIdWithMe', chatIdWithMe);
+        const chatIdWithMe = chatWithMe ? chatWithMe.id : undefined;
         const isConnectedWithMe = chatIdWithMe ? true : false;
         const hasLikedMe = viewerId ? (await this.likeModel.getLikeBetweenUsers(user.id, viewerId) ? true : false) : false;
         const haveILiked = viewerId ? (await this.likeModel.getLikeBetweenUsers(viewerId, user.id) ? true : false) : false;
-        console.log('getUserPublic', 'viewerId', viewerId, 'userId', user.id, 'isConnectedWithMe', isConnectedWithMe, 'chatIdWithMe', chatIdWithMe, 'haveILiked', haveILiked, 'hasLikedMe', hasLikedMe);
         return {
             id: user.id,
             username: user.username,
@@ -329,11 +329,12 @@ class UserService {
             bornAt: user.bornAt as Date,
             gender: user.gender as string ,
             orientation: user.orientation as string,
+            fameRate: user.fameRate,
             location: {
-                latitude: user.location?.latitude || null,
-                longitude: user.location?.longitude || null,
-                city: user.location?.city || null,
-                country: user.location?.country || null
+                latitude: user.location?.latitude,
+                longitude: user.location?.longitude,
+                city: user.location?.city,
+                country: user.location?.country
             },
             isConnectedWithMe,
             chatIdWithMe,
@@ -357,6 +358,15 @@ class UserService {
         const existingProfilePicture = receiverUser.profilePictures?.[receiverUser.profilePictureIndex || 0];
         if (!existingProfilePicture)
             throw new BadRequestError('User has no profile picture');
+    }
+
+    private async updateFameRate(userId: number): Promise<number> {
+        const likesReceived = await this.likeModel.getAllByLikedId(userId);
+        const viewsReceived = await this.viewModel.getAllByViewedId(userId);
+
+        const fameRate = (likesReceived.length && viewsReceived.length) ? Number((likesReceived.length / viewsReceived.length).toPrecision(2)) * 1000 : 0;
+        await this.userModel.update(userId, { fameRate });
+        return fameRate;
     }
 
     async sendLike(senderId: number, receiverId: number): Promise<void> {
@@ -383,6 +393,7 @@ class UserService {
             likerId: senderId,
             createdAt: like.createdAt
         };
+        await this.updateFameRate(receiverId);
         this.fastify.webSocketService.sendLike(receiverId, data);
         await this.fastify.notificationService.createNotification(receiverId, senderId, 'like', like.id);
     }
@@ -409,6 +420,7 @@ class UserService {
             createdChatId: chatId,
             removedAt: new Date()
         };
+        await this.updateFameRate(receiverId);
         this.fastify.webSocketService.sendUnlike(receiverId, data);
         await this.fastify.notificationService.createNotification(receiverId, senderId, 'unlike', like.id);
     }

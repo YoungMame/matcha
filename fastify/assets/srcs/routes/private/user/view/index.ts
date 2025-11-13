@@ -25,20 +25,20 @@ const viewRoutes = async (fastify: FastifyInstance) => {
                         bornAt: { type: 'string', format: 'date-time' },
                         gender: { type: 'string', enum: ['male', 'female'] },
                         orientation: { type: 'string', enum: ['heterosexual', 'homosexual', 'bisexual'] },
+                        fameRate: { type: 'number' },
                         location: {
                             type: 'object',
                             properties: {
-                                latitude: { type: 'number', nullable: true },
-                                longitude: { type: 'number', nullable: true },
-                                city: { type: 'string', nullable: true },
-                                country: { type: 'string', nullable: true }
+                                latitude: { type: 'number' },
+                                longitude: { type: 'number' },
+                                city: { type: 'string' },
+                                country: { type: 'string' }
                             },
-                            required: ['latitude', 'longitude', 'city', 'country'],
                         },
 
                         // Relation infos
                         isConnectedWithMe: { type: 'boolean' },
-                        chatIdWithMe: { type: ['integer'], nullable: true },
+                        chatIdWithMe: { type: ['integer'] },
                         hasLikedMe: { type: 'boolean' },
                         haveILiked: { type: 'boolean' },
                     },
