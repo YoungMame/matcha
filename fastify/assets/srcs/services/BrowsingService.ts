@@ -125,12 +125,39 @@ BETWEEN ${filters.age.min} AND ${filters.age.max}
         return userRows.sort((a, b) => this.getSimilarTagsCount(userTags, b.tags || []) - this.getSimilarTagsCount(userTags, a.tags || []));
     }
 
+    private sortByAll(userRows: Array<BrowsingUser>, bornAt: Date, userTags: Array<string>, fameRate: number): Array<BrowsingUser> {
+        const ageWeight = 0.3;
+        const tagsWeight = 0.4;
+        const fameRateWeight = 0.3;
+        const maxAgeDiff = 10; // years
+        const maxFameDiff = 400;
+
+        let scoreMap = new Map<number, number>(); // index to score
+
+        userRows.forEach(user => {
+            const ageDiff = Math.abs(bornAt.getFullYear() - new Date(user.bornAt).getFullYear());
+            const ageScore = 100 - (ageDiff / maxAgeDiff) * maxAgeDiff;
+
+            const similarTagsCount = this.getSimilarTagsCount(userTags, user.tags || []);
+            const tagsScore = userTags.length > 0 ? (similarTagsCount / userTags.length) * 100 : 0;
+
+            const fameRateDiff = Math.abs(fameRate - user.fameRate);
+            const fameRateScore = 100 - (fameRateDiff / maxFameDiff) * maxFameDiff;
+
+            const totalScore = (ageScore * ageWeight) + (tagsScore * tagsWeight) + (fameRateScore * fameRateWeight);
+            console.log(`User ${user.id} - Age Score: ${ageScore.toFixed(2)}, Tags Score: ${tagsScore.toFixed(2)}, Fame Rate Score: ${fameRateScore.toFixed(2)}, Total Score: ${totalScore.toFixed(2)}`);
+            scoreMap.set(user.id, totalScore);
+        })
+        return userRows.sort((a, b) => (scoreMap.get(b.id) ?? 0) - (scoreMap.get(a.id) ?? 0));
+    }
+
     public async browseUsers(userId: number, limit: number = 5, offset: number = 0, radius: number = 25, filters?: BrowsingFilter, sort?: BrowsingSort): Promise<Array<BrowsingUser>> {
         const user = await this.fastify.userService.getMe(userId);
         const lat = filters?.location?.latitude ?? user.location?.latitude;
         const lgn = filters?.location?.longitude ?? user.location?.longitude;
         const bornAt = user.bornAt;
         const tags = user.tags;
+        const fameRate = user.fameRate;
         
         if (lat === undefined || lgn === undefined)
             throw new BadRequestError();
@@ -145,7 +172,7 @@ BETWEEN ${filters.age.min} AND ${filters.age.max}
             case 'tags':
                 return this.sortByTags(userRows, tags);
             default:
-                return userRows;
+                return this.sortByAll(userRows, bornAt, tags, fameRate ?? 0);
         }
     }
 }
