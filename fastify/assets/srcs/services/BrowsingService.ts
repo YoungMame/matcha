@@ -26,6 +26,17 @@ export type BrowsingFilter = {
 
 export type BrowsingSort = 'distance' | 'age' | 'fameRate' | 'tags';
 
+export type BrowsingUser = {
+    id: number;
+    firstName: string;
+    gender: string;
+    tags: Array<string>;
+    fameRate: number;
+    profilePicture: string;
+    bornAt: string;
+    distance: number;
+}
+
 class BrowsingService {
     private fastify: FastifyInstance;
     private userModel: UserModel;
@@ -43,14 +54,14 @@ class BrowsingService {
         this.UsersCache = new Map<number, User>();
     }
 
-    private async getUsersFromCoordsAndRadius(userId: number, lat: number, lgn: number, limit: number, offset: number, radius: number, filters?: BrowsingFilter): Promise<Array<any>> {
+    private async getUsersFromCoordsAndRadius(userId: number, lat: number, lgn: number, limit: number, offset: number, radius: number, filters?: BrowsingFilter): Promise<Array<BrowsingUser>> {
         let parameters: Array<string | number | Array<string>> = [lat, lgn, radius, userId, limit, offset];
         if (filters?.tags && filters.tags.length > 0) {
             parameters.push(filters.tags);
         }
-        const rows = await this.fastify.pg.query(
+        const result = await this.fastify.pg.query(
             `
-            SELECT u.id, u.first_name, u.gender, u.profile_pictures, u.profile_picture_index, distances.distance
+            SELECT u.id, u.first_name, u.gender, u.profile_pictures, u.profile_picture_index, u.born_at, u.tags, u.fame_rate, distances.distance
             FROM users u
             JOIN
             (
@@ -61,6 +72,7 @@ class BrowsingService {
                 ORDER BY distance
             ) AS distances ON u.id = distances.user_id
             WHERE u.is_profile_completed = TRUE
+            AND u.profile_picture_index IS NOT NULL
             ${filters?.age ? `AND u.age BETWEEN ${filters.age.min} AND ${filters.age.max}` : ''}
             ${filters?.fameRate ? `AND u.fame_rate BETWEEN ${filters.fameRate.min} AND ${filters.fameRate.max}` : ''}
             ${filters?.tags && filters.tags.length > 0 ? `FROM users WHERE tags @> $7::text[]` : ''}
@@ -68,8 +80,19 @@ class BrowsingService {
             `,
             parameters
         );
-        // console.log(rows.rows);
-        return rows.rows;
+        return result.rows.map(row => {
+            const user = {
+                id: row.id as number,
+                firstName: row.first_name as string,
+                gender: row.gender as string,
+                tags: row.tags as Array<string>,
+                fameRate: row.fame_rate as number,
+                profilePicture: row.profile_pictures[row.profile_picture_index] ?? '',
+                bornAt: row.born_at as string,
+                distance: row.distance as number
+            }
+            return user;
+        });
     }
 
     private getSimilarTagsCount(userTags: Array<string>, otherUserTags: Array<string>): number {
@@ -83,26 +106,28 @@ class BrowsingService {
         return count;
     }
 
-    private sortByDistance(userRows: Array<any>): Array<any> {
+    private sortByDistance(userRows: Array<BrowsingUser>): Array<BrowsingUser> {
         return userRows.sort((a, b) => a.distance - b.distance);
     }
 
-    private sortByAge(userRows: Array<any>): Array<any> {
-        return userRows.sort((a, b) => a.age - b.age);
+    private sortByAge(userRows: Array<BrowsingUser>, bornAt: Date): Array<BrowsingUser> {
+        return userRows.sort((a, b) => Math.abs(bornAt.getTime() - new Date(a.bornAt).getTime()) - Math.abs(bornAt.getTime() - new Date(b.bornAt).getTime()));
     }
 
-    private sortByFameRate(userRows: Array<any>): Array<any> {
-        return userRows.sort((a, b) => a.fame_rate - b.fame_rate);
+    private sortByFameRate(userRows: Array<BrowsingUser>): Array<BrowsingUser> {
+        return userRows.sort((a, b) => a.fameRate - b.fameRate);
     }
 
-    private sortByTags(userRows: Array<any>, userTags: Array<string>): Array<any> {
+    private sortByTags(userRows: Array<BrowsingUser>, userTags: Array<string>): Array<BrowsingUser> {
         return userRows.sort((a, b) => this.getSimilarTagsCount(userTags, b.tags || []) - this.getSimilarTagsCount(userTags, a.tags || []));
     }
 
-    public async browseUsers(userId: number, limit: number = 5, offset: number = 0, radius: number = 25, filters?: BrowsingFilter, sort?: BrowsingSort): Promise<Array<any>> {
+    public async browseUsers(userId: number, limit: number = 5, offset: number = 0, radius: number = 25, filters?: BrowsingFilter, sort?: BrowsingSort): Promise<Array<BrowsingUser>> {
         const user = await this.fastify.userService.getMe(userId);
         const lat = filters?.location?.latitude ?? user.location?.latitude;
         const lgn = filters?.location?.longitude ?? user.location?.longitude;
+        const bornAt = user.bornAt;
+        const tags = user.tags;
         
         if (lat === undefined || lgn === undefined)
             throw new BadRequestError();
@@ -111,11 +136,11 @@ class BrowsingService {
             case 'distance':
                 return this.sortByDistance(userRows);
             case 'age':
-                return this.sortByAge(userRows);
+                return this.sortByAge(userRows, bornAt);
             case 'fameRate':
                 return this.sortByFameRate(userRows);
             case 'tags':
-                return this.sortByTags(userRows, user.tags || []);
+                return this.sortByTags(userRows, tags);
             default:
                 return userRows;
         }
