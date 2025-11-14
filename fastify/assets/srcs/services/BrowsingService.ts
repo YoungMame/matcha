@@ -73,9 +73,11 @@ class BrowsingService {
             ) AS distances ON u.id = distances.user_id
             WHERE u.is_profile_completed = TRUE
             AND u.profile_picture_index IS NOT NULL
-            ${filters?.age ? `AND u.age BETWEEN ${filters.age.min} AND ${filters.age.max}` : ''}
+            ${filters?.age ? `AND (CURRENT_DATE - u.born_at) / 365
+BETWEEN ${filters.age.min} AND ${filters.age.max}
+            ` : ''}
             ${filters?.fameRate ? `AND u.fame_rate BETWEEN ${filters.fameRate.min} AND ${filters.fameRate.max}` : ''}
-            ${filters?.tags && filters.tags.length > 0 ? `FROM users WHERE tags @> $7::text[]` : ''}
+            ${filters?.tags && filters.tags.length > 0 ? `AND u.tags @> $7::text[]` : ''}
             LIMIT $5 OFFSET $6
             `,
             parameters
@@ -115,7 +117,8 @@ class BrowsingService {
     }
 
     private sortByFameRate(userRows: Array<BrowsingUser>): Array<BrowsingUser> {
-        return userRows.sort((a, b) => a.fameRate - b.fameRate);
+        console.log('sortByFameRate called with:', userRows);
+        return userRows.sort((a, b) => b.fameRate - a.fameRate);
     }
 
     private sortByTags(userRows: Array<BrowsingUser>, userTags: Array<string>): Array<BrowsingUser> {
@@ -131,7 +134,7 @@ class BrowsingService {
         
         if (lat === undefined || lgn === undefined)
             throw new BadRequestError();
-        const userRows = await this.getUsersFromCoordsAndRadius(userId, lat, lgn, limit, offset, radius);
+        const userRows = await this.getUsersFromCoordsAndRadius(userId, lat, lgn, limit, offset, radius, filters);
         switch (sort) {
             case 'distance':
                 return this.sortByDistance(userRows);
