@@ -29,9 +29,11 @@ export default fp(async function(fastify, opts) {
             if (!currentSize)
                 throw new Error('Unrecognized file format');
 
-            const ratio = (currentSize.width / currentSize.height).toPrecision(3);
+            // const ratio = (currentSize.width / currentSize.height).toPrecision(3);
             const expectedRatio = (ratiox / ratioy).toPrecision(3);
-            if (currentSize.width > maxWidth || currentSize.width < minWidth || ratio != expectedRatio)
+            if (currentSize.width > maxWidth || currentSize.width < minWidth
+				//  || ratio != expectedRatio
+				)
                 throw new Error('Wrong file dimensions');
 
             // attach buffer + meta to the request so later handlers can reuse it

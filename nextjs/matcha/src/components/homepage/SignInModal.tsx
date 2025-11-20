@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import axios from "@/lib/axios";
 import Image from "next/image";
 import Modal from "@/components/common/Modal";
 import Typography from "@/components/common/Typography";
@@ -10,6 +8,7 @@ import TextField from "@/components/common/TextField";
 import Button from "@/components/common/Button";
 import Stack from "@/components/common/Stack";
 import Alert from "@/components/common/Alert";
+import { useLogin } from "@/hooks/useAuth";
 
 interface SignInModalProps {
   isOpen: boolean;
@@ -22,35 +21,26 @@ export default function SignInModal({
   onClose,
   onSwitchToSignUp,
 }: SignInModalProps) {
-  const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  
+  const { mutate: login, isPending, error } = useLogin();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    setLoading(true);
-
-    try {
-      await axios.post("/api/auth/login", formData);
-		console.log("Login successful");
-      router.push("/browsing");
-    } catch (err: any) {
-      setError(err.response?.data?.error || "Login failed. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    login(formData, {
+      onSuccess: () => {
+        // Close modal on successful login
+        handleClose();
+      },
+    });
   };
 
   const handleClose = () => {
     // Reset state when closing
     setFormData({ email: "", password: "" });
-    setError("");
-    setLoading(false);
     onClose();
   };
 
@@ -68,7 +58,9 @@ export default function SignInModal({
 
       {error && (
         <div className="mb-4">
-          <Alert variant="error">{error}</Alert>
+          <Alert variant="error">
+            {(error as any)?.response?.data?.error || error.message || "Login failed. Please try again."}
+          </Alert>
         </div>
       )}
 
@@ -96,8 +88,8 @@ export default function SignInModal({
             required
           />
 
-          <Button type="submit" variant="gradient" fullWidth disabled={loading}>
-            {loading ? "Connexion..." : "Se connecter"}
+          <Button type="submit" variant="gradient" fullWidth disabled={isPending}>
+            {isPending ? "Connexion..." : "Se connecter"}
           </Button>
         </Stack>
       </form>

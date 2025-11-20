@@ -1,50 +1,69 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Container from "@/components/common/Container";
 import Typography from "@/components/common/Typography";
 import Button from "@/components/common/Button";
 import Alert from "@/components/common/Alert";
-import axiosInstance from "@/lib/axios";
-import { MyProfile } from "@/types/myProfile";
+import TextField from "@/components/common/TextField";
+import { useMyProfile, useUpdateProfile } from "@/hooks/useProfile";
+import InterestsStep from "@/components/onboarding/steps/InterestsStep";
 
 export default function MyProfilePage() {
   const router = useRouter();
-  const [profile, setProfile] = useState<MyProfile | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: profile, isLoading, error } = useMyProfile();
+  const { mutate: updateProfile, isPending: isUpdating } = useUpdateProfile();
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    bio: "",
+    tags: [] as string[],
+    gender: "",
+    orientation: "",
+    bornAt: "",
+  });
 
   useEffect(() => {
-    const fetchMyProfile = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        
-        // Call the GET /private/user/me/profile endpoint
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "/api";
-        const response = await axiosInstance.get(`${apiUrl}/private/user/me/profile`);
-        
-        setProfile(response.data);
-      } catch (err: any) {
-        console.error("Error fetching profile:", err);
-        if (err.response?.status === 401) {
-          setError("Session expirée. Veuillez vous reconnecter.");
-          router.push("/login");
-        } else if (err.response?.data?.error) {
-          setError(err.response.data.error);
-        } else {
-          setError("Erreur lors du chargement de votre profil");
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    if (profile) {
+      setFormData({
+        bio: profile.bio || "",
+        tags: profile.tags || [],
+        gender: profile.gender || "",
+        orientation: profile.orientation || "",
+        bornAt: profile.bornAt ? new Date(profile.bornAt).toISOString().split('T')[0] : "",
+      });
+    }
+  }, [profile]);
 
-    fetchMyProfile();
-  }, [router]);
+  const handleSave = () => {
+    updateProfile({
+      ...formData,
+      gender: formData.gender as "men" | "women",
+      orientation: formData.orientation as "heterosexual" | "homosexual" | "bisexual" | "other",
+      bornAt: formData.bornAt ? new Date(formData.bornAt).toISOString() : undefined,
+    }, {
+      onSuccess: () => {
+        setIsEditing(false);
+      }
+    });
+  };
+
+  const handleCancel = () => {
+    if (profile) {
+      setFormData({
+        bio: profile.bio || "",
+        tags: profile.tags || [],
+        gender: profile.gender || "",
+        orientation: profile.orientation || "",
+        bornAt: profile.bornAt ? new Date(profile.bornAt).toISOString().split('T')[0] : "",
+      });
+    }
+    setIsEditing(false);
+  };
 
   const calculateAge = (bornAt: string): number => {
+    if (!bornAt) return 0;
     const birthDate = new Date(bornAt);
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
@@ -58,7 +77,7 @@ export default function MyProfilePage() {
   if (isLoading) {
     return (
       <div className="h-full overflow-y-auto bg-gray-50 dark:bg-gray-900">
-        <Container size="xl" className="py-8">
+        <Container size="full" className="py-8">
           <div className="flex items-center justify-center h-64">
             <Typography variant="h3" color="secondary">
               Chargement de votre profil...
@@ -69,12 +88,19 @@ export default function MyProfilePage() {
     );
   }
 
-  if (error || !profile) {
+  if (error) {
+    const errorMessage = (error as any)?.response?.data?.error || error.message || "Erreur lors du chargement de votre profil";
+    const is401 = (error as any)?.response?.status === 401;
+    
+    if (is401) {
+      router.push("/");
+    }
+    
     return (
       <div className="h-full overflow-y-auto bg-gray-50 dark:bg-gray-900">
-        <Container size="xl" className="py-8">
-          <div className="space-y-4 max-w-2xl mx-auto">
-            <Alert variant="error">{error || "Profil non trouvé"}</Alert>
+        <Container size="full" className="py-8">
+          <div className="space-y-4 w-full px-4">
+            <Alert variant="error">{errorMessage}</Alert>
             <Button variant="primary" onClick={() => router.push("/browsing")}>
               Retour à la recherche
             </Button>
@@ -83,19 +109,36 @@ export default function MyProfilePage() {
       </div>
     );
   }
+  
+  if (!profile) {
+    return null;
+  }
 
   return (
-    <div className="h-full overflow-y-auto bg-gray-50 dark:bg-gray-900">
-      <Container size="xl" className="py-8">
-        <div className="max-w-4xl mx-auto space-y-6">
+    <div className="h-full w-full overflow-y-auto bg-gray-50 dark:bg-gray-900">
+      <Container size="full" className="py-8">
+        <div className="w-full mx-auto space-y-6 px-4">
           {/* Header */}
           <div className="flex items-center justify-between">
             <Typography variant="h1" color="primary">
               Mon Profil
             </Typography>
-            <Button variant="outline" onClick={() => router.push("/me/edit")}>
-              Modifier
-            </Button>
+            <div className="flex gap-2">
+              {isEditing ? (
+                <>
+                  <Button variant="outline" onClick={handleCancel} disabled={isUpdating}>
+                    Annuler
+                  </Button>
+                  <Button variant="primary" onClick={handleSave} disabled={isUpdating}>
+                    {isUpdating ? "Sauvegarde..." : "Sauvegarder"}
+                  </Button>
+                </>
+              ) : (
+                <Button variant="outline" onClick={() => setIsEditing(true)}>
+                  Modifier
+                </Button>
+              )}
+            </div>
           </div>
 
           {/* Profile Card */}
@@ -116,57 +159,88 @@ export default function MyProfilePage() {
               {/* Basic Info */}
               <div>
                 <Typography variant="h2" color="primary" className="mb-2">
-                  {profile.username}, {calculateAge(profile.bornAt)}
+                  {profile.firstName} {profile.lastName}, {calculateAge(profile.bornAt)}
+                </Typography>
+                <Typography variant="body" color="secondary">
+                  @{profile.username}
                 </Typography>
                 <Typography variant="body" color="secondary">
                   {profile.email}
                 </Typography>
+                {isEditing && (
+                  <div className="mt-4">
+                    <TextField
+                      label="Date de naissance"
+                      type="date"
+                      value={formData.bornAt}
+                      onChange={(e) => setFormData({ ...formData, bornAt: e.target.value })}
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Status Badges */}
-              <div className="flex gap-2 flex-wrap">
-                {profile.isVerified && (
-                  <span className="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 rounded-full text-sm">
-                    ✓ Vérifié
-                  </span>
-                )}
-                {profile.isProfileCompleted && (
-                  <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 rounded-full text-sm">
-                    ✓ Profil complet
-                  </span>
+              {!isEditing && (
+                <div className="flex gap-2 flex-wrap">
+                  {profile.isVerified && (
+                    <span className="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 rounded-full text-sm">
+                      ✓ Vérifié
+                    </span>
+                  )}
+                  {profile.isProfileCompleted && (
+                    <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 rounded-full text-sm">
+                      ✓ Profil complet
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {/* Bio */}
+              <div>
+                <Typography variant="h3" color="primary" className="mb-2">
+                  À propos
+                </Typography>
+                {isEditing ? (
+                  <textarea
+                    className="w-full px-4 py-3 border rounded-md transition-all focus:outline-none focus:ring-2 focus:border-transparent border-gray-300 focus:ring-pink-500 dark:bg-gray-700 dark:border-gray-600"
+                    rows={4}
+                    value={formData.bio}
+                    onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                  />
+                ) : (
+                  <Typography variant="body" color="secondary">
+                    {profile.bio || "Aucune description"}
+                  </Typography>
                 )}
               </div>
 
-              {/* Bio */}
-              {profile.bio && (
-                <div>
-                  <Typography variant="h3" color="primary" className="mb-2">
-                    À propos
-                  </Typography>
-                  <Typography variant="body" color="secondary">
-                    {profile.bio}
-                  </Typography>
-                </div>
-              )}
-
               {/* Tags/Interests */}
-              {profile.tags && profile.tags.length > 0 && (
-                <div>
-                  <Typography variant="h3" color="primary" className="mb-2">
-                    Centres d'intérêt
-                  </Typography>
+              <div>
+                <Typography variant="h3" color="primary" className="mb-2">
+                  Centres d'intérêt
+                </Typography>
+                {isEditing ? (
+                  <InterestsStep
+                    interests={formData.tags}
+                    onChange={(tags) => setFormData({ ...formData, tags })}
+                  />
+                ) : (
                   <div className="flex flex-wrap gap-2">
-                    {profile.tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-pink-100 dark:bg-pink-900 text-pink-800 dark:text-pink-100 rounded-full text-sm"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
+                    {profile.tags && profile.tags.length > 0 ? (
+                      profile.tags.map((tag: string, index: number) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 bg-pink-100 dark:bg-pink-900 text-pink-800 dark:text-pink-100 rounded-full text-sm"
+                        >
+                          #{tag}
+                        </span>
+                      ))
+                    ) : (
+                      <Typography variant="body" color="secondary">Aucun centre d'intérêt</Typography>
+                    )}
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
               {/* Gender & Orientation */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -174,19 +248,44 @@ export default function MyProfilePage() {
                   <Typography variant="h3" color="primary" className="mb-2">
                     Genre
                   </Typography>
-                  <Typography variant="body" color="secondary">
-                    {profile.gender === 'male' ? 'Homme' : 'Femme'}
-                  </Typography>
+                  {isEditing ? (
+                    <select
+                      className="w-full px-4 py-3 border rounded-md transition-all focus:outline-none focus:ring-2 focus:border-transparent border-gray-300 focus:ring-pink-500 dark:bg-gray-700 dark:border-gray-600"
+                      value={formData.gender}
+                      onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                    >
+                      <option value="men">Homme</option>
+                      <option value="women">Femme</option>
+                    </select>
+                  ) : (
+                    <Typography variant="body" color="secondary">
+                      {profile.gender === 'men' ? 'Homme' : 'Femme'}
+                    </Typography>
+                  )}
                 </div>
                 <div>
                   <Typography variant="h3" color="primary" className="mb-2">
                     Orientation
                   </Typography>
-                  <Typography variant="body" color="secondary">
-                    {profile.orientation === 'heterosexual' && 'Hétérosexuel(le)'}
-                    {profile.orientation === 'homosexual' && 'Homosexuel(le)'}
-                    {profile.orientation === 'bisexual' && 'Bisexuel(le)'}
-                  </Typography>
+                  {isEditing ? (
+                    <select
+                      className="w-full px-4 py-3 border rounded-md transition-all focus:outline-none focus:ring-2 focus:border-transparent border-gray-300 focus:ring-pink-500 dark:bg-gray-700 dark:border-gray-600"
+                      value={formData.orientation}
+                      onChange={(e) => setFormData({ ...formData, orientation: e.target.value })}
+                    >
+                      <option value="heterosexual">Hétérosexuel(le)</option>
+                      <option value="homosexual">Homosexuel(le)</option>
+                      <option value="bisexual">Bisexuel(le)</option>
+                      <option value="other">Autre</option>
+                    </select>
+                  ) : (
+                    <Typography variant="body" color="secondary">
+                      {profile.orientation === 'heterosexual' && 'Hétérosexuel(le)'}
+                      {profile.orientation === 'homosexual' && 'Homosexuel(le)'}
+                      {profile.orientation === 'bisexual' && 'Bisexuel(le)'}
+                      {profile.orientation === 'other' && 'Autre'}
+                    </Typography>
+                  )}
                 </div>
               </div>
 
@@ -211,7 +310,7 @@ export default function MyProfilePage() {
                     Photos ({profile.profilePictures.length})
                   </Typography>
                   <div className="grid grid-cols-3 gap-3">
-                    {profile.profilePictures.map((pic, index) => (
+                    {profile.profilePictures.map((pic: string, index: number) => (
                       <div
                         key={index}
                         className={`relative aspect-square rounded-lg overflow-hidden ${

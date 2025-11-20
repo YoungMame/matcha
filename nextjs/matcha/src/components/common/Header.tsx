@@ -6,14 +6,9 @@ import Image from "next/image";
 import Button from "./Button";
 import Typography from "./Typography";
 import { useState } from "react";
-import axios from "axios";
-import SignInModal from "@/components/homepage/SignUpModal";
+import SignInModal from "@/components/homepage/SignInModal";
 import SignUpModal from "@/components/homepage/SignUpModal";
-
-interface User {
-  id: string;
-  username: string;
-}
+import { useLogout } from "@/hooks/useAuth";
 
 export default function Header() {
   const pathname = usePathname();
@@ -21,6 +16,7 @@ export default function Header() {
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showSignInModal, setShowSignInModal] = useState(false);
   const [language, setLanguage] = useState("FR");
+  const { mutate: logout } = useLogout();
 
   // Determine which page we're on
   const isHomePage = pathname === "/";
@@ -39,16 +35,10 @@ export default function Header() {
   //     enabled: !isHomePage, // Only fetch if not on home page
   //   });
 
-  const userData: any = undefined;
+  const userData: any = {user: true};
 
-  const handleLogout = async () => {
-    try {
-      await axios.post("/api/auth/logout");
-      router.push("/");
-      router.refresh();
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
+  const handleLogout = () => {
+    logout();
   };
 
   const handleLanguageChange = () => {

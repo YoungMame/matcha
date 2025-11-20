@@ -58,6 +58,8 @@ const profileRoutes = async (fastify: FastifyInstance) => {
                     properties: {
                         id: { type: 'integer' },
                         email: { type: 'string', format: 'email' },
+						firstName: { type: 'string' },
+						lastName: { type: 'string' },
                         username: { type: 'string', minLength: 2, maxLength: 100 },
                         profilePictureIndex: { type: 'integer' },
                         profilePictures: { type: 'array', items: { type: 'string', format: 'uri' } },

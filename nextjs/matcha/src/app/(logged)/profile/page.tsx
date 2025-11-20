@@ -1,147 +1,138 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Container from "@/components/common/Container";
 import Typography from "@/components/common/Typography";
 import Button from "@/components/common/Button";
 import Alert from "@/components/common/Alert";
 import ProfileView from "@/components/profile/ProfileView";
 import MatchingModal from "@/components/browsing/MatchingModal";
-import { mockUserProfiles } from "@/mocks/browsing_mocks";
-import {
-  mockProfileInteractions,
-  getConnectionStatus,
-  toggleLike,
-  blockUser,
-  reportUser,
-  recordProfileVisit,
-  CURRENT_USER_HAS_PROFILE_PICTURE,
-} from "@/mocks/profile_mocks";
 import { UserProfile } from "@/types/userProfile";
-import { ProfileInteraction } from "@/types/profileInteraction";
-import { useBrowsing } from "@/contexts/BrowsingContext";
+import { ConnectionStatus } from "@/types/profileInteraction";
+import { useBrowsing as useBrowsingContext } from "@/contexts/BrowsingContext";
+import { 
+  useUserProfile, 
+  useLikeProfile, 
+  useBlockProfile, 
+  useReportProfile, 
+  useRecordProfileVisit 
+} from "@/hooks/useUserProfile";
 
 export default function ProfilePage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const userId = searchParams.get("id");
-  const { selectedMatchUserId, closeMatchModal } = useBrowsing();
+  const { selectedMatchUserId, closeMatchModal } = useBrowsingContext();
 
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [interaction, setInteraction] = useState<ProfileInteraction | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   
   // Match modal state
   const [matchModalUser, setMatchModalUser] = useState<UserProfile | null>(null);
   const [isMatchModalOpen, setIsMatchModalOpen] = useState(false);
 
+  // Fetch profile data
+  const { data: profileData, isLoading, error } = useUserProfile(userId || "");
+  
+  // Mutations
+  const { mutate: recordVisit } = useRecordProfileVisit();
+  const { mutate: likeProfile, isPending: isLiking } = useLikeProfile();
+  const { mutate: blockProfile, isPending: isBlocking } = useBlockProfile();
+  const { mutate: reportProfile, isPending: isReporting } = useReportProfile();
+
+  // Record visit when profile loads
+  useEffect(() => {
+    if (userId && profileData) {
+      recordVisit(userId);
+    }
+  }, [userId, profileData, recordVisit]);
+
+  // Convert API profile data to UserProfile type
+  const profile: UserProfile | null = profileData ? {
+    id: profileData.id,
+    username: profileData.username,
+    firstName: profileData.firstName,
+    lastName: profileData.lastName,
+    birthday: profileData.birthday,
+    biography: profileData.bio,
+    interests: profileData.interests,
+    profilePicture: profileData.profilePicture,
+    additionalPictures: profileData.additionalPictures,
+    distance: profileData.location.distance || 0,
+    fame: profileData.fame,
+    gender: profileData.gender,
+    interestedInGenders: [],
+  } : null;
+
   // Watch for match modal state from context
   useEffect(() => {
-    if (selectedMatchUserId) {
-      const user = mockUserProfiles.find((u) => u.id === selectedMatchUserId);
-      if (user) {
-        setMatchModalUser(user);
-        setIsMatchModalOpen(true);
-      }
+    if (selectedMatchUserId && profileData) {
+      setMatchModalUser(profile);
+      setIsMatchModalOpen(true);
     }
-  }, [selectedMatchUserId]);
-
-  useEffect(() => {
-    if (!userId) {
-      setError("Aucun profil spécifié");
-      setIsLoading(false);
-      return;
-    }
-
-    // Simulate API call to fetch profile
-    const fetchProfile = async () => {
-      try {
-        setIsLoading(true);
-        
-        // Record visit
-        await recordProfileVisit(userId);
-        
-        // Find profile
-        const foundProfile = mockUserProfiles.find((p) => p.id === userId);
-        if (!foundProfile) {
-          setError("Profil non trouvé");
-          return;
-        }
-
-        setProfile(foundProfile);
-        setInteraction(
-          mockProfileInteractions[userId] || {
-            userId,
-            likedByMe: false,
-            likedByThem: false,
-            blocked: false,
-            reported: false,
-            isOnline: false,
-          }
-        );
-      } catch (err) {
-        setError("Erreur lors du chargement du profil");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, [userId]);
+  }, [selectedMatchUserId, profileData, profile]);
 
   const handleToggleLike = async () => {
     if (!userId) return;
     
-    try {
-      const updated = await toggleLike(userId);
-      setInteraction(updated);
-      
-      if (updated.likedByMe) {
-        if (updated.likedByThem) {
-          setSuccessMessage("🎉 Félicitations ! Vous êtes maintenant connectés. Vous pouvez commencer à discuter !");
-        } else {
-          setSuccessMessage("❤️ Like envoyé !");
-        }
-      } else {
-        setSuccessMessage("Like retiré. Les notifications de cet utilisateur sont désactivées.");
-      }
-      
-      setTimeout(() => setSuccessMessage(null), 3000);
-    } catch (err) {
-      setError("Erreur lors du like");
-    }
+    return new Promise<void>((resolve, reject) => {
+      likeProfile(userId, {
+        onSuccess: (data) => {
+          if (data.matched) {
+            setSuccessMessage("🎉 Félicitations ! Vous êtes maintenant connectés. Vous pouvez commencer à discuter !");
+          } else {
+            setSuccessMessage("❤️ Like envoyé !");
+          }
+          setTimeout(() => setSuccessMessage(null), 3000);
+          resolve();
+        },
+        onError: () => {
+          setSuccessMessage("Erreur lors du like");
+          setTimeout(() => setSuccessMessage(null), 3000);
+          reject();
+        },
+      });
+    });
   };
 
   const handleBlock = async () => {
     if (!userId) return;
     
-    try {
-      const updated = await blockUser(userId);
-      setInteraction(updated);
-      setSuccessMessage("✅ Utilisateur bloqué. Il n'apparaîtra plus dans vos recherches.");
-      
-      // Redirect after 2 seconds
-      setTimeout(() => {
-        window.location.href = "/browsing";
-      }, 2000);
-    } catch (err) {
-      setError("Erreur lors du blocage");
-    }
+    return new Promise<void>((resolve, reject) => {
+      blockProfile(userId, {
+        onSuccess: () => {
+          setSuccessMessage("✅ Utilisateur bloqué. Il n'apparaîtra plus dans vos recherches.");
+          setTimeout(() => {
+            router.push("/browsing");
+            resolve();
+          }, 2000);
+        },
+        onError: () => {
+          setSuccessMessage("Erreur lors du blocage");
+          setTimeout(() => setSuccessMessage(null), 3000);
+          reject();
+        },
+      });
+    });
   };
 
   const handleReport = async () => {
     if (!userId) return;
     
-    try {
-      const updated = await reportUser(userId);
-      setInteraction(updated);
-      setSuccessMessage("✅ Signalement envoyé. Notre équipe examinera ce profil.");
-      setTimeout(() => setSuccessMessage(null), 3000);
-    } catch (err) {
-      setError("Erreur lors du signalement");
-    }
+    return new Promise<void>((resolve, reject) => {
+      reportProfile({ userId }, {
+        onSuccess: () => {
+          setSuccessMessage("✅ Signalement envoyé. Notre équipe examinera ce profil.");
+          setTimeout(() => setSuccessMessage(null), 3000);
+          resolve();
+        },
+        onError: () => {
+          setSuccessMessage("Erreur lors du signalement");
+          setTimeout(() => setSuccessMessage(null), 3000);
+          reject();
+        },
+      });
+    });
   };
 
   const handleMatchModalClose = () => {
@@ -151,14 +142,34 @@ export default function ProfilePage() {
   };
 
   const handleMatchModalLike = (userId: string) => {
-    console.log("Liked user from match modal:", userId);
-    // TODO: Implement like logic
+    likeProfile(userId, {
+      onSuccess: (data) => {
+        if (data.matched) {
+          console.log("It's a match!", userId);
+        }
+      },
+    });
   };
 
   const handleMatchModalPass = (userId: string) => {
+    // Pass logic could be implemented here
     console.log("Passed user from match modal:", userId);
-    // TODO: Implement pass logic
   };
+
+  if (!userId) {
+    return (
+      <div className="h-full overflow-y-auto bg-gray-50 dark:bg-gray-900">
+        <Container size="xl" className="py-8">
+          <div className="space-y-4 max-w-5xl mx-auto">
+            <Alert variant="error">Aucun profil spécifié</Alert>
+            <Button variant="primary" onClick={() => router.push("/browsing")}>
+              Retour à la recherche
+            </Button>
+          </div>
+        </Container>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -174,13 +185,15 @@ export default function ProfilePage() {
     );
   }
 
-  if (error || !profile || !interaction || !userId) {
+  if (error || !profile) {
+    const errorMessage = error ? (error as any)?.response?.data?.error || error.message || "Erreur lors du chargement du profil" : "Profil non trouvé";
+    
     return (
       <div className="h-full overflow-y-auto bg-gray-50 dark:bg-gray-900">
         <Container size="xl" className="py-8">
           <div className="space-y-4 max-w-5xl mx-auto">
-            <Alert variant="error">{error || "Profil non trouvé"}</Alert>
-            <Button variant="primary" onClick={() => (window.location.href = "/browsing")}>
+            <Alert variant="error">{errorMessage}</Alert>
+            <Button variant="primary" onClick={() => router.push("/browsing")}>
               Retour à la recherche
             </Button>
           </div>
@@ -188,8 +201,6 @@ export default function ProfilePage() {
       </div>
     );
   }
-
-  const connectionStatus = getConnectionStatus(userId);
 
   return (
     <div className="h-full w-full overflow-y-auto bg-gray-50 dark:bg-gray-900">
@@ -204,11 +215,11 @@ export default function ProfilePage() {
           {/* Profile View */}
           <ProfileView
             profile={profile}
-            connectionStatus={connectionStatus}
-            isLiked={interaction.likedByMe}
-            isOnline={interaction.isOnline}
-            lastSeenAt={interaction.lastSeenAt}
-            hasProfilePicture={CURRENT_USER_HAS_PROFILE_PICTURE}
+            connectionStatus={(profileData?.isOnline ? 'online' : 'offline') as ConnectionStatus}
+            isLiked={false} // Will be determined by API
+            isOnline={profileData?.isOnline || false}
+            lastSeenAt={profileData?.lastSeen ? new Date(profileData.lastSeen) : undefined}
+            hasProfilePicture={true} // Assuming current user has profile picture
             onToggleLike={handleToggleLike}
             onBlock={handleBlock}
             onReport={handleReport}

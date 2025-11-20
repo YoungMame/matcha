@@ -142,6 +142,8 @@ class UserService {
         id: number;
         email: string;
         username: string;
+        firstName: string;
+        lastName: string;
         profilePictureIndex: number | undefined;
         profilePictures: string[];
         bio: string;
@@ -161,6 +163,8 @@ class UserService {
             id: user.id,
             email: user.email,
             username: user.username,
+            firstName: user.firstName || '',
+            lastName: user.lastName || '',
             profilePictureIndex: user.profilePictureIndex,
             profilePictures: user.profilePictures || [],
             bio: user.bio || '',
