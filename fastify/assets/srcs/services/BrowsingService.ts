@@ -168,14 +168,22 @@ BETWEEN ${filters.age.min} AND ${filters.age.max}
     public async browseUsers(userId: number, limit: number = 5, offset: number = 0, radius: number = 25, filters?: BrowsingFilter, sort?: BrowsingSort): Promise<Array<BrowsingUser>> {
         const user = await this.fastify.userService.getMe(userId);
         const lat = filters?.location?.latitude ?? user.location?.latitude;
-        const lgn = filters?.location?.longitude ?? user.location?.longitude;
+        const lng = filters?.location?.longitude ?? user.location?.longitude;
+        if (filters?.tags && filters.tags.length === 0) {
+            delete filters.tags;
+        }
         const bornAt = user.bornAt;
-        const tags = user.tags;
         const fameRate = user.fameRate;
-        
-        if (lat === undefined || lgn === undefined)
+        const tags = user.tags;
+
+        if (lat === undefined || lng === undefined)
             throw new BadRequestError();
-        const userRows = await this.getUsersFromCoordsAndRadius(userId, lat, lgn, limit, offset, radius, filters);
+        console.log('Browsing users with filters:', filters,);
+        console.log('Lat and Lgn:', lat, lng);
+        console.log('Radius:', radius);
+        console.log('Sort by:', sort);
+        console.log('Limit and Offset:', limit, offset);
+        const userRows = await this.getUsersFromCoordsAndRadius(userId, lat, lng, limit, offset, radius, filters);
         switch (sort) {
             case 'distance':
                 return this.sortByDistance(userRows);

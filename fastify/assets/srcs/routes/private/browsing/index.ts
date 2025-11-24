@@ -11,7 +11,7 @@ export default async function browsingRoutes(fastify: FastifyInstance) {
                     maxAge: { type: 'number', minimum: 18, maximum: 100 },
                     minFame: { type: 'number', minimum: 0, maximum: 1000 },
                     maxFame: { type: 'number', minimum: 0, maximum: 1000 },
-                    tags: { type: 'array', items: { type: 'string' } },
+                    tags: { type: 'string' }, // comma separated tags
                     lat: { type: 'number' },
                     lng: { type: 'number' },
                     radius: { type: 'number', minimum: 0 },
