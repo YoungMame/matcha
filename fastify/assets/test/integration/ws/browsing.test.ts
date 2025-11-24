@@ -53,24 +53,24 @@ describe('Browsing filters and sorting', async () => {
         await setLocalisation(app, token3, 69.854, 2.5522);
 
         const { userData: data4, token: token4 } = await quickUser(app); // #3 Less tags
-        await setTags(app, token4, ['cooking']);
+        await setTags(app, token4, ['music', 'dshsh', 'sdgfgd']);
         await setBirthDate(app, token4, '1996-11-05');
         await setLocalisation(app, token4, 69.9566, 2.3522);
 
-        const { userData: data5, token: token5 } = await quickUser(app); // #4 Too far
+        const { userData: data5, token: token5 } = await quickUser(app); // #7 Too old
         await setTags(app, token5, ['music', 'sport', 'travel', 'art']);
-        await setBirthDate(app, token5, '1995-05-30');
-        await setLocalisation(app, token5, 68.8566, 2.355);
+        await setBirthDate(app, token5, '1970-03-22');
+        await setLocalisation(app, token5, 69.8577, 2.3522);
 
-        const { userData: data6, token: token6 } = await quickUser(app); // #6 No matching tags
-        await setTags(app, token6, ['cooking', 'reading', 'drug', 'gambling', 'alcohol']);
-        await setBirthDate(app, token6, '1960-03-22');
-        await setLocalisation(app, token6, 69.86, 2.3522);
+        const { userData: data6, token: token6 } = await quickUser(app); // #4 Too far
+        await setTags(app, token6, ['cooking', 'reading', 'music']);
+        await setBirthDate(app, token6, '1995-05-30');
+        await setLocalisation(app, token6, 68.8566, 2.955);
 
-        const { userData: data7, token: token7 } = await quickUser(app); // #7 Too old
-        await setTags(app, token7, ['music', 'sport', 'travel', 'art']);
-        await setBirthDate(app, token7, '1970-03-22');
-        await setLocalisation(app, token7, 69.8577, 2.3522);
+        const { userData: data7, token: token7 } = await quickUser(app); // #5 No matching tags + far + old
+        await setTags(app, token7, ['cooking', 'reading', 'drug', 'gambling', 'alcohol']);
+        await setBirthDate(app, token7, '1960-03-22');
+        await setLocalisation(app, token7, 69.86, 2.3522);
 
         const rows = await app.browsingService.browseUsers(data1.id as number, 10, 0, 200, undefined);
         console.log('Rows :', rows);
@@ -78,6 +78,9 @@ describe('Browsing filters and sorting', async () => {
         expect(rows[0].id).to.equal(data2.id);
         expect(rows[1].id).to.equal(data3.id);
         expect(rows[2].id).to.equal(data4.id);
-        expect(rows[3].id).to.equal(data4.id);
+        expect(rows[3].id).to.equal(data5.id);
+        expect(rows[4].id).to.equal(data6.id);
+        expect(rows[4].id).to.equal(data6.id);
+
     });
 });

@@ -82,7 +82,17 @@ BETWEEN ${filters.age.min} AND ${filters.age.max}
             `,
             parameters
         );
-        return result.rows.map(row => {
+        return result.rows.map((row: {
+            id: number;
+            first_name: string;
+            gender: string;
+            tags: Array<string>;
+            fame_rate: number;
+            profile_pictures: Array<string>;
+            profile_picture_index: number;
+            born_at: string;
+            distance: number;
+        }) => {
             const user = {
                 id: row.id as number,
                 firstName: row.first_name as string,
@@ -127,16 +137,19 @@ BETWEEN ${filters.age.min} AND ${filters.age.max}
 
     private sortByAll(userRows: Array<BrowsingUser>, bornAt: Date, userTags: Array<string>, fameRate: number): Array<BrowsingUser> {
         const ageWeight = 0.3;
-        const tagsWeight = 0.4;
-        const fameRateWeight = 0.3;
+        const tagsWeight = 0.2;
+        const fameRateWeight = 0.2;
+        const distanceWeight = 0.3;
         const maxAgeDiff = 10; // years
         const maxFameDiff = 400;
+        const maxDistance = 100;
 
         let scoreMap = new Map<number, number>(); // index to score
 
         userRows.forEach(user => {
             const ageDiff = Math.abs(bornAt.getFullYear() - new Date(user.bornAt).getFullYear());
-            const ageScore = 100 - (ageDiff / maxAgeDiff) * maxAgeDiff;
+
+            const ageScore = 100 - (Math.min(ageDiff, maxAgeDiff) / maxAgeDiff) * 100;
 
             const similarTagsCount = this.getSimilarTagsCount(userTags, user.tags || []);
             const tagsScore = userTags.length > 0 ? (similarTagsCount / userTags.length) * 100 : 0;
@@ -144,11 +157,13 @@ BETWEEN ${filters.age.min} AND ${filters.age.max}
             const fameRateDiff = Math.abs(fameRate - user.fameRate);
             const fameRateScore = 100 - (fameRateDiff / maxFameDiff) * maxFameDiff;
 
-            const totalScore = (ageScore * ageWeight) + (tagsScore * tagsWeight) + (fameRateScore * fameRateWeight);
-            console.log(`User ${user.id} - Age Score: ${ageScore.toFixed(2)}, Tags Score: ${tagsScore.toFixed(2)}, Fame Rate Score: ${fameRateScore.toFixed(2)}, Total Score: ${totalScore.toFixed(2)}`);
+            const distanceScore = 100 - (Math.min(user.distance, maxDistance) / maxDistance) * 100;
+
+            const totalScore = (ageScore * ageWeight) + (tagsScore * tagsWeight) + (fameRateScore * fameRateWeight) + (distanceScore * distanceWeight);
+            console.log(`User ${user.id} - Age Score: ${ageScore.toFixed(2)}, Tags Score: ${tagsScore.toFixed(2)}, Fame Rate Score: ${fameRateScore.toFixed(2)}, Total Score: ${totalScore.toFixed(2)}, Distance Score: ${distanceScore.toFixed(2)}`);
             scoreMap.set(user.id, totalScore);
         })
-        return userRows.sort((a, b) => (scoreMap.get(b.id) ?? 0) - (scoreMap.get(a.id) ?? 0));
+        return userRows.sort((a, b) => (scoreMap.get(b.id) || 0) - (scoreMap.get(a.id) || 0));
     }
 
     public async browseUsers(userId: number, limit: number = 5, offset: number = 0, radius: number = 25, filters?: BrowsingFilter, sort?: BrowsingSort): Promise<Array<BrowsingUser>> {
