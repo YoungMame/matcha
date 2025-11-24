@@ -13,6 +13,9 @@ export interface CompleteProfileRequest {
 }
 
 export interface UpdateProfileRequest {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
   bio?: string;
   tags?: string[];
   gender?: 'men' | 'women';

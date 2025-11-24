@@ -57,6 +57,34 @@ export function useUploadProfilePicture() {
 }
 
 /**
+ * Hook for deleting profile picture
+ */
+export function useDeleteProfilePicture() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (index: number) => profileApi.deleteProfilePicture(index),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+    },
+  });
+}
+
+/**
+ * Hook for setting main profile picture
+ */
+export function useSetProfilePictureIndex() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (index: number) => profileApi.setProfilePictureIndex(index),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+    },
+  });
+}
+
+/**
  * Hook for fetching current user's profile
  */
 export function useMyProfile() {

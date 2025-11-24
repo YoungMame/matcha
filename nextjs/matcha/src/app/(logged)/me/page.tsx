@@ -7,16 +7,23 @@ import Typography from "@/components/common/Typography";
 import Button from "@/components/common/Button";
 import Alert from "@/components/common/Alert";
 import TextField from "@/components/common/TextField";
-import { useMyProfile, useUpdateProfile } from "@/hooks/useProfile";
+import { useMyProfile, useUpdateProfile, useUploadProfilePicture, useDeleteProfilePicture, useSetProfilePictureIndex } from "@/hooks/useProfile";
 import InterestsStep from "@/components/onboarding/steps/InterestsStep";
 
 export default function MyProfilePage() {
   const router = useRouter();
   const { data: profile, isLoading, error } = useMyProfile();
   const { mutate: updateProfile, isPending: isUpdating } = useUpdateProfile();
+  const { mutate: uploadPicture, isPending: isUploading } = useUploadProfilePicture();
+  const { mutate: deletePicture, isPending: isDeleting } = useDeleteProfilePicture();
+  const { mutate: setMainPicture, isPending: isSettingMain } = useSetProfilePictureIndex();
 
   const [isEditing, setIsEditing] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
     bio: "",
     tags: [] as string[],
     gender: "",
@@ -27,6 +34,9 @@ export default function MyProfilePage() {
   useEffect(() => {
     if (profile) {
       setFormData({
+        firstName: profile.firstName || "",
+        lastName: profile.lastName || "",
+        email: profile.email || "",
         bio: profile.bio || "",
         tags: profile.tags || [],
         gender: profile.gender || "",
@@ -37,8 +47,29 @@ export default function MyProfilePage() {
   }, [profile]);
 
   const handleSave = () => {
+    setValidationError(null);
+    
+    if (formData.tags.length < 3) {
+      setValidationError("Vous devez sélectionner au moins 3 centres d'intérêt.");
+      return;
+    }
+
+    if (formData.bio.trim().length < 50) {
+      setValidationError("Votre bio doit contenir au moins 50 caractères.");
+      return;
+    }
+
+    if (!formData.firstName.trim() || !formData.lastName.trim() || !formData.email.trim()) {
+      setValidationError("Veuillez remplir tous les champs obligatoires (Prénom, Nom, Email).");
+      return;
+    }
+
     updateProfile({
       ...formData,
+      firstName: formData.firstName.trim(),
+      lastName: formData.lastName.trim(),
+      email: formData.email.trim(),
+      bio: formData.bio.trim(),
       gender: formData.gender as "men" | "women",
       orientation: formData.orientation as "heterosexual" | "homosexual" | "bisexual" | "other",
       bornAt: formData.bornAt ? new Date(formData.bornAt).toISOString() : undefined,
@@ -50,8 +81,12 @@ export default function MyProfilePage() {
   };
 
   const handleCancel = () => {
+    setValidationError(null);
     if (profile) {
       setFormData({
+        firstName: profile.firstName || "",
+        lastName: profile.lastName || "",
+        email: profile.email || "",
         bio: profile.bio || "",
         tags: profile.tags || [],
         gender: profile.gender || "",
@@ -141,6 +176,10 @@ export default function MyProfilePage() {
             </div>
           </div>
 
+          {validationError && (
+            <Alert variant="error">{validationError}</Alert>
+          )}
+
           {/* Profile Card */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
             {/* Profile Picture */}
@@ -158,17 +197,26 @@ export default function MyProfilePage() {
             <div className="p-6 space-y-6">
               {/* Basic Info */}
               <div>
-                <Typography variant="h2" color="primary" className="mb-2">
-                  {profile.firstName} {profile.lastName}, {calculateAge(profile.bornAt)}
-                </Typography>
-                <Typography variant="body" color="secondary">
-                  @{profile.username}
-                </Typography>
-                <Typography variant="body" color="secondary">
-                  {profile.email}
-                </Typography>
-                {isEditing && (
-                  <div className="mt-4">
+                {isEditing ? (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <TextField
+                        label="Prénom"
+                        value={formData.firstName}
+                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                      />
+                      <TextField
+                        label="Nom"
+                        value={formData.lastName}
+                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                      />
+                    </div>
+                    <TextField
+                      label="Email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    />
                     <TextField
                       label="Date de naissance"
                       type="date"
@@ -176,6 +224,18 @@ export default function MyProfilePage() {
                       onChange={(e) => setFormData({ ...formData, bornAt: e.target.value })}
                     />
                   </div>
+                ) : (
+                  <>
+                    <Typography variant="h2" color="primary" className="mb-2">
+                      {profile.firstName} {profile.lastName}, {calculateAge(profile.bornAt)}
+                    </Typography>
+                    <Typography variant="body" color="secondary">
+                      @{profile.username}
+                    </Typography>
+                    <Typography variant="body" color="secondary">
+                      {profile.email}
+                    </Typography>
+                  </>
                 )}
               </div>
 
@@ -303,20 +363,46 @@ export default function MyProfilePage() {
                 </div>
               )}
 
-              {/* Additional Photos */}
-              {profile.profilePictures && profile.profilePictures.length > 1 && (
+              {/* Photos Management */}
+              {(isEditing || (profile.profilePictures && profile.profilePictures.length > 0)) && (
                 <div>
-                  <Typography variant="h3" color="primary" className="mb-3">
-                    Photos ({profile.profilePictures.length})
-                  </Typography>
-                  <div className="grid grid-cols-3 gap-3">
-                    {profile.profilePictures.map((pic: string, index: number) => (
+                  <div className="flex items-center justify-between mb-3">
+                    <Typography variant="h3" color="primary">
+                      Photos ({profile.profilePictures?.length || 0})
+                    </Typography>
+                    {isEditing && (profile.profilePictures?.length || 0) < 5 && (
+                      <label className="cursor-pointer">
+                        <input
+                          type="file"
+                          className="hidden"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              if (file.size > 5 * 1024 * 1024) {
+                                setValidationError("L'image ne doit pas dépasser 5MB");
+                                return;
+                              }
+                              uploadPicture(file);
+                            }
+                          }}
+                          disabled={isUploading}
+                        />
+                        <span className="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600 transition-colors text-sm font-medium inline-block">
+                          {isUploading ? "Ajout..." : "Ajouter une photo"}
+                        </span>
+                      </label>
+                    )}
+                  </div>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {profile.profilePictures?.map((pic: string, index: number) => (
                       <div
                         key={index}
-                        className={`relative aspect-square rounded-lg overflow-hidden ${
+                        className={`relative aspect-square rounded-lg overflow-hidden group ${
                           index === profile.profilePictureIndex
                             ? 'ring-4 ring-pink-500'
-                            : ''
+                            : 'border border-gray-200 dark:border-gray-700'
                         }`}
                       >
                         <img
@@ -324,11 +410,39 @@ export default function MyProfilePage() {
                           alt={`Photo ${index + 1}`}
                           className="w-full h-full object-cover"
                         />
+                        
+                        {/* Main Photo Indicator */}
                         {index === profile.profilePictureIndex && (
-                          <div className="absolute top-2 right-2 bg-pink-500 text-white rounded-full p-1">
+                          <div className="absolute top-2 right-2 bg-pink-500 text-white rounded-full p-1 shadow-md z-10">
                             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                             </svg>
+                          </div>
+                        )}
+
+                        {/* Edit Controls */}
+                        {isEditing && (
+                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2">
+                            {index !== profile.profilePictureIndex && (
+                              <Button
+                                variant="secondary"
+                                size="small"
+                                onClick={() => setMainPicture(index)}
+                                disabled={isSettingMain}
+                                className="w-full text-xs"
+                              >
+                                Définir principale
+                              </Button>
+                            )}
+                            <Button
+                              variant="outline"
+                              size="small"
+                              onClick={() => deletePicture(index)}
+                              disabled={isDeleting}
+                              className="w-full text-xs bg-white text-red-500 border-red-500 hover:bg-red-50"
+                            >
+                              Supprimer
+                            </Button>
                           </div>
                         )}
                       </div>

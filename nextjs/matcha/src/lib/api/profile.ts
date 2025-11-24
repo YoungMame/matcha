@@ -44,6 +44,20 @@ export const profileApi = {
   },
 
   /**
+   * Delete profile picture
+   */
+  deleteProfilePicture: async (index: number): Promise<void> => {
+    await axios.delete(`/api/private/user/me/profile-picture/${index}`);
+  },
+
+  /**
+   * Set profile picture as main (index)
+   */
+  setProfilePictureIndex: async (index: number): Promise<void> => {
+    await axios.put(`/api/private/user/me/profile-picture/${index}`);
+  },
+
+  /**
    * Get current user profile
    */
   getMyProfile: async (): Promise<any> => {

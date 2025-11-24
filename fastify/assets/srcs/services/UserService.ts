@@ -208,10 +208,12 @@ class UserService {
         return jwt;
     }
 
-    async updateUserProfile(id: number, profile: { bio?: string, tags?: string[], gender?: string, orientation?: string, bornAt?: Date }): Promise<void> {
+    async updateUserProfile(id: number, profile: { firstName?: string, lastName?: string, email?: string, bio?: string, tags?: string[], gender?: string, orientation?: string, bornAt?: Date }): Promise<void> {
         const user = await this.getUser(id);
         if (!user)
             throw new NotFoundError();
+        if (profile.tags && profile.tags.length < 3)
+            throw new BadRequestError('You must have at least 3 interests');
         await this.userModel.update(id, profile);
     }
 
@@ -249,14 +251,27 @@ class UserService {
         const user = await this.getUser(id);
         if (!user)
             throw new NotFoundError();
-        const pictureToRemove = user.profilePicture && user.profilePictures[pictureIndex];
+        if (user.profilePictures.length <= 1)
+            throw new BadRequestError('Cannot delete the last profile picture');
+        const pictureToRemove = user.profilePictures && user.profilePictures[pictureIndex];
         if (!pictureToRemove)
             throw new NotFoundError();
-        const pictureUploadName = pictureToRemove.split('/uploads/')[1];
-        if (!pictureUploadName)
-            throw new NotFoundError();
-        const picturePath = path.join(__dirname, '..', '..', 'uploads', pictureUploadName);
-        fs.unlinkSync(picturePath);
+        
+        const parts = pictureToRemove.split('/uploads/');
+        if (parts.length >= 2) {
+            const pictureUploadName = parts[1];
+            if (pictureUploadName) {
+                const picturePath = path.join(__dirname, '..', '..', 'uploads', pictureUploadName);
+                if (fs.existsSync(picturePath)) {
+                    try {
+                        fs.unlinkSync(picturePath);
+                    } catch (err) {
+                        console.error(`Failed to delete file ${picturePath}:`, err);
+                    }
+                }
+            }
+        }
+
         user.profilePictures = user.profilePictures.filter((_, index) => index !== pictureIndex);
         if (user.profilePictureIndex !== undefined) {
             if (pictureIndex < user.profilePictureIndex) {

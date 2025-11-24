@@ -7,7 +7,10 @@ const profileRoutes = async (fastify: FastifyInstance) => {
             body: {
                 type: 'object',
                 properties: {
-                    bio: { type: 'string', minLength: 2, maxLength: 100 },
+                    firstName: { type: 'string' },
+                    lastName: { type: 'string' },
+                    email: { type: 'string', format: 'email' },
+                    bio: { type: 'string', minLength: 50, maxLength: 100 },
                     tags: { type: 'array', items: { type: 'string' }, minItems: 1 },
                     gender: { type: 'string', enum: ['men', 'women'] },
                     orientation: { type: 'string', enum: ['heterosexual', 'homosexual', 'bisexual', 'other'] },
