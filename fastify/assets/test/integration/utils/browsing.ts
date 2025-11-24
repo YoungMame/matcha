@@ -60,7 +60,6 @@ export const setBirthDate = async (app: FastifyInstance, token: string, birthdat
             bornAt: new Date(birthdate).toISOString()
         }
     });
-    console.log(response.statusCode);
 }
 
 export const getAgeDifference = (birthdate1: string, birthdate2: string): number => {

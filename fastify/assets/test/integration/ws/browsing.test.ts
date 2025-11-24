@@ -9,6 +9,20 @@ import { quickUser } from '../fixtures/auth.fixtures';
 // import utils
 import { setTags, setLocalisation, setBirthDate, likeUser, viewUser, getAgeDifference } from '../utils/browsing';
 
+async function browseUsers(app: FastifyInstance, token: string, params: any) {
+    const url = `/private/browsing/${params.minAge || 18}/${params.maxAge || 100}/${params.minFame || 0}/${params.maxFame || 1000}/${(params.tags || []).join(',')}/${params.lat || 1000}/${params.lng || 1000}/${params.radius || 30}/${params.sortBy || 'default'}`;
+    const response = await app.inject({
+        method: 'GET',
+        headers: {
+            Cookie: `jwt=${token}`
+        },
+        url: url,
+    });
+    console.log('Url:', url);
+    console.log('Browse users response:', response.body);
+    return JSON.parse(response.body).users;
+}
+
 describe('Browsing filters and sorting', async () => {
     let app: FastifyInstance;
 
@@ -72,15 +86,24 @@ describe('Browsing filters and sorting', async () => {
         await setBirthDate(app, token7, '1960-03-22');
         await setLocalisation(app, token7, 69.86, 2.3522);
 
-        const rows = await app.browsingService.browseUsers(data1.id as number, 10, 0, 200, undefined);
-        console.log('Rows :', rows);
+        const users = await browseUsers(app, token1, {
+            minAge: 18,
+            maxAge: 40,
+            minFame: 0,
+            maxFame: 1000,
+            tags: ['music', 'sport', 'travel', 'art'],
+            lat: 69.8566,
+            lng: 2.3522,
+            radius: 100,
+            sortBy: 'default'
+        });
+        console.log('Rows :', users);
 
-        expect(rows[0].id).to.equal(data2.id);
-        expect(rows[1].id).to.equal(data3.id);
-        expect(rows[2].id).to.equal(data4.id);
-        expect(rows[3].id).to.equal(data5.id);
-        expect(rows[4].id).to.equal(data6.id);
-        expect(rows[4].id).to.equal(data6.id);
-
+        expect(users[0].id).to.equal(data2.id);
+        expect(users[1].id).to.equal(data3.id);
+        expect(users[2].id).to.equal(data4.id);
+        expect(users[3].id).to.equal(data5.id);
+        expect(users[4].id).to.equal(data6.id);
+        expect(users[5].id).to.equal(data7.id);
     });
 });

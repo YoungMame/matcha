@@ -155,7 +155,6 @@ describe('Browsing filters and sorting', () => {
         await setTags(app, token5, ['gaming', 'photography', 'art']);
 
         const rows = await app.browsingService.browseUsers(data1.id as number, 10, 0, 50, undefined, 'tags');
-        console.log(rows);
         
         for (let i = 0; i < rows.length - 1; i++) {
             const countCurrent = rows[i].tags.filter((tag: string) => ['music', 'sports', 'art'].includes(tag)).length;
@@ -186,7 +185,6 @@ describe('Browsing filters and sorting', () => {
         await setTags(app, token5, ['gaming', 'photography', 'gambling']);
 
         const rows = await app.browsingService.browseUsers(data1.id as number, 10, 0, 50, { tags: ['music'] });
-        console.log(rows);
         
         for (let i = 0; i < rows.length - 1; i++) {
             expect(rows[i].tags).to.include('music');
@@ -225,7 +223,6 @@ describe('Browsing filters and sorting', () => {
         await setBirthDate(app, token5, less33YearsAgo.toISOString());
 
         const rows = await app.browsingService.browseUsers(data1.id as number, 10, 0, 50, { age: { min: 34, max: 39 } });
-        console.log(rows);
 
         for (let i = 0; i < rows.length - 1; i++) {
             const age = new Date().getFullYear() - new Date(rows[i].bornAt).getFullYear();
@@ -266,7 +263,6 @@ describe('Browsing filters and sorting', () => {
         await setBirthDate(app, token5, less33YearsAgo.toISOString());
 
         const rows = await app.browsingService.browseUsers(data1.id as number, 10, 0, 50, { age: { min: 34, max: 39 } });
-        console.log(rows);
 
         for (let i = 0; i < rows.length - 1; i++) {
             const age = new Date().getFullYear() - new Date(rows[i].bornAt).getFullYear();

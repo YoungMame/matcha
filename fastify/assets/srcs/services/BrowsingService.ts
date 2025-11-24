@@ -127,7 +127,6 @@ BETWEEN ${filters.age.min} AND ${filters.age.max}
     }
 
     private sortByFameRate(userRows: Array<BrowsingUser>): Array<BrowsingUser> {
-        console.log('sortByFameRate called with:', userRows);
         return userRows.sort((a, b) => b.fameRate - a.fameRate);
     }
 
