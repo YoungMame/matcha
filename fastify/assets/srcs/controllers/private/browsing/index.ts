@@ -16,14 +16,15 @@ export const browseUsersHandler = async (request: FastifyRequest, reply: Fastify
             sortBy,
             offset,
             limit
-        } = request.params as { minAge: number, maxAge: number, minFame: number, maxFame: number, tags: string[], lat: number, lng: number, radius: number, sortBy: string, offset: number, limit: number };
+        } = request.params as { minAge: number, maxAge: number, minFame: number, maxFame: number, tags: string, lat: number, lng: number, radius: number, sortBy: string, offset: number, limit: number };
 
         if (!request.user?.id)
             throw new UnauthorizedError();
+        const tagsArray = tags ? tags.split(',') : [];
         let requestFilters: BrowsingFilter = {
             age: { min: minAge, max: maxAge },
             fameRate: { min: minFame, max: maxFame },
-            tags: tags
+            tags: tagsArray
         };
         if (!(lat < -90 || lat > 90 || lng < -180 || lng > 180))
             requestFilters.location = { latitude: lat, longitude: lng };

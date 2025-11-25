@@ -94,7 +94,7 @@ export const quickUser = async (app: FastifyInstance): Promise<{ userData: UserD
         bio: `Nice description for quick user ${concat}`,
         tags: ['quick', 'test', 'user'],
         bornAt: '2000-01-01',
-        orientation: 'heterosexual',
+        orientation: 'bisexual',
         gender: 'men'
     };
     const token = await signUpAndGetToken(app, userData);

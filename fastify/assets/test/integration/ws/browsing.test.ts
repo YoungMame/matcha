@@ -4,10 +4,14 @@ import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
 
 // import fixtures
-import { quickUser } from '../fixtures/auth.fixtures';
+import { quickUser, signUpAndGetToken } from '../fixtures/auth.fixtures';
 
 // import utils
 import { setTags, setLocalisation, setBirthDate, likeUser, viewUser, getAgeDifference } from '../utils/browsing';
+import path from 'node:path';
+import fs from 'node:fs';
+import FormData from 'form-data';
+import { create } from 'node:domain';
 
 async function browseUsers(app: FastifyInstance, token: string, params: any) {
     const url = `/private/browsing/${params.minAge || 18}/${params.maxAge || 100}/${params.minFame || 0}/${params.maxFame || 1000}/${(params.tags || []).join(',')}/${params.lat || 1000}/${params.lng || 1000}/${params.radius || 30}/${params.sortBy || 'default'}`;
@@ -18,9 +22,43 @@ async function browseUsers(app: FastifyInstance, token: string, params: any) {
         },
         url: url,
     });
-    console.log('Url:', url);
-    console.log('Browse users response:', response.body);
     return JSON.parse(response.body).users;
+}
+
+async function createUserWithProfile(app: FastifyInstance, username: string, email: string, password: string, firstName: string, lastName: string, bio: string, tags: string[], bornAt: string, orientation: string, gender: string): Promise<string> {
+    const token = await signUpAndGetToken(app, {
+        username: username,
+        email: email,
+        password: password,
+        firstName: firstName,
+        lastName: lastName,
+        bio: bio,
+        tags: tags,
+        bornAt: bornAt,
+        orientation: orientation,
+        gender: gender
+    });
+    if (!token) throw new Error('Failed to create browsing test user 1');
+    await setLocalisation(app, token, 69.8566, 2.3522);     
+    
+    const form = new FormData();
+    const filePath = path.join(__dirname, '../../files/test.jpg');
+    form.append('file', fs.createReadStream(filePath), {
+        filename: 'test.jpg',
+        contentType: 'image/jpeg'
+    });
+
+    const headers = form.getHeaders();
+    headers['Cookie'] = `jwt=${token}`;
+
+    await app.inject({
+        method: 'POST',
+        url: '/private/user/me/profile-picture',
+        headers,
+        payload: form
+    });
+
+    return token;
 }
 
 describe('Browsing filters and sorting', async () => {
@@ -48,12 +86,7 @@ describe('Browsing filters and sorting', async () => {
 
     it('should be able to give the best corresponding users', async function (this: any) {
         this.timeout(5000);
-        const { userData: data1, token: token1 } = await quickUser(app);
-
-        // Build my user profile
-        await setTags(app, token1, ['music', 'sport', 'travel', 'art']);
-        await setBirthDate(app, token1, '1995-06-15');
-        await setLocalisation(app, token1, 69.8566, 2.3522);
+        const token1 = await createUserWithProfile(app, 'browsingtestuser1', 'browsingtestuser1@gmail.com', 'Test@1234!fjfsfas', 'Browsing', 'TestUser1', 'I am browsing test user 1', ['music', 'sport', 'travel', 'art'], '1995-06-15', 'heterosexual', 'women');
 
         // Build corresponding users
         const { userData: data2, token: token2 } = await quickUser(app); // #1 Perfect match
@@ -88,16 +121,14 @@ describe('Browsing filters and sorting', async () => {
 
         const users = await browseUsers(app, token1, {
             minAge: 18,
-            maxAge: 40,
+            maxAge: 100,
             minFame: 0,
             maxFame: 1000,
-            tags: ['music', 'sport', 'travel', 'art'],
             lat: 69.8566,
             lng: 2.3522,
-            radius: 100,
+            radius: 300,
             sortBy: 'default'
         });
-        console.log('Rows :', users);
 
         expect(users[0].id).to.equal(data2.id);
         expect(users[1].id).to.equal(data3.id);

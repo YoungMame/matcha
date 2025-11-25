@@ -54,7 +54,7 @@ class BrowsingService {
         this.UsersCache = new Map<number, User>();
     }
 
-    private async getUsersFromCoordsAndRadius(userId: number, lat: number, lgn: number, limit: number, offset: number, radius: number, filters?: BrowsingFilter): Promise<Array<BrowsingUser>> {
+    private async getUsersFromCoordsAndRadius(userId: number, lat: number, lgn: number, limit: number, offset: number, radius: number, gender?: string, filters?: BrowsingFilter): Promise<Array<BrowsingUser>> {
         let parameters: Array<string | number | Array<string>> = [lat, lgn, radius, userId, limit, offset];
         if (filters?.tags && filters.tags.length > 0) {
             parameters.push(filters.tags);
@@ -78,6 +78,7 @@ BETWEEN ${filters.age.min} AND ${filters.age.max}
             ` : ''}
             ${filters?.fameRate ? `AND u.fame_rate BETWEEN ${filters.fameRate.min} AND ${filters.fameRate.max}` : ''}
             ${filters?.tags && filters.tags.length > 0 ? `AND u.tags @> $7::text[]` : ''}
+            ${gender ? `AND u.gender = '${gender}'` : ''}
             LIMIT $5 OFFSET $6
             `,
             parameters
@@ -159,7 +160,7 @@ BETWEEN ${filters.age.min} AND ${filters.age.max}
             const distanceScore = 100 - (Math.min(user.distance, maxDistance) / maxDistance) * 100;
 
             const totalScore = (ageScore * ageWeight) + (tagsScore * tagsWeight) + (fameRateScore * fameRateWeight) + (distanceScore * distanceWeight);
-            console.log(`User ${user.id} - Age Score: ${ageScore.toFixed(2)}, Tags Score: ${tagsScore.toFixed(2)}, Fame Rate Score: ${fameRateScore.toFixed(2)}, Total Score: ${totalScore.toFixed(2)}, Distance Score: ${distanceScore.toFixed(2)}`);
+            // console.log(`User ${user.id} - Age Score: ${ageScore.toFixed(2)}, Tags Score: ${tagsScore.toFixed(2)}, Fame Rate Score: ${fameRateScore.toFixed(2)}, Total Score: ${totalScore.toFixed(2)}, Distance Score: ${distanceScore.toFixed(2)}`);
             scoreMap.set(user.id, totalScore);
         })
         return userRows.sort((a, b) => (scoreMap.get(b.id) || 0) - (scoreMap.get(a.id) || 0));
@@ -178,12 +179,13 @@ BETWEEN ${filters.age.min} AND ${filters.age.max}
 
         if (lat === undefined || lng === undefined)
             throw new BadRequestError();
-        console.log('Browsing users with filters:', filters,);
-        console.log('Lat and Lgn:', lat, lng);
-        console.log('Radius:', radius);
-        console.log('Sort by:', sort);
-        console.log('Limit and Offset:', limit, offset);
-        const userRows = await this.getUsersFromCoordsAndRadius(userId, lat, lng, limit, offset, radius, filters);
+        let gender: string | undefined = undefined;
+        if (user.orientation === 'heterosexual') {
+            gender = user.gender === 'men' ? 'women' : 'men';
+        } else if (user.orientation === 'homosexual') {
+            gender = user.gender;
+        }
+        const userRows = await this.getUsersFromCoordsAndRadius(userId, lat, lng, limit, offset, radius, gender, filters);
         switch (sort) {
             case 'distance':
                 return this.sortByDistance(userRows);
