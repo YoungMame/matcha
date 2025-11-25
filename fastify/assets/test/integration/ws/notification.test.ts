@@ -1,7 +1,7 @@
 import chai from 'chai';
 import { expect } from 'chai';
-import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
+import { app } from '../../setup';
 
 // import fixtures
 import { quickUser } from '../fixtures/auth.fixtures';
@@ -9,12 +9,6 @@ import { quickUser } from '../fixtures/auth.fixtures';
 import { wait } from '../utils/wait';
 
 describe('Notification', () => {
-    let app: FastifyInstance;
-
-    beforeEach(async () => {
-        app = buildApp();
-        await app.ready();
-    });
 
     it('should be able to get notifications on like and like back and unlike', async function (this: any) {
         this.timeout(5000);

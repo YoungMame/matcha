@@ -11,6 +11,9 @@ CREATE TABLE if not exists users (
 -- Email Verification
     is_verified BOOLEAN DEFAULT FALSE,
 
+-- Provider
+    provider VARCHAR(50) DEFAULT 'local', -- e.g., 'local', 'facebook', etc.
+
 -- Profile completion fields
     first_name VARCHAR(255),
     last_name VARCHAR(255),

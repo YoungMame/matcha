@@ -12,12 +12,33 @@ const setGeoloc = async (fastify: FastifyInstance, userId: number, ip: string) =
             fastify.log.warn('IPSTACK_API_KEY is not set; skipping geolocation lookup');
             return;
         }
-        const response = await fetch(`https://api.ipstack.com/${ip}?access_key=${apiKey}&hostname=1`);
-        if (response.ok)
+        if (process.env.NODE_ENV !== 'test')
         {
-            const data = await response.json();
-            if (data.latitude && data.longitude)
+            const response = await fetch(`https://api.ipstack.com/${ip}?access_key=${apiKey}&hostname=1`);
+            if (response.ok)
+            {
+                const data = await response.json();
+                if (data.latitude && data.longitude)
+                    await fastify.userService.updateUserLocation(userId, data.latitude, data.longitude);
+            }
+            else if (response.status == 429 && process.env.NODE_ENV !== 'prod')
+            {
+                console.log('IPStack API rate limit reached');
+                const data = {
+                    latitude: 42.424242,
+                    longitude: 42.424242
+                }
                 await fastify.userService.updateUserLocation(userId, data.latitude, data.longitude);
+            }
+        }
+        else
+        {
+            // In test environment, set a fixed location
+            const data = {
+                latitude: 42.424242,
+                longitude: 42.424242
+            }
+            await fastify.userService.updateUserLocation(userId, data.latitude, data.longitude);
         }
     }
 }

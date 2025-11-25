@@ -1,18 +1,12 @@
 import chai from 'chai';
 import { expect } from 'chai';
-import { buildApp } from '../../../srcs/app';
+import { app } from '../../setup';
 import { FastifyInstance } from 'fastify';
 
 // import fixtures
 import { quickUser } from '../fixtures/auth.fixtures';
 
 describe('Websocket like test', () => {
-    let app: FastifyInstance;
-
-    beforeEach(async () => {
-        app = buildApp();
-        await app.ready();
-    });
 
     it('should get connected to ws and deliver a like to the target user then unlike', async function (this: any) {
         this.timeout(5000);

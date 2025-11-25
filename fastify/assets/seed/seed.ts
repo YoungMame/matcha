@@ -30,31 +30,31 @@ function parseTags(s: string) {
   return s.split(',').map(t => t.trim()).filter(Boolean);
 }
 
-async function waitForDbReady(retries = 60, delayMs = 2000) {
-  for (let i = 0; i < retries; i++) {
-    const probeClient = new Client({
-      host: process.env.PGHOST || 'db',
-      port: Number(process.env.PGPORT || 5432),
-      user: process.env.PGUSER || process.env.POSTGRES_USER,
-      database: process.env.PGDB || process.env.POSTGRES_DB,
-      password: process.env.PGPASSWORD || process.env.POSTGRES_PASSWORD,
-      connectionTimeoutMillis: 2000,
-    });
-    try {
-      await probeClient.connect();
-      await probeClient.end();
-      console.log('DB ready');
-      return;
-    } catch (err: any) {
-      console.log(`DB not ready (${i + 1}/${retries}): ${err.message}`);
-      await new Promise(res => setTimeout(res, delayMs));
-    }
-  }
-  throw new Error('DB did not become ready');
-}
+// async function waitForDbReady(retries = 60, delayMs = 2000) {
+//   for (let i = 0; i < retries; i++) {
+//     const probeClient = new Client({
+//       host: process.env.PGHOST || 'db',
+//       port: Number(process.env.PGPORT || 5432),
+//       user: process.env.PGUSER || process.env.POSTGRES_USER,
+//       database: process.env.PGDB || process.env.POSTGRES_DB,
+//       password: process.env.PGPASSWORD || process.env.POSTGRES_PASSWORD,
+//       connectionTimeoutMillis: 2000,
+//     });
+//     try {
+//       await probeClient.connect();
+//       await probeClient.end();
+//       console.log('DB ready');
+//       return;
+//     } catch (err: any) {
+//       console.log(`DB not ready (${i + 1}/${retries}): ${err.message}`);
+//       await new Promise(res => setTimeout(res, delayMs));
+//     }
+//   }
+//   throw new Error('DB did not become ready');
+// }
 
 async function seed() {
-    await waitForDbReady();
+    // await waitForDbReady();
     console.log("Database is ready, proceeding with seed...");
     await client.connect();
     try {
@@ -104,13 +104,13 @@ async function seed() {
                 if (!id) return; // skip if user still missing
                 const [lat, lon] = u.location.split(',').map(s => parseFloat(s.trim()));
                 const base = locValues.length + 1;
-                locValues.push(id, lat, lon, 'Paris', 'Le Havre'); // city and country as '...' for seed
+                locValues.push(id, lat, lon, 'Paris', 'France'); // city and country as '...' for seed
                 locRows.push(`($${base}, $${base + 1}, $${base + 2}, $${base + 3}, $${base + 4})`);
             });
 
             if (locRows.length > 0) {
                 const insertLocSql = `
-                INSERT INTO locations (user_id, latitude, longitude, city, longitude)
+                INSERT INTO locations (user_id, latitude, longitude, city, country)
                 VALUES ${locRows.join(',')}
                 `;
                 await client.query(insertLocSql, locValues);

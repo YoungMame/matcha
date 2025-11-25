@@ -19,6 +19,8 @@ import browsingService from './services/BrowsingService'
 // import custom plugins
 import authenticate from './plugins/authenticate'
 import checkImageConformity from './plugins/checkImageConformity'
+// import oauthPlugins from './plugins/oAuth/*'
+import facebookOAuth from './plugins/oAuth/facebook'
 
 export const buildApp = () => {
     const app = Fastify({
@@ -27,6 +29,10 @@ export const buildApp = () => {
 
     app.get('/debug', async () => {
         return { message: 'Debug route working' };
+    });
+
+    app.get('/health', async (request, reply) => {
+        return reply.send({ status: 'ok' });
     });
 
     app.register(multipart, {
@@ -89,6 +95,8 @@ export const buildApp = () => {
         secret: process.env.COOKIE_SECRET, // for cookies signature
         parseOptions: {}  // options for parsing cookies
     } as FastifyCookieOptions);
+
+    app.register(facebookOAuth);
 
     app.setErrorHandler((err: FastifyError, request: FastifyRequest, reply) => {
         if (err.validation) {

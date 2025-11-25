@@ -1,6 +1,6 @@
 import chai from 'chai';
 import { expect } from 'chai';
-import { buildApp } from '../../../srcs/app';
+import { app } from '../../setup';
 import { FastifyInstance } from 'fastify';
 
 // import fixtures
@@ -73,12 +73,6 @@ async function createUserWithProfile(app: FastifyInstance, username: string, ema
 }
 
 describe('Browsing filters and sorting', async () => {
-    let app: FastifyInstance;
-
-    beforeEach(async () => {
-        app = buildApp();
-        await app.ready();
-    });
 
     it('should be able get near users', async function (this: any) {
         this.timeout(5000);

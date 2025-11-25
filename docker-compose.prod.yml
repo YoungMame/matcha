@@ -17,6 +17,8 @@ services:
       IPSTACK_API_KEY: ${IPSTACK_API_KEY}
       GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY}
       DOMAIN: matcha.fr
+      FACEBOOK_CLIENT_ID: ${FACEBOOK_CLIENT_ID}
+      FACEBOOK_CLIENT_SECRET: ${FACEBOOK_CLIENT_SECRET}
     restart: on-failure
     build: 
         context: ./fastify

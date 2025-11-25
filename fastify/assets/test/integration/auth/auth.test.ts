@@ -1,10 +1,11 @@
 import chai from 'chai';
 import { expect } from 'chai';
-import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
 
 // import fixtures
 import { signUpAndGetToken, UserData } from '../fixtures/auth.fixtures';
+
+import { app } from '../../setup';
 
 const testWeakPassword = async (app: FastifyInstance, passwordToTest: string) => {
     const signUpResponse = await app.inject({
@@ -34,13 +35,6 @@ const login = async(app: FastifyInstance, email: string, password: string) => {
 }
 
 describe('Auth Integration Tests', () => {
-    let app: FastifyInstance;
-
-    beforeEach(async () => {
-        app = buildApp();
-        await app.ready();
-    });
-
     it('should sign up a new user and login', async () => {
         const userData: UserData = {
             username: 'testuser1',

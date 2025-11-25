@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { buildApp } from '../../../srcs/app';
+import { app } from '../../setup';
 import { FastifyInstance } from 'fastify';
 
 // import fixtures
@@ -20,12 +20,6 @@ function getMessages(app: FastifyInstance, chatId: number, userToken: string, fr
 
 
 describe('Chat test', () => {
-    let app: FastifyInstance;
-
-    beforeEach(async () => {
-        app = buildApp();
-        await app.ready();
-    });
 
     it('should not get connected if not in chat', async function (this: any) {
         this.timeout(5000);

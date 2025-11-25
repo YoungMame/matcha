@@ -151,7 +151,7 @@ export default class UserModel {
             );
             if (rows.rows.length === 0)
             {
-                await this.fastify.pg.query(
+                const result = await this.fastify.pg.query(
                     `INSERT INTO locations (user_id, latitude, longitude, city, country) VALUES (${id}, ${location.latitude}, ${location.longitude}, \'${location.city}\', \'${location.country}\');`,
                 );
                 return;
