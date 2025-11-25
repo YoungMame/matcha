@@ -15,6 +15,7 @@ import chatServicePlugin from './services/ChatService'
 import mailServicePlugin from './services/MailService'
 import notificationService from './services/NotificationsServices'
 import reportService from './services/ReportService'
+import browsingService from './services/BrowsingService'
 // import custom plugins
 import authenticate from './plugins/authenticate'
 import checkImageConformity from './plugins/checkImageConformity'
@@ -72,6 +73,8 @@ export const buildApp = () => {
     app.register(notificationService);
 
     app.register(reportService);
+
+    app.register(browsingService);
 
     app.register(pg, {
         connectionString: process.env.PG

@@ -5,13 +5,31 @@ export const setProfileHandler = async (
     request: FastifyRequest,
     reply: FastifyReply
 ) => {
-    const body = request.body as any;
-    const updateObject: any = {};
-    Object.entries(body).forEach(([key, value]) => {
-        if (value !== undefined && key !== 'location') {
-            updateObject[key] = value;
-        }
-    });
+    const body = request.body as {
+        bio?: string;
+        tags?: Array<string>;
+        gender?: string;
+        orientation?: string;
+        bornAt?: string;
+        location?: {
+            latitude?: number;
+            longitude?: number;
+        };
+    };
+
+    let updateObject: {
+        bio?: string;
+        tags?: string[];
+        gender?: string;
+        orientation?: string;
+        bornAt?: Date;
+    } = {};
+
+    if (body.bio !== undefined) updateObject.bio = body.bio;
+    if (body.tags !== undefined) updateObject.tags = body.tags;
+    if (body.gender !== undefined) updateObject.gender = body.gender;
+    if (body.orientation !== undefined) updateObject.orientation = body.orientation;
+    if (body.bornAt) updateObject.bornAt = new Date(body.bornAt);
 
     try {
         const user = request.user as FastifyRequestUser | undefined;

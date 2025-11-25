@@ -4,6 +4,7 @@ import { setProfileHandler, getProfileHandler } from "../../../../controllers/pr
 const profileRoutes = async (fastify: FastifyInstance) => {
     fastify.put('/', {
         schema: {
+            
             body: {
                 type: 'object',
                 properties: {
@@ -18,7 +19,6 @@ const profileRoutes = async (fastify: FastifyInstance) => {
                             latitude: { type: 'number' },
                             longitude: { type: 'number' }
                         },
-                        required: ['latitude', 'longitude'],
                         additionalProperties: false
                     }
                 },
