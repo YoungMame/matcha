@@ -54,10 +54,27 @@ class BrowsingService {
         this.UsersCache = new Map<number, User>();
     }
 
-    private async getUsersFromCoordsAndRadius(userId: number, lat: number, lgn: number, limit: number, offset: number, radius: number, gender?: string, filters?: BrowsingFilter): Promise<Array<BrowsingUser>> {
+    private async getUsersFromCoordsAndRadius(userId: number, username: string | undefined, lat: number, lgn: number, limit: number, offset: number, radius: number, gender?: string, filters?: BrowsingFilter): Promise<Array<BrowsingUser>> {
         let parameters: Array<string | number | Array<string>> = [lat, lgn, radius, userId, limit, offset];
+
+        let tagsIndex: number | undefined;
+        let genderIndex: number | undefined;
+        let usernameIndex: number | undefined;
+
         if (filters?.tags && filters.tags.length > 0) {
             parameters.push(filters.tags);
+            tagsIndex = parameters.length;
+        }
+
+        if (gender) {
+            parameters.push(gender);
+            genderIndex = parameters.length;
+        }
+
+        if (username) {
+            // pass wildcard in parameter to avoid concatenation in SQL
+            parameters.push(`%${username}%`);
+            usernameIndex = parameters.length;
         }
         const result = await this.fastify.pg.query(
             `
@@ -77,8 +94,9 @@ class BrowsingService {
 BETWEEN ${filters.age.min} AND ${filters.age.max}
             ` : ''}
             ${filters?.fameRate ? `AND u.fame_rate BETWEEN ${filters.fameRate.min} AND ${filters.fameRate.max}` : ''}
-            ${filters?.tags && filters.tags.length > 0 ? `AND u.tags @> $7::text[]` : ''}
-            ${gender ? `AND u.gender = '${gender}'` : ''}
+            ${tagsIndex ? `AND u.tags @> $${tagsIndex}::text[]` : ''}
+            ${genderIndex ? `AND u.gender = $${genderIndex}` : ''}
+            ${usernameIndex ? `AND (u.first_name ILIKE $${usernameIndex} OR u.username ILIKE $${usernameIndex} OR u.last_name ILIKE $${usernameIndex})` : ''}
             LIMIT $5 OFFSET $6
             `,
             parameters
@@ -185,7 +203,41 @@ BETWEEN ${filters.age.min} AND ${filters.age.max}
         } else if (user.orientation === 'homosexual') {
             gender = user.gender;
         }
-        const userRows = await this.getUsersFromCoordsAndRadius(userId, lat, lng, limit, offset, radius, gender, filters);
+        const userRows = await this.getUsersFromCoordsAndRadius(userId, undefined, lat, lng, limit, offset, radius, gender, filters);
+        switch (sort) {
+            case 'distance':
+                return this.sortByDistance(userRows);
+            case 'age':
+                return this.sortByAge(userRows, bornAt);
+            case 'fameRate':
+                return this.sortByFameRate(userRows);
+            case 'tags':
+                return this.sortByTags(userRows, tags);
+            default:
+                return this.sortByAll(userRows, bornAt, tags, fameRate ?? 0);
+        }
+    }
+
+    public async researchUsers(userId: number, username: string, limit: number = 5, offset: number = 0, radius: number = 25, filters?: BrowsingFilter, sort?: BrowsingSort): Promise<Array<BrowsingUser>> {
+        const user = await this.fastify.userService.getMe(userId);
+        const lat = filters?.location?.latitude ?? user.location?.latitude;
+        const lng = filters?.location?.longitude ?? user.location?.longitude;
+        if (filters?.tags && filters.tags.length === 0) {
+            delete filters.tags;
+        }
+        const bornAt = user.bornAt;
+        const fameRate = user.fameRate;
+        const tags = user.tags;
+
+        if (lat === undefined || lng === undefined)
+            throw new BadRequestError();
+        let gender: string | undefined = undefined;
+        if (user.orientation === 'heterosexual') {
+            gender = user.gender === 'men' ? 'women' : 'men';
+        } else if (user.orientation === 'homosexual') {
+            gender = user.gender;
+        }
+        const userRows = await this.getUsersFromCoordsAndRadius(userId, username, lat, lng, limit, offset, radius, gender, filters);
         switch (sort) {
             case 'distance':
                 return this.sortByDistance(userRows);
