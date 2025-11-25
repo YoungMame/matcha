@@ -13,9 +13,6 @@ RUN chmod +x pnpm_install.sh && ./pnpm_install.sh
 
 COPY ./assets/ ./
 
-COPY ./conf/wait-db.sh .
-RUN chmod +x wait-db.sh
-
 COPY ./conf/entrypoint.sh .
 RUN chmod +x entrypoint.sh
 
