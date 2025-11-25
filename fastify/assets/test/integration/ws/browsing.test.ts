@@ -11,10 +11,21 @@ import { setTags, setLocalisation, setBirthDate, likeUser, viewUser, getAgeDiffe
 import path from 'node:path';
 import fs from 'node:fs';
 import FormData from 'form-data';
-import { create } from 'node:domain';
 
 async function browseUsers(app: FastifyInstance, token: string, params: any) {
     const url = `/private/browsing/${params.minAge || 18}/${params.maxAge || 100}/${params.minFame || 0}/${params.maxFame || 1000}/${(params.tags || []).join(',')}/${params.lat || 1000}/${params.lng || 1000}/${params.radius || 30}/${params.sortBy || 'default'}`;
+    const response = await app.inject({
+        method: 'GET',
+        headers: {
+            Cookie: `jwt=${token}`
+        },
+        url: url,
+    });
+    return JSON.parse(response.body).users;
+}
+
+async function researchUsers(app: FastifyInstance, token: string, params: any) {
+    const url = `/private/research/${params.username || ''}/${params.minAge || 18}/${params.maxAge || 100}/${params.minFame || 0}/${params.maxFame || 1000}/${(params.tags || []).join(',')}/${params.lat || 1000}/${params.lng || 1000}/${params.radius || 30}/${params.sortBy || 'default'}`;
     const response = await app.inject({
         method: 'GET',
         headers: {
@@ -136,5 +147,31 @@ describe('Browsing filters and sorting', async () => {
         expect(users[3].id).to.equal(data5.id);
         expect(users[4].id).to.equal(data6.id);
         expect(users[5].id).to.equal(data7.id);
+    });
+
+    it('should be able to research users by username', async function (this: any) {
+        this.timeout(5000);
+        const token1 = await createUserWithProfile(app, 'researchtestuser1', 'researchtestuser1@gmail.com', 'Test@1234!fjfsfas', 'Test', 'TestUser1', 'I am browsing test user 1', ['music', 'sport', 'travel', 'art'], '1995-06-15', 'heterosexual', 'women');
+        await setLocalisation(app, token1, 89.8566, 52.3522);
+        const { userData: data2, token: token2 } = await quickUser(app);
+        await setTags(app, token2, ['music', 'sport', 'travel']);
+        await setBirthDate(app, token2, '1994-08-20');
+        await setLocalisation(app, token2, 89.8566, 52.3622);
+        const { userData: data3, token: token3 } = await quickUser(app);
+        await setLocalisation(app, token3, 89.854, 52.5522);
+        const users = await researchUsers(app, token2, {
+            username: 'researchtestuser1',
+            minAge: 18,
+            maxAge: 100,
+            minFame: 0,
+            maxFame: 1000,
+            lat: 89.8566,
+            lng: 52.3622,
+            radius: 300,
+            sortBy: 'default'
+        });
+        expect(users.length).to.be.greaterThan(0);
+        expect(users[0].firstName).to.equal('Test');
+        expect(users[1]).to.be.undefined;
     });
 });
