@@ -58,12 +58,13 @@ declare module 'fastify' {
         haveILiked: boolean;
       }>;
       getUser(idOrEmail: string | number): Promise<User | null>;
-        isUserBlockedBy(blockedId: number, blockerId: number): Promise<boolean>;
-        blockUser(userId: number, targetId: number): Promise<void>;
-        unblockUser(userId: number, targetId: number): Promise<void>;
-        getBlockerUsers(userId: number): Promise<Map<number, Date>>;
-        getBlockedUsersDetails(userId: number): Promise<{ id: number; username: string; createdAt: Date }[]>;
-        getBlockedUsers(userId: number): Promise<Map<number, Date>>;
+      getUserByUsername(username: string): Promise<User | null>;
+      isUserBlockedBy(blockedId: number, blockerId: number): Promise<boolean>;
+      blockUser(userId: number, targetId: number): Promise<void>;
+      unblockUser(userId: number, targetId: number): Promise<void>;
+      getBlockerUsers(userId: number): Promise<Map<number, Date>>;
+      getBlockedUsersDetails(userId: number): Promise<{ id: number; username: string; createdAt: Date }[]>;
+      getBlockedUsers(userId: number): Promise<Map<number, Date>>;
     };
     webSocketService: {
       handleClientMessage(id: number, message: string): void;

@@ -1,6 +1,5 @@
 import fp from 'fastify-plugin'
 import oauthPlugin, {  } from '@fastify/oauth2'
-import { FastifyRequest, FastifyReply, FastifyPluginAsync } from 'fastify'
 
 export default fp(async function(fastify, opts) {
     const CLIENT_ID = process.env.FACEBOOK_CLIENT_ID;
@@ -26,10 +25,8 @@ export default fp(async function(fastify, opts) {
 
     // The service provider redirect the user here after successful login
     fastify.get('/auth/login/facebook/callback/', async function (request, reply) {
-        console.log('Facebook callback called');
-        const { token } = await this.facebookOAuth2.getAccessTokenFromAuthorizationCodeFlow(request)
-
-        // Fetch profile directly from Facebook Graph API (plugin.userinfo cannot be used without discovery)
+        const { token } = await this.facebookOAuth2.getAccessTokenFromAuthorizationCodeFlow(request);
+        console.log('getNewAccessTokenUsingRefreshToken:', token.access_token);
         const fields = ['id', 'name', 'email', 'birthday', 'gender'].join(',');
         const graphRes = await fetch(`https://graph.facebook.com/me?fields=${fields}&access_token=${token.access_token}`);
         if (!graphRes.ok) {
@@ -37,87 +34,60 @@ export default fp(async function(fastify, opts) {
             console.log('Failed to fetch facebook userinfo:', text);
             return reply.status(500).send({ error: 'Failed to fetch facebook userinfo' });
         }
+
         const userInfos = await graphRes.json();
         if (!userInfos || !userInfos.email || !userInfos.name) {
             console.log('Invalid user info received from Facebook:', userInfos);
-            return reply.status(500).send({ error: 'Invalid user info received from Facebook' });
+            return reply.status(400).send({ error: 'Invalid user info received from Facebook' });
         }
+
         const existigUser = await this.userService.getUser(userInfos.email || '');
-        if (!existigUser) {
+        if (existigUser && existigUser.provider !== 'facebook') {
+            console.log('User tried to login with facebook but email is already used with another provider');
+            return reply.status(400).send({ error: 'Email already used with another provider' });
+        } else if (existigUser && existigUser.provider === 'facebook') {
+            console.log('Existing facebook user logged in:', existigUser.id);
+            const jwt = await fastify.jwt.sign({ id: existigUser.id, email: existigUser.email, username: existigUser.username, isVerified: existigUser.isVerified, isCompleted: existigUser.isProfileCompleted });
+
+            reply.setCookie('jwt', jwt, { 
+                domain: process.env.DOMAIN || 'localhost',
+                path: '/',
+                signed: true,
+                maxAge: 3600 * 24 * 7
+            });
+            reply.status(201).send({ message: 'User logged in successfully' });
+        } else {
             console.log('Creating new user from facebook infos');
             let isUsernameTaken = true;
             let baseUsername = userInfos.name;
+
             while (isUsernameTaken) {
                 const suffix = Math.floor(Math.random() * 10000);
                 const tryUsername = `${baseUsername}${suffix}`;
-                const userByUsername = await this.userService.getUser(tryUsername);
+                const userByUsername = await this.userService.getUserByUsername(tryUsername);
                 if (!userByUsername) {
                     baseUsername = tryUsername;
                     isUsernameTaken = false;
                 }
             }
-            const newUserId = await this.userService.createUser(
+            await this.userService.createUser(
                 userInfos.email,
                 'NoPasswordFacebookOAuth2',
                 baseUsername,
                 'facebook'
             );
-            if (!newUserId) {
-                return reply.status(500).send();
-            }
-            this.userService.verifyEmail(Number(newUserId)!, undefined);
-        }
-        // if (!existigUser) { ...create user... }
-        reply.cookie('refresh_token', token.refresh_token).send({ access_token: token.access_token });
-    });
 
-    fastify.post('/auth/login/facebook/refresh', async function (request: FastifyRequest, reply: FastifyReply) {
-        const refresh_token = request.cookies.refresh_token ? reply.unsignCookie(request.cookies.refresh_token).value : { refresh_token: null };
-
-        if (!refresh_token)
-            return reply.redirect(`${request.protocol}://${request.hostname}/auth/login/facebook`);
-        try {
-            const { token: newToken } = await this.facebookOAuth2.getNewAccessTokenUsingRefreshToken(refresh_token);
-            
-            reply.send({ access_token: newToken.access_token, refresh_token: newToken.refresh_token });
-        } catch (error) {
-            return reply.redirect(`${request.protocol}://${request.hostname}/api/login/facebook`);
-        }
-    });
-
-    fastify.decorate("revokeFacebookToken", async function(accessToken?: string, refreshToken?: string): Promise<void> {
-        try {
-            if (!accessToken && !refreshToken) {
-                throw new Error('No token provided to revoke');
-            }
-
-            if (!accessToken && refreshToken) {
-                const { token } = await this.facebookOAuth2.getNewAccessTokenUsingRefreshToken(refreshToken);
-                accessToken = token.access_token;
-            }
-            if (accessToken)
-                await this.facebookOAuth2.revokeToken(accessToken, 'access_token');
-        } catch (error) {
-            console.error('Error revoking Facebook token:', error);
-            throw error;
-        }
-    });
-
-    fastify.decorate("revokeFacebookAllTokens", async function(accessToken?: string, refreshToken?: string): Promise<void> {
-        try {
-            if (!accessToken && !refreshToken) {
-                throw new Error('No token provided to revoke');
-            }
-
-            if (!accessToken && refreshToken) {
-                const { token } = await this.facebookOAuth2.getNewAccessTokenUsingRefreshToken(refreshToken);
-                accessToken = token.access_token;
-            }
-            if (accessToken)
-                await this.facebookOAuth2.revokeAllToken(accessToken, undefined);
-        } catch (error) {
-            console.error('Error revoking Facebook token:', error);
-            throw error;
+            const existigUser = await this.userService.getUser(userInfos.email);
+            await this.userService.verifyEmail(Number(existigUser.id)!, undefined);
+            const jwt = await fastify.jwt.sign({ id: existigUser.id, email: existigUser.email, username: existigUser.username, isVerified: true, isCompleted: existigUser.isProfileCompleted });
+    
+            reply.setCookie('jwt', jwt, { 
+                domain: process.env.DOMAIN || 'localhost',
+                path: '/',
+                signed: true,
+                maxAge: 3600 * 24 * 7
+            });
+            reply.status(202).send({ message: 'User created and logged in successfully' });
         }
     });
 });

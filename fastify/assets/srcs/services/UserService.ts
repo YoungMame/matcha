@@ -63,6 +63,14 @@ class UserService {
         this.userModel.setVerified(userId);
     }
 
+    public async getUserByUsername(username: string): Promise<User | null> {
+        const userdata = await this.userModel.findByUsername(username);
+        if (!userdata)
+            return (null);
+        let user: User = User.fromRow(userdata);
+        return (user);
+    }
+
     public async getUser(idOrMail: string | number): Promise<User | null> {
         let userdata: undefined | User = undefined;
         if (typeof idOrMail == 'string')
