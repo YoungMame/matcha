@@ -4,7 +4,8 @@ services:
   fastify:
     container_name: fastify-app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       NODE_ENV: test
       PG: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
@@ -44,6 +45,11 @@ services:
 
   db:
     image: postgres:18-alpine3.22
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     logging:
       driver: "none"
     environment:
