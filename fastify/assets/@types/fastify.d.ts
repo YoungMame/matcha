@@ -115,7 +115,7 @@ declare module 'fastify' {
     nodemailer: any;
 
     facebookOAuth2: OAuth2Namespace;
-    myCustomOAuth2: OAuth2Namespace;
+    fortyTwoAuth2: OAuth2Namespace;
 
     authenticate(request: any, reply: any): Promise<void>;
     checkImageConformity(request: any, reply: any): Promise<void>;

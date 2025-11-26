@@ -21,6 +21,7 @@ import authenticate from './plugins/authenticate'
 import checkImageConformity from './plugins/checkImageConformity'
 // import oauthPlugins from './plugins/oAuth/*'
 import facebookOAuth from './plugins/oAuth/facebook'
+import fortyTwoOAuth from './plugins/oAuth/42'
 
 export const buildApp = () => {
     const app = Fastify({
@@ -98,6 +99,7 @@ export const buildApp = () => {
     } as FastifyCookieOptions);
 
     app.register(facebookOAuth);
+    app.register(fortyTwoOAuth);
 
     app.setErrorHandler((err: FastifyError, request: FastifyRequest, reply) => {
         if (err.validation) {
