@@ -25,7 +25,8 @@ import fortyTwoOAuth from './plugins/oAuth/42'
 
 export const buildApp = () => {
     const app = Fastify({
-        logger: (process.env.NODE_ENV == 'dev')
+        logger: (process.env.NODE_ENV == 'dev'),
+        trustProxy: (process.env.NODE_ENV != 'test')
     });
 
     app.get('/debug', async () => {
