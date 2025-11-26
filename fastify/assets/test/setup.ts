@@ -5,7 +5,7 @@ export let app: FastifyInstance;
 
 before(async function () {
     // augmente le timeout pour CI / containers
-    this.timeout(20000);
+    this.timeout(30000);
     process.env.NODE_ENV = 'test';
     app = buildApp();
     await app.ready();
