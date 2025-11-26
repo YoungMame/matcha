@@ -3,6 +3,8 @@ import oauthPlugin, {  } from '@fastify/oauth2'
 import { FastifyRequest } from 'fastify';
 import { FastifyReply } from 'fastify/types/reply';
 
+const MAX_USERNAME_RETRIES = 10;
+
 export default fp(async function(fastify, opts) {
     const CLIENT_ID = process.env['FT_CLIENT_ID'];
     const CLIENT_SECRET = process.env['FT_CLIENT_SECRET'];
@@ -69,8 +71,12 @@ export default fp(async function(fastify, opts) {
         } else {
             let isUsernameTaken = true;
             let baseUsername = userInfo.login;
+            let retryCount = 0;
 
             while (isUsernameTaken) {
+                if (retryCount >= MAX_USERNAME_RETRIES) {
+                    return reply.status(500).send({ error: 'Failed to generate unique username after maximum retries' });
+                }
                 const suffix = Math.floor(Math.random() * 10000);
                 const tryUsername = `${baseUsername}${suffix}`;
                 const userByUsername = await this.userService.getUserByUsername(tryUsername);
@@ -78,6 +84,7 @@ export default fp(async function(fastify, opts) {
                     baseUsername = tryUsername;
                     isUsernameTaken = false;
                 }
+                retryCount++;
             }
             await this.userService.createUser(
                 userInfo.email,
