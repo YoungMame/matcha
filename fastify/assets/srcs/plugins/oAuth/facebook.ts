@@ -60,8 +60,13 @@ export default fp(async function(fastify, opts) {
             console.log('Creating new user from facebook infos');
             let isUsernameTaken = true;
             let baseUsername = userInfos.name;
+            const MAX_USERNAME_RETRIES = 10;
+            let retryCount = 0;
 
             while (isUsernameTaken) {
+                if (retryCount >= MAX_USERNAME_RETRIES) {
+                    return reply.status(500).send({ error: 'Failed to generate unique username after maximum retries' });
+                }
                 const suffix = Math.floor(Math.random() * 10000);
                 const tryUsername = `${baseUsername}${suffix}`;
                 const userByUsername = await this.userService.getUserByUsername(tryUsername);
@@ -69,6 +74,7 @@ export default fp(async function(fastify, opts) {
                     baseUsername = tryUsername;
                     isUsernameTaken = false;
                 }
+                retryCount++;
             }
             await this.userService.createUser(
                 userInfos.email,
