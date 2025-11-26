@@ -10,7 +10,7 @@ export default fp(async function(fastify, opts) {
 
     fastify.register(oauthPlugin, {
         name: 'facebookOAuth2',
-        scope: ['email', 'user_location', 'user_gender', 'user_birthday', 'public_profile'],
+        scope: ['public_profile', 'email', 'user_birthday', 'user_gender'],
         credentials: {
             client: {
                 id: CLIENT_ID,
@@ -21,20 +21,54 @@ export default fp(async function(fastify, opts) {
         // register a fastify url to start the redirect flow to the service provider's OAuth2 login
         startRedirectPath: '/auth/login/facebook',
         // service provider redirects here after user login
-        callbackUri: req => `${req.protocol}://${req.hostname}/auth/login/facebook/callback`,
+        callbackUri: req => `https://matcha.fr/api/auth/login/facebook/callback/`,
     })
 
     // The service provider redirect the user here after successful login
-    fastify.get('/auth/login/facebook/callback', async function (request, reply) {
+    fastify.get('/auth/login/facebook/callback/', async function (request, reply) {
+        console.log('Facebook callback called');
         const { token } = await this.facebookOAuth2.getAccessTokenFromAuthorizationCodeFlow(request)
 
-        console.log('access token', token.access_token)
-        const userInfos = await this.facebookOAuth2.userinfo(token.access_token);
-        console.log('user infos', userInfos);
-        const existigUser = await this.userService.debugGetUser(userInfos.email);
-        // if (!existigUser) {
-            // const createdUser = await this.userService.createUser()
-        reply.cookie('refresh_token', token.refresh_token).send({ access_token: token.access_token })
+        // Fetch profile directly from Facebook Graph API (plugin.userinfo cannot be used without discovery)
+        const fields = ['id', 'name', 'email', 'birthday', 'gender'].join(',');
+        const graphRes = await fetch(`https://graph.facebook.com/me?fields=${fields}&access_token=${token.access_token}`);
+        if (!graphRes.ok) {
+            const text = await graphRes.text();
+            console.log('Failed to fetch facebook userinfo:', text);
+            return reply.status(500).send({ error: 'Failed to fetch facebook userinfo' });
+        }
+        const userInfos = await graphRes.json();
+        if (!userInfos || !userInfos.email || !userInfos.name) {
+            console.log('Invalid user info received from Facebook:', userInfos);
+            return reply.status(500).send({ error: 'Invalid user info received from Facebook' });
+        }
+        const existigUser = await this.userService.getUser(userInfos.email || '');
+        if (!existigUser) {
+            console.log('Creating new user from facebook infos');
+            let isUsernameTaken = true;
+            let baseUsername = userInfos.name;
+            while (isUsernameTaken) {
+                const suffix = Math.floor(Math.random() * 10000);
+                const tryUsername = `${baseUsername}${suffix}`;
+                const userByUsername = await this.userService.getUser(tryUsername);
+                if (!userByUsername) {
+                    baseUsername = tryUsername;
+                    isUsernameTaken = false;
+                }
+            }
+            const newUserId = await this.userService.createUser(
+                userInfos.email,
+                'NoPasswordFacebookOAuth2',
+                baseUsername,
+                'facebook'
+            );
+            if (!newUserId) {
+                return reply.status(500).send();
+            }
+            this.userService.verifyEmail(Number(newUserId)!, undefined);
+        }
+        // if (!existigUser) { ...create user... }
+        reply.cookie('refresh_token', token.refresh_token).send({ access_token: token.access_token });
     });
 
     fastify.post('/auth/login/facebook/refresh', async function (request: FastifyRequest, reply: FastifyReply) {

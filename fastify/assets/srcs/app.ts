@@ -24,7 +24,8 @@ import facebookOAuth from './plugins/oAuth/facebook'
 
 export const buildApp = () => {
     const app = Fastify({
-        logger: (process.env.NODE_ENV == 'dev')
+        logger: (process.env.NODE_ENV == 'dev'),
+        trustProxy: true
     });
 
     app.get('/debug', async () => {

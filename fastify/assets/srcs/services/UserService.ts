@@ -63,7 +63,7 @@ class UserService {
         this.userModel.setVerified(userId);
     }
 
-    private async getUser(idOrMail: string | number): Promise<User | null> {
+    public async getUser(idOrMail: string | number): Promise<User | null> {
         let userdata: undefined | User = undefined;
         if (typeof idOrMail == 'string')
             userdata = await this.userModel.findByEmail(idOrMail);
@@ -110,7 +110,7 @@ class UserService {
         return false;
     }
 
-    async createUser(email: string, password: string, username: string): Promise<string | undefined> {
+    async createUser(email: string, password: string, username: string, provider: string = 'local'): Promise<string | undefined> {
         if (!(email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)))
             throw new BadRequestError('Invalid email format');
         if (!(username.match(/^[a-zA-Z0-9._\- ]+$/)))
@@ -118,7 +118,7 @@ class UserService {
         if (this.isPasswordCommon(password))
             throw new BadRequestError('Password is too common');
         const hashedPassword = await PasswordManager.hashPassword(password);
-        const userId = await this.userModel.insert(email, hashedPassword, username);
+        const userId = await this.userModel.insert(email, hashedPassword, username, provider);
         const user = await this.getUser(userId);
         if (!user)
             throw new InternalServerError('User not found');
@@ -129,7 +129,7 @@ class UserService {
 
     async login(email: string, password: string) {
         const user = await this.getUser(email);
-        if (!user)
+        if (!user || user.provider !== 'local')
             throw new UnauthorizedError();
         const isValid = await PasswordManager.compare(password, user.passwordHash);
         if (!isValid)

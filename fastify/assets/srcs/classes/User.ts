@@ -21,6 +21,7 @@ export default class User {
     lastName: string | undefined;
     bio: string | undefined;
     tags: string[] | undefined;
+    provider: string;
     bornAt: Date | undefined;
     gender: 'men' | 'women' | undefined;
     orientation: 'heterosexual' | 'homosexual' | 'bisexual' | undefined;
@@ -44,6 +45,7 @@ export default class User {
         firstName: string ,
         lastName: string,
         bio: string = '',
+        provider: string = 'local',
         tags: string[] = [],
         bornAt: Date,
         gender: 'men' | 'women' = 'men',
@@ -63,6 +65,7 @@ export default class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.bio = bio;
+        this.provider = provider;
         this.tags = tags;
         this.bornAt = bornAt;
         this.gender = gender;
@@ -85,6 +88,7 @@ export default class User {
             row.first_name,
             row.last_name,
             row.bio,
+            row.provider_,
             row.tags,
             new Date(row.born_at),
             row.gender,

@@ -7,7 +7,7 @@ declare module 'fastify' {
       debugGetUser(idOrMail: string | number): Promise<User | null>;
       debugGetUserEmailCode(userId: number, codeType: "emailValidation" | "dfaValidation" | "passwordResetValidation"): Promise<string | number | undefined>;
 
-      createUser(email: string, password: string, username: string): Promise<string | undefined>;
+      createUser(email: string, password: string, username: string, provider?: string): Promise<string | undefined>;
       login(email: string, password: string): Promise<string | undefined>;
       askForEmailVerification(userId: number): Promise<void>
       verifyEmail(id: number, code?: string): Promise<void>;
@@ -57,6 +57,7 @@ declare module 'fastify' {
         hasLikedMe: boolean;
         haveILiked: boolean;
       }>;
+      getUser(idOrEmail: string | number): Promise<User | null>;
         isUserBlockedBy(blockedId: number, blockerId: number): Promise<boolean>;
         blockUser(userId: number, targetId: number): Promise<void>;
         unblockUser(userId: number, targetId: number): Promise<void>;
