@@ -1,7 +1,8 @@
 import chai from 'chai';
 import { expect } from 'chai';
-import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
+import { app } from '../../setup';
+
 
 // import fixtures
 import { quickUser } from '../fixtures/auth.fixtures';
@@ -43,12 +44,6 @@ const createFameRate = (likerCount: number, viewerCount: number) => {
 }
 
 describe('Fame rate test', () => {
-    let app: FastifyInstance;
-
-    beforeEach(async () => {
-        app = buildApp();
-        await app.ready();
-    });
 
     it('It should have the correct fame rate calculation', async function (this: any) {
         this.timeout(5000);

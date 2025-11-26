@@ -7,7 +7,7 @@ declare module 'fastify' {
       debugGetUser(idOrMail: string | number): Promise<User | null>;
       debugGetUserEmailCode(userId: number, codeType: "emailValidation" | "dfaValidation" | "passwordResetValidation"): Promise<string | number | undefined>;
 
-      createUser(email: string, password: string, username: string): Promise<string | undefined>;
+      createUser(email: string, password: string, username: string, provider?: string): Promise<string | undefined>;
       login(email: string, password: string): Promise<string | undefined>;
       askForEmailVerification(userId: number): Promise<void>
       verifyEmail(id: number, code?: string): Promise<void>;
@@ -57,12 +57,14 @@ declare module 'fastify' {
         hasLikedMe: boolean;
         haveILiked: boolean;
       }>;
-        isUserBlockedBy(blockedId: number, blockerId: number): Promise<boolean>;
-        blockUser(userId: number, targetId: number): Promise<void>;
-        unblockUser(userId: number, targetId: number): Promise<void>;
-        getBlockerUsers(userId: number): Promise<Map<number, Date>>;
-        getBlockedUsersDetails(userId: number): Promise<{ id: number; username: string; createdAt: Date }[]>;
-        getBlockedUsers(userId: number): Promise<Map<number, Date>>;
+      getUser(idOrEmail: string | number): Promise<User | null>;
+      getUserByUsername(username: string): Promise<User | null>;
+      isUserBlockedBy(blockedId: number, blockerId: number): Promise<boolean>;
+      blockUser(userId: number, targetId: number): Promise<void>;
+      unblockUser(userId: number, targetId: number): Promise<void>;
+      getBlockerUsers(userId: number): Promise<Map<number, Date>>;
+      getBlockedUsersDetails(userId: number): Promise<{ id: number; username: string; createdAt: Date }[]>;
+      getBlockedUsers(userId: number): Promise<Map<number, Date>>;
     };
     webSocketService: {
       handleClientMessage(id: number, message: string): void;
@@ -112,10 +114,14 @@ declare module 'fastify' {
 
     nodemailer: any;
 
+    facebookOAuth2: OAuth2Namespace;
+    fortyTwoAuth2: OAuth2Namespace;
+
     authenticate(request: any, reply: any): Promise<void>;
     checkImageConformity(request: any, reply: any): Promise<void>;
     checkIsCompleted(request: any, reply: any): Promise<void>;
     checkIsVerified(request: any, reply: any): Promise<void>;
+    checkFacebookOAuth(request: any, reply: any): Promise<void>;
   }
 
   type FastifyRequestUser = {

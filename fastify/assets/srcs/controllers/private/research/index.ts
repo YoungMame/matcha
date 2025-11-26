@@ -29,7 +29,6 @@ export const researchUsersHandler = async (request: FastifyRequest, reply: Fasti
         };
         if (!(lat < -90 || lat > 90 || lng < -180 || lng > 180))
             requestFilters.location = { latitude: lat, longitude: lng };
-        console.log('Username in researchUsersHandler:', username);
         const users: BrowsingUser[] = await request.server.browsingService.researchUsers(
             request.user.id,
             username,

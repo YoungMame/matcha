@@ -1,18 +1,12 @@
 import chai from 'chai';
 import { expect } from 'chai';
-import { buildApp } from '../../../srcs/app';
+import { app } from '../../setup';
 import { FastifyInstance } from 'fastify';
 
 // import fixtures
 import { quickUser } from '../fixtures/auth.fixtures';
 
 describe('Block users test', () => {
-    let app: FastifyInstance;
-
-    beforeEach(async () => {
-        app = buildApp();
-        await app.ready();
-    });
 
     it('should be able to block user list', async function (this: any) {
         this.timeout(5000);

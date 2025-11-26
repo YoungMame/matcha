@@ -1,19 +1,13 @@
 import chai from 'chai';
 import { expect } from 'chai';
-import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
+import { app } from '../../setup';
+
 
 // import fixtures
 import { quickUser } from '../fixtures/auth.fixtures';
 
 describe('Report users test', () => {
-    let app: FastifyInstance;
-
-    beforeEach(async () => {
-        app = buildApp();
-        await app.ready();
-    });
-
     it('should be able to report a user', async function (this: any) {
         this.timeout(5000);
 

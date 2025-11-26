@@ -2,7 +2,7 @@ FROM node:24-alpine
 
 WORKDIR  /usr/src/app
 
-RUN apk add --no-cache pnpm
+RUN apk add --no-cache pnpm curl
 
 ARG NODE_ENV
 

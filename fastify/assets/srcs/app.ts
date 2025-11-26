@@ -19,14 +19,22 @@ import browsingService from './services/BrowsingService'
 // import custom plugins
 import authenticate from './plugins/authenticate'
 import checkImageConformity from './plugins/checkImageConformity'
+// import oauthPlugins from './plugins/oAuth/*'
+import facebookOAuth from './plugins/oAuth/facebook'
+import fortyTwoOAuth from './plugins/oAuth/42'
 
 export const buildApp = () => {
     const app = Fastify({
-        logger: (process.env.NODE_ENV == 'dev')
+        logger: (process.env.NODE_ENV == 'dev'),
+        trustProxy: (process.env.NODE_ENV != 'test')
     });
 
     app.get('/debug', async () => {
         return { message: 'Debug route working' };
+    });
+
+    app.get('/health', async (request, reply) => {
+        return reply.send({ status: 'ok' });
     });
 
     app.register(multipart, {
@@ -89,6 +97,9 @@ export const buildApp = () => {
         secret: process.env.COOKIE_SECRET, // for cookies signature
         parseOptions: {}  // options for parsing cookies
     } as FastifyCookieOptions);
+
+    app.register(facebookOAuth);
+    app.register(fortyTwoOAuth);
 
     app.setErrorHandler((err: FastifyError, request: FastifyRequest, reply) => {
         if (err.validation) {

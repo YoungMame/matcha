@@ -7,6 +7,7 @@ if [ "$NODE_ENV" = "dev" ]; then
         pnpm run seed
         export RUN_SEED="false"
     fi
+    echo "Starting in development mode"
     exec pnpm dev
 elif [ "$NODE_ENV" = "test" ]; then
     sleep 1 # wait for the database to be ready

@@ -8,6 +8,7 @@ import { quickUser } from '../fixtures/auth.fixtures';
 
 // import utils
 import { setTags, setLocalisation, setBirthDate, likeUser, viewUser, getAgeDifference } from '../utils/browsing';
+import { BrowsingUser } from '../../../srcs/services/BrowsingService';
 
 describe('Browsing filters and sorting', () => {
     let app: FastifyInstance;
@@ -54,7 +55,7 @@ describe('Browsing filters and sorting', () => {
         const rows = await app.browsingService.browseUsers(data1.id as number, 10, 0, 50, undefined, 'distance');
 
         for (let i = 0; i < rows.length - 1; i++) {
-            expect(rows[i].distance).to.be.lessThanOrEqual(rows[i + 1].distance);
+            expect((rows[i] as BrowsingUser).distance).to.be.lessThanOrEqual((rows[i + 1] as BrowsingUser).distance);
         }
     });
 
@@ -83,7 +84,7 @@ describe('Browsing filters and sorting', () => {
         const rows = await app.browsingService.browseUsers(data1.id as number, 10, 0, 50, undefined, 'age');
 
         for (let i = 0; i < rows.length - 1; i++) {
-            expect(getAgeDifference(userBirthdate, rows[i].bornAt)).to.be.lessThanOrEqual(getAgeDifference(userBirthdate, rows[i + 1].bornAt));
+            expect(getAgeDifference(userBirthdate, (rows[i] as BrowsingUser).bornAt)).to.be.lessThanOrEqual(getAgeDifference(userBirthdate, (rows[i + 1] as BrowsingUser).bornAt));
         }
     });
 
@@ -127,9 +128,12 @@ describe('Browsing filters and sorting', () => {
         await likeUser(app, token4, data5.id as number);
 
         const rows = await app.browsingService.browseUsers(data1.id as number, 10, 0, 50, undefined, 'fameRate');
+        
+        expect(rows).to.not.be.undefined;
+        if (!rows) return;
 
         for (let i = 0; i < rows.length - 1; i++) {
-            expect(rows[i].fameRate).to.be.greaterThanOrEqual(rows[i + 1].fameRate);
+            expect((rows[i] as BrowsingUser).fameRate).to.be.greaterThanOrEqual((rows[i + 1] as BrowsingUser).fameRate);
         }
     });
 
@@ -157,8 +161,8 @@ describe('Browsing filters and sorting', () => {
         const rows = await app.browsingService.browseUsers(data1.id as number, 10, 0, 50, undefined, 'tags');
         
         for (let i = 0; i < rows.length - 1; i++) {
-            const countCurrent = rows[i].tags.filter((tag: string) => ['music', 'sports', 'art'].includes(tag)).length;
-            const countNext = rows[i + 1].tags.filter((tag: string) => ['music', 'sports', 'art'].includes(tag)).length;
+            const countCurrent = (rows[i] as BrowsingUser).tags.filter((tag: string) => ['music', 'sports', 'art'].includes(tag)).length;
+            const countNext = (rows[i + 1] as BrowsingUser).tags.filter((tag: string) => ['music', 'sports', 'art'].includes(tag)).length;
             expect(countCurrent).to.be.greaterThanOrEqual(countNext);
         }
     });
@@ -187,7 +191,7 @@ describe('Browsing filters and sorting', () => {
         const rows = await app.browsingService.browseUsers(data1.id as number, 10, 0, 50, { tags: ['music'] });
         
         for (let i = 0; i < rows.length - 1; i++) {
-            expect(rows[i].tags).to.include('music');
+            expect((rows[i] as BrowsingUser).tags).to.include('music');
         }
     });
 
@@ -225,7 +229,7 @@ describe('Browsing filters and sorting', () => {
         const rows = await app.browsingService.browseUsers(data1.id as number, 10, 0, 50, { age: { min: 34, max: 39 } });
 
         for (let i = 0; i < rows.length - 1; i++) {
-            const age = new Date().getFullYear() - new Date(rows[i].bornAt).getFullYear();
+            const age = new Date().getFullYear() - new Date((rows[i] as BrowsingUser).bornAt).getFullYear();
             expect(age).to.be.at.least(34);
             expect(age).to.be.at.most(39);
         }
@@ -265,7 +269,7 @@ describe('Browsing filters and sorting', () => {
         const rows = await app.browsingService.browseUsers(data1.id as number, 10, 0, 50, { age: { min: 34, max: 39 } });
 
         for (let i = 0; i < rows.length - 1; i++) {
-            const age = new Date().getFullYear() - new Date(rows[i].bornAt).getFullYear();
+            const age = new Date().getFullYear() - new Date((rows[i] as BrowsingUser).bornAt).getFullYear();
             expect(age).to.be.at.least(34);
             expect(age).to.be.at.most(39);
         }
@@ -313,20 +317,20 @@ describe('Browsing filters and sorting', () => {
         const rows = await app.browsingService.browseUsers(data1.id as number, 10, 0, 50, { fameRate: { min: 300, max: 800 } });
 
         for (let i = 0; i < rows.length - 1; i++) {
-            expect(rows[i].fameRate).to.be.at.least(300);
-            expect(rows[i].fameRate).to.be.at.most(800);
+            expect((rows[i] as BrowsingUser).fameRate).to.be.at.least(300);
+            expect((rows[i] as BrowsingUser).fameRate).to.be.at.most(800);
         }
 
         const rows1 = await app.browsingService.browseUsers(data1.id as number, 10, 0, 50, { fameRate: { min: 600, max: 1000 } });
         for (let i = 0; i < rows1.length - 1; i++) {
-            expect(rows1[i].fameRate).to.be.at.least(600);
-            expect(rows1[i].fameRate).to.be.at.most(1000);
+            expect((rows1[i] as BrowsingUser).fameRate).to.be.at.least(600);
+            expect((rows1[i] as BrowsingUser).fameRate).to.be.at.most(1000);
         }
 
         const rows2 = await app.browsingService.browseUsers(data1.id as number, 10, 0, 50, { fameRate: { min: 0, max: 0 } });
         for (let i = 0; i < rows2.length - 1; i++) {
-            expect(rows2[i].fameRate).to.be.at.least(0);
-            expect(rows2[i].fameRate).to.be.at.most(0);
+            expect((rows2[i] as BrowsingUser).fameRate).to.be.at.least(0);
+            expect((rows2[i] as BrowsingUser).fameRate).to.be.at.most(0);
         }
     });
 
@@ -354,7 +358,7 @@ describe('Browsing filters and sorting', () => {
         expect(rows.length).to.be.greaterThan(0);
 
         for (let i = 0; i < rows.length - 1; i++) {
-            expect(rows[i].distance).to.be.at.most(50);
+            expect((rows[i] as BrowsingUser).distance).to.be.at.most(50);
         }
 
         const rows1 = await app.browsingService.browseUsers(data1.id as number, 10, 0, 25, { 
@@ -366,7 +370,7 @@ describe('Browsing filters and sorting', () => {
         expect(rows1.length).to.be.greaterThan(0);
 
         for (let i = 0; i < rows1.length - 1; i++) {
-            expect(rows1[i].distance).to.be.at.most(25);
+            expect((rows1[i] as BrowsingUser).distance).to.be.at.most(25);
         }
     });
 });

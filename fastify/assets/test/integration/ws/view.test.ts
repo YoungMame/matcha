@@ -1,6 +1,6 @@
 import chai from 'chai';
 import { expect } from 'chai';
-import { buildApp } from '../../../srcs/app';
+import { app } from '../../setup';
 import { FastifyInstance } from 'fastify';
 
 // import fixtures
@@ -10,13 +10,6 @@ import { signUpAndGetToken, quickUser, UserData } from '../fixtures/auth.fixture
 import { wait } from '../utils/wait';
 
 describe('Websocket view test', () => {
-    let app: FastifyInstance;
-
-    beforeEach(async () => {
-        app = buildApp();
-        await app.ready();
-    });
-
     it('should get connected to ws and deliver a view to the target user', async function (this: any) {
         this.timeout(5000);
 

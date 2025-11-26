@@ -1,19 +1,13 @@
 import chai from 'chai';
 import { expect } from 'chai';
-import { buildApp } from '../../../srcs/app';
 import { FastifyInstance } from 'fastify';
+import { app } from '../../setup';
+
 
 // import fixtures
 import { quickUser } from '../fixtures/auth.fixtures';
 
 describe('Websocket chat event test', () => {
-    let app: FastifyInstance;
-
-    beforeEach(async () => {
-        app = buildApp();
-        await app.ready();
-    });
-
     it('should get connected to ws and create an event and send it to the users', async function (this: any) {
         this.timeout(5000);
 

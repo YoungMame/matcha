@@ -1,17 +1,8 @@
-import buildApp from '../../srcs/app';
+import { app } from '../setup';
 import { expect } from 'chai';
 import { describe, it, before, after } from 'mocha';
 
 describe('API basic tests', () => {
-    let app: any;
-
-    before(async () => {
-        app = buildApp();
-    });
-
-    after(async () => {
-        await app.close();
-    });
 
     it("should create the app instance", () => {
         expect(app).to.exist;
