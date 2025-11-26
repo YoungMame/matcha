@@ -1,6 +1,8 @@
 import fp from 'fastify-plugin'
 import oauthPlugin, {  } from '@fastify/oauth2'
 
+const MAX_USERNAME_RETRIES = 10;
+
 export default fp(async function(fastify, opts) {
     const CLIENT_ID = process.env.FACEBOOK_CLIENT_ID;
     const CLIENT_SECRET = process.env.FACEBOOK_CLIENT_SECRET;
@@ -60,7 +62,6 @@ export default fp(async function(fastify, opts) {
             console.log('Creating new user from facebook infos');
             let isUsernameTaken = true;
             let baseUsername = userInfos.name;
-            const MAX_USERNAME_RETRIES = 10;
             let retryCount = 0;
 
             while (isUsernameTaken) {
