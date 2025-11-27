@@ -150,6 +150,8 @@ class UserService {
         id: number;
         email: string;
         username: string;
+        firstName: string;
+        lastName: string;
         profilePictureIndex: number | undefined;
         profilePictures: string[];
         bio: string;
@@ -164,12 +166,15 @@ class UserService {
         createdAt: Date;
     }> {
         const user = await this.getUser(id);
+        console.log("Retrieved user:", user);
         if (!user || !user.isProfileCompleted)
             throw new NotFoundError();
         return {
             id: user.id,
             email: user.email,
             username: user.username,
+            firstName: user.firstName as string,
+            lastName: user.lastName as string,
             profilePictureIndex: user.profilePictureIndex,
             profilePictures: user.profilePictures || [],
             bio: user.bio || '',
@@ -204,8 +209,6 @@ class UserService {
             throw new NotFoundError();
         if (user.isProfileCompleted)
             throw new BadRequestError('Profile already completed');
-        if (user.isVerified === false)
-            throw new BadRequestError('Email not verified');
         await this.userModel.update(id, {
             ...profile,
             isProfileCompleted: true

@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { OnboardingData, OnboardingStep } from '@/types/onboarding';
 import { STEPS, MIN_INTERESTS } from '@/constants/onboarding';
+import { Fira_Sans_Extra_Condensed } from 'next/font/google';
 
 const initialData: OnboardingData = {
 	firstName: '',
@@ -80,7 +81,6 @@ export const useOnboarding = () => {
 	const completedStepsCount = STEPS.filter((step) => isStepValid(step.id)).length;
 
 	const submitOnboarding = async () => {
-		console.log("Submitting onboarding with data:", data);
 		try {
 			// Step 1: Upload profile picture (required)
 			if (data.profilePicture) {
@@ -93,29 +93,32 @@ export const useOnboarding = () => {
 				});
 			}
 
-			// Step 2: Upload additional pictures
-			// for (const picture of data.additionalPictures) {
-			// 	if (picture) {
-			// 		const formData = new FormData();
-			// 		formData.append('file', picture);
+			for (const picture of data.additionalPictures) {
+				if (picture) {
+					const formData = new FormData();
+					formData.append('file', picture);
 					
-			// 		await fetch('/api/private/user/me/profile-picture', {
-			// 			method: 'POST',
-			// 			body: formData,
-			// 		});
-			// 	}
-			// }
+					await fetch('/api/private/user/me/profile-picture', {
+						method: 'POST',
+						body: formData,
+					});
+				}
+			}
 
 		// Map gender from UI values to backend enum ("men"/"women")
 		const genderMap: Record<string, string> = {
 			'Men': 'men',
 			'Women': 'women',
 			'male': 'men',
-			'female': 'women'
+			'female': 'women',
+			'men': 'men',
+			'women': 'women',
 		};
 
 		// Step 3: Update profile with onboarding data
 		const profileData = {
+			firstName: data.firstName,
+			lastName: data.lastName,
 			bio: data.biography,
 			tags: data.interests,
 			gender: genderMap[data.gender] || data.gender,
@@ -125,14 +128,17 @@ export const useOnboarding = () => {
 					? 'homosexual' 
 					: 'heterosexual',
 			bornAt: new Date(data.birthday).toISOString(),
-		};			const response = await fetch('/api/private/user/me/profile', {
-				method: 'PUT',
+		};		
+		console.log('Submitting profile data:', profileData);
+		const response = await fetch('/api/private/user/me/complete-profile', {
+				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(profileData),
 			});
 
 			if (!response.ok) {
 				const error = await response.json();
+
 				console.error('Failed to submit onboarding:', error);
 				throw new Error(error.message || 'Failed to submit onboarding');
 			}

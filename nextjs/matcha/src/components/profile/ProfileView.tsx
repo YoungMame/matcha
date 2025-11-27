@@ -102,7 +102,7 @@ export default function ProfileView({
               
               <div className="flex items-center gap-3 mb-2">
                 <Typography variant="body" color="secondary" className="uppercase text-xs font-medium">
-                  {profile.gender === "male" ? "Homme" : profile.gender === "female" ? "Femme" : "Autre"}
+                  {profile.gender === "men" ? "Homme" : profile.gender === "women" ? "Femme" : "Autre"}
                 </Typography>
                 <Typography variant="body" color="secondary">
                   {profile.firstName} {age > 0 ? age : "?"}
@@ -185,7 +185,7 @@ export default function ProfileView({
                       Genre
                     </Typography>
                     <Typography variant="small" color="primary" className="font-medium">
-                      {profile.gender === "male" ? "Homme" : profile.gender === "female" ? "Femme" : "Autre"}
+                      {profile.gender === "men" ? "Homme" : profile.gender === "women" ? "Femme" : "Autre"}
                     </Typography>
                   </div>
                 </div>
@@ -217,7 +217,7 @@ export default function ProfileView({
                     <div className="flex gap-1 mt-1">
                       {profile.interestedInGenders.map((gender, idx) => (
                         <Typography key={idx} variant="small" color="primary" className="font-medium">
-                          {gender === "male" ? "Homme" : gender === "female" ? "Femme" : "Autre"}
+                          {gender === "men" ? "Homme" : gender === "women" ? "Femme" : "Autre"}
                           {idx < profile.interestedInGenders.length - 1 && ", "}
                         </Typography>
                       ))}

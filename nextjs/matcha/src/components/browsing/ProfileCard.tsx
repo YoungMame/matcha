@@ -24,6 +24,7 @@ export default function ProfileCard({
 			{/* Image */}
 			<div className="relative aspect-3/4 w-full overflow-hidden">
 				<Image
+					unoptimized
 					src={pictureUrl}
 					alt={name}
 					fill

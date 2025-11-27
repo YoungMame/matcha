@@ -10,9 +10,9 @@ const meRoutes = async (fastify: FastifyInstance) => {
             'GET /profile', 'PUT /profile', 'DELETE /profile',
         ]};
     });
-    fastify.register(profilePictureRoutes, { prefix: '/profile-picture', preHandler: fastify.checkIsCompleted });
+    fastify.register(profilePictureRoutes, { prefix: '/profile-picture' });
     fastify.register(profileRoutes, { prefix: '/profile', preHandler: fastify.checkIsCompleted });
-    fastify.register(completeProfileRoutes, { prefix: '/complete-profile', preHandler: fastify.checkIsVerified });
+    fastify.register(completeProfileRoutes, { prefix: '/complete-profile'});
 }
 
 export default meRoutes;

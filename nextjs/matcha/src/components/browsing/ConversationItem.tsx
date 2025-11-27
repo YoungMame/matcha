@@ -23,7 +23,7 @@ export default function ConversationItem({
 		>
 			<Stack direction="row" align="center" spacing="md" className="w-full">
 				<div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0">
-					<Image src={pictureUrl} alt={name} fill className="object-cover" />
+					<Image unoptimized src={pictureUrl} alt={name} fill className="object-cover" />
 				</div>
 				<Stack direction="column" spacing="xs" className="flex-1 overflow-hidden">
 					<Typography variant="body" className="font-medium">

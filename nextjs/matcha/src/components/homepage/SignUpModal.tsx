@@ -60,9 +60,6 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
         email,
         username,
         password,
-        bornAt: "1990-01-01", // Default date of birth
-        orientation: "bisexual" as const, // Default orientation
-        gender: "men" as const, // Default gender
       };
 
       const response = await fetch("/api/auth/signup", {
