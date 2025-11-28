@@ -4,6 +4,8 @@ import { useRef, useState } from "react";
 import Typography from "@/components/common/Typography";
 import ErrorModal from "@/components/common/ErrorModal";
 import { MAX_ADDITIONAL_PICTURES } from "@/constants/onboarding";
+import ReactCrop, { type Crop } from 'react-image-crop'
+import 'react-image-crop/dist/ReactCrop.css';
 
 interface PicturesStepProps {
 	profilePicture: File | null;
@@ -158,6 +160,9 @@ export default function PicturesStep({
 
 	const hasError = showValidation && !profilePicture;
 
+	const [crop, setCrop] = useState<Crop>()
+
+
 	return (
 		<div className="space-y-8">
 			{/* Profile Picture */}
@@ -174,7 +179,7 @@ export default function PicturesStep({
 					</Typography>
 				)}
 
-				<div className="flex items-start gap-4">
+				<div className="flex flex-col lg:flex-row items-start gap-4">
 					<div
 						className={`
 							relative w-48 h-48 rounded-lg border-2 border-dashed
@@ -247,6 +252,11 @@ export default function PicturesStep({
 							</label>
 						)}
 					</div>
+					{profilePicture && (
+						<ReactCrop crop={crop} aspect={9 / 16} onChange={c => setCrop(c)}>
+							<img src={getImageUrl(profilePicture) || "none"} />
+						</ReactCrop>)
+					}
 				</div>
 			</div>
 
