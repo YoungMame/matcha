@@ -43,8 +43,8 @@ interface PicturesStepProps {
 	profilePictureSettings: ImageSettings;
 	additionalPicturesSettings: ImageSettings[];
 	onChange: (
-		field: "profilePicture" | "additionalPictures",
-		value: File | null | (File | null)[]
+		field: "profilePicture" | "additionalPictures" | "profilePictureSettings" | "additionalPicturesSettings",
+		value: File | null | (File | null)[] | ImageSettings | ImageSettings[]
 	) => void;
 	showValidation?: boolean;
 }
@@ -227,12 +227,12 @@ export default function PicturesStep({
 			setCroppedImages(newCroppedImages);
 			setCurrentCroppingIndex(null);
 			onChange(
-				currentCroppingIndex == 0 ? "profilePicture" : "additionalPictures",
+				currentCroppingIndex == 0 ? "profilePictureSettings" : "additionalPicturesSettings",
 				currentCroppingIndex == 0
-					? croppedImage as File
+					? { rotation, crop: croppedAreaPixels as Area }
 					: (() => {
-						const newAdditionalPictures = [...additionalPictures];
-						newAdditionalPictures[currentCroppingIndex - 1] = croppedImage as File;
+						const newAdditionalPictures = [...additionalPicturesSettings];
+						newAdditionalPictures[currentCroppingIndex - 1] = { rotation, crop: croppedAreaPixels as Area };
 						return newAdditionalPictures;
 					})()
 			);

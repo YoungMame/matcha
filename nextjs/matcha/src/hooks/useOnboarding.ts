@@ -13,6 +13,11 @@ const initialData: OnboardingData = {
 	interestedInGenders: [],
 	profilePicture: null,
 	additionalPictures: [null, null, null, null],
+	profilePictureSettings: {
+		rotation: 0,
+		crop: { x: 0, y: 0, width: 0, height: 0 },
+	},
+	additionalPicturesSettings: [],
 };
 
 export const useOnboarding = () => {
@@ -86,6 +91,8 @@ export const useOnboarding = () => {
 			if (data.profilePicture) {
 				const formData = new FormData();
 				formData.append('file', data.profilePicture);
+				formData.append('rotation', data.profilePictureSettings.rotation.toString());
+				formData.append('scrop', JSON.stringify(data.profilePictureSettings.crop));
 				
 				await fetch('/api/private/user/me/profile-picture', {
 					method: 'POST',
@@ -97,6 +104,8 @@ export const useOnboarding = () => {
 				if (picture) {
 					const formData = new FormData();
 					formData.append('file', picture);
+					formData.append('rotation', data.additionalPicturesSettings[data.additionalPictures.indexOf(picture)].rotation.toString());
+					formData.append('scrop', JSON.stringify(data.additionalPicturesSettings[data.additionalPictures.indexOf(picture)].crop));
 					
 					await fetch('/api/private/user/me/profile-picture', {
 						method: 'POST',

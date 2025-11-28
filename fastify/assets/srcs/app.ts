@@ -46,7 +46,8 @@ export const buildApp = () => {
             files: 1,
             headerPairs: 2000,
             parts: 1000
-        }
+        },
+        attachFieldsToBody: true
     });
 
     app.register(websocket, {

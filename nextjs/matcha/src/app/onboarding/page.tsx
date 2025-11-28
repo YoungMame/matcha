@@ -121,6 +121,8 @@ export default function OnboardingPage() {
 					<PicturesStep
 						profilePicture={data.profilePicture}
 						additionalPictures={data.additionalPictures}
+						profilePictureSettings={data.profilePictureSettings}
+						additionalPicturesSettings={data.additionalPicturesSettings}
 						onChange={(field, value) => {
 							updateData({ [field]: value });
 							if (showValidation) {
