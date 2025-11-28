@@ -30,11 +30,18 @@ declare type Area = {
     y: number;
 };
 
+declare type ImageSettings = {
+	rotation: number;
+	crop: Area;
+}
+
 const CROP_AREA_ASPECT = 9 / 16;
 
 interface PicturesStepProps {
 	profilePicture: File | null;
 	additionalPictures: (File | null)[];
+	profilePictureSettings: ImageSettings;
+	additionalPicturesSettings: ImageSettings[];
 	onChange: (
 		field: "profilePicture" | "additionalPictures",
 		value: File | null | (File | null)[]
@@ -42,35 +49,11 @@ interface PicturesStepProps {
 	showValidation?: boolean;
 }
 
-const Output = ({ croppedArea}: { croppedArea: Area }) => {
-  const scale = 100 / croppedArea.width;
-  const transform = {
-    x: `${-croppedArea.x * scale}%`,
-    y: `${-croppedArea.y * scale}%`,
-    scale,
-    width: "calc(100% + 0.5px)",
-    height: "auto"
-  };
-
-  const imageStyle = {
-    transform: `translate3d(${transform.x}, ${transform.y}, 0) scale3d(${transform.scale},${transform.scale},1)`,
-    width: transform.width,
-    height: transform.height
-  };
-
-  return (
-    <div
-      className="output"
-      style={{ paddingBottom: `${100 / CROP_AREA_ASPECT}%` }}
-    >
-      <img src="/assets/dog.jpeg" alt="" style={imageStyle} />
-    </div>
-  );
-};
-
 export default function PicturesStep({
 	profilePicture,
 	additionalPictures,
+	profilePictureSettings,
+	additionalPicturesSettings,
 	onChange,
 	showValidation = false,
 }: PicturesStepProps) {
@@ -211,33 +194,52 @@ export default function PicturesStep({
 
 	const hasError = showValidation && !profilePicture;
 
-  const [crop, setCrop] = useState({ x: 0, y: 0 })
-  const [rotation, setRotation] = useState(0)
-  const [zoom, setZoom] = useState(1)
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
-  const [croppedImage, setCroppedImage] = useState<string | null>(null)
+	const [crop, setCrop] = useState({ x: 0, y: 0 });
+	const [rotation, setRotation] = useState(0);
+	const [zoom, setZoom] = useState(1);
+	const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
-  const onCropComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
-    setCroppedAreaPixels(croppedAreaPixels)
-  }
+	const [croppedImages, setCroppedImages] = useState<string[]>([]);
+	const [currentCroppingIndex, setCurrentCroppingIndex] = useState<number | null>(null);
 
-  const showCroppedImage = async () => {
-    try {
-      const croppedImage = await getCroppedImg(
-        profilePicture ? getImageUrl(profilePicture)! : "",
-        croppedAreaPixels as Area,
-        rotation
-      )
-      console.log('donee', { croppedImage })
-      setCroppedImage(croppedImage as string)
-    } catch (e) {
-      console.error(e)
-    }
-  }
+	const onCropComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
+		setCroppedAreaPixels(croppedAreaPixels)
+	}
 
-  const onClose = () => {
-    setCroppedImage(null)
-  }
+	const submitImage = async () => {
+		try {
+			if (currentCroppingIndex === null || croppedAreaPixels === null) return;
+
+			const picture = currentCroppingIndex == 0 ? profilePicture : additionalPictures[currentCroppingIndex - 1];
+			if (picture == null) return;
+
+			const pictureURL = getImageUrl(picture);
+			if (pictureURL == null) return;
+
+			const croppedImage = await getCroppedImg(
+				pictureURL,
+				croppedAreaPixels as Area,
+				rotation
+			)
+			console.log('donee', { croppedImage })
+			const newCroppedImages = [...croppedImages];
+			newCroppedImages[currentCroppingIndex] = croppedImage as string;
+			setCroppedImages(newCroppedImages);
+			setCurrentCroppingIndex(null);
+			onChange(
+				currentCroppingIndex == 0 ? "profilePicture" : "additionalPictures",
+				currentCroppingIndex == 0
+					? croppedImage as File
+					: (() => {
+						const newAdditionalPictures = [...additionalPictures];
+						newAdditionalPictures[currentCroppingIndex - 1] = croppedImage as File;
+						return newAdditionalPictures;
+					})()
+			);
+		} catch (e) {
+			console.error(e)
+		}
+	}
 
 	return (
 		<div className="space-y-8">
@@ -258,7 +260,7 @@ export default function PicturesStep({
 				<div className="flex flex-col lg:flex-row items-start gap-4">
 					<div
 						className={`
-							relative w-48 h-48 rounded-lg border-2 border-dashed
+							relative w-27 h-48 rounded-lg border-2 border-dashed
 							${profilePicture
 								? "border-pink-500"
 								: hasError
@@ -271,7 +273,7 @@ export default function PicturesStep({
 						{profilePicture ? (
 							<>
 								<img
-									src={getImageUrl(profilePicture)!}
+									src={ croppedImages[0] || getImageUrl(profilePicture)! }
 									alt="Profile"
 									className="w-full h-full object-cover"
 								/>
@@ -328,10 +330,10 @@ export default function PicturesStep({
 							</label>
 						)}
 					</div>
-					{profilePicture && (<>
+					{currentCroppingIndex !== null && (<>
 							<div className="relative z-10 w-48 h-80 bg-gray-200">
 								<Cropper
-									image={getImageUrl(profilePicture) || "none"}
+									image={getImageUrl(currentCroppingIndex == 0 ? profilePicture : additionalPictures[currentCroppingIndex - 1]) || "none"}
 									crop={crop}
 									zoom={zoom}
 									aspect={CROP_AREA_ASPECT}
@@ -342,10 +344,7 @@ export default function PicturesStep({
 								{/* TODO create slider component */}
 								<button onClick={() => setRotation((rotation + 90) % 360)}>ROTATE DROITE</button>
 								<button onClick={() => setRotation((rotation - 90) % 360)}>ROTATE GAUCHE</button>
-								<button onClick={showCroppedImage}>CROP</button>
-							</div>
-							<div className="viewer relative z-10 w-48 h-80 bg-gray-200">
-								<img src={croppedImage || ""} alt="" />
+								<button onClick={submitImage}>Confirmer</button>
 							</div>
 						</>
 					)}
@@ -375,7 +374,7 @@ export default function PicturesStep({
 							{picture ? (
 								<>
 									<img
-										src={getImageUrl(picture)!}
+										src={ croppedImages[index + 1] || getImageUrl(picture)!}
 										alt={`Additional ${index + 1}`}
 										className="w-full h-full object-cover"
 									/>

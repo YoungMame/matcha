@@ -77,6 +77,14 @@ const profilePictureRoutes = async (fastify: FastifyInstance) => {
     });
     fastify.post('/', {
         schema: {
+            request: {
+                properties: {
+                    scrop: { type: 'object', properties: {
+                        x: { type: 'number' }, y: { type: 'number' }, width: { type: 'number' }, height: { type: 'number'}
+                    }, required: ['x', 'y', 'width', 'height']},
+                    rotation: { type: 'number' }
+                }
+            },
             response: {
                 200: {
                     type: 'object',

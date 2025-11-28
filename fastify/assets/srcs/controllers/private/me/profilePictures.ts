@@ -2,6 +2,14 @@ import { FastifyRequest, FastifyReply, FastifyRequestUser } from 'fastify';
 import { AppError, UnauthorizedError, ForbiddenError, NotFoundError, BadRequestError } from '../../../utils/error';
 import path from 'path';
 import fs from 'fs';
+import sharp from 'sharp';
+
+type Scrop = {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
 
 export const setProfilePictureIndexHandler = async (
     request: FastifyRequest,
@@ -35,6 +43,8 @@ export const addProfilePictureHandler = async (
         if (!userId)
             throw new UnauthorizedError();
 
+        const { scrop, rotation } = request.body as { scrop?: Scrop, rotation?: number };
+
         const file = request.fileMeta;
         if (!file)
             throw (new BadRequestError());
@@ -48,7 +58,15 @@ export const addProfilePictureHandler = async (
         const newFilePath = path.join(picturesDir, newFileName);
         const newFileURL = `https://${process.env.DOMAIN || 'localhost'}/api/private/uploads/${userId}/${newFileName}`;
         const dest = fs.createWriteStream(newFilePath);
-        dest.write(request.fileBuffer);
+
+        const newBuffer = await sharp(request.fileBuffer).extract({
+            left: Math.round(scrop?.x || 0),
+            top: Math.round(scrop?.y || 0),
+            width: Math.round(scrop?.width || 0),
+            height: Math.round(scrop?.height || 0)
+        }).rotate(rotation || 0).toBuffer();
+
+        dest.write(newBuffer);
         dest.end();
 
         // dest.on('finish', () => {
