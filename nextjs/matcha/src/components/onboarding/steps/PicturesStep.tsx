@@ -4,8 +4,33 @@ import { useRef, useState } from "react";
 import Typography from "@/components/common/Typography";
 import ErrorModal from "@/components/common/ErrorModal";
 import { MAX_ADDITIONAL_PICTURES } from "@/constants/onboarding";
-import ReactCrop, { type Crop } from 'react-image-crop'
-import 'react-image-crop/dist/ReactCrop.css';
+import Cropper from 'react-easy-crop'
+import getCroppedImg from '@/utils/cropImage';
+import RangeSlider from "@/components/common/RangeSlider";
+
+// declare type Size = {
+//     width: number;
+//     height: number;
+// };
+// declare type MediaSize = {
+//     width: number;
+//     height: number;
+//     naturalWidth: number;
+//     naturalHeight: number;
+// };
+
+declare type Point = {
+    x: number;
+    y: number;
+};
+declare type Area = {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+};
+
+const CROP_AREA_ASPECT = 9 / 16;
 
 interface PicturesStepProps {
 	profilePicture: File | null;
@@ -16,6 +41,32 @@ interface PicturesStepProps {
 	) => void;
 	showValidation?: boolean;
 }
+
+const Output = ({ croppedArea}: { croppedArea: Area }) => {
+  const scale = 100 / croppedArea.width;
+  const transform = {
+    x: `${-croppedArea.x * scale}%`,
+    y: `${-croppedArea.y * scale}%`,
+    scale,
+    width: "calc(100% + 0.5px)",
+    height: "auto"
+  };
+
+  const imageStyle = {
+    transform: `translate3d(${transform.x}, ${transform.y}, 0) scale3d(${transform.scale},${transform.scale},1)`,
+    width: transform.width,
+    height: transform.height
+  };
+
+  return (
+    <div
+      className="output"
+      style={{ paddingBottom: `${100 / CROP_AREA_ASPECT}%` }}
+    >
+      <img src="/assets/dog.jpeg" alt="" style={imageStyle} />
+    </div>
+  );
+};
 
 export default function PicturesStep({
 	profilePicture,
@@ -160,8 +211,33 @@ export default function PicturesStep({
 
 	const hasError = showValidation && !profilePicture;
 
-	const [crop, setCrop] = useState<Crop>()
+  const [crop, setCrop] = useState({ x: 0, y: 0 })
+  const [rotation, setRotation] = useState(0)
+  const [zoom, setZoom] = useState(1)
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
+  const [croppedImage, setCroppedImage] = useState<string | null>(null)
 
+  const onCropComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
+    setCroppedAreaPixels(croppedAreaPixels)
+  }
+
+  const showCroppedImage = async () => {
+    try {
+      const croppedImage = await getCroppedImg(
+        profilePicture ? getImageUrl(profilePicture)! : "",
+        croppedAreaPixels as Area,
+        rotation
+      )
+      console.log('donee', { croppedImage })
+      setCroppedImage(croppedImage as string)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const onClose = () => {
+    setCroppedImage(null)
+  }
 
 	return (
 		<div className="space-y-8">
@@ -252,11 +328,27 @@ export default function PicturesStep({
 							</label>
 						)}
 					</div>
-					{profilePicture && (
-						<ReactCrop crop={crop} aspect={9 / 16} onChange={c => setCrop(c)}>
-							<img src={getImageUrl(profilePicture) || "none"} />
-						</ReactCrop>)
-					}
+					{profilePicture && (<>
+							<div className="relative z-10 w-48 h-80 bg-gray-200">
+								<Cropper
+									image={getImageUrl(profilePicture) || "none"}
+									crop={crop}
+									zoom={zoom}
+									aspect={CROP_AREA_ASPECT}
+									onCropChange={setCrop}
+									onZoomChange={setZoom}
+									onCropComplete={onCropComplete}
+								/>
+								{/* TODO create slider component */}
+								<button onClick={() => setRotation((rotation + 90) % 360)}>ROTATE DROITE</button>
+								<button onClick={() => setRotation((rotation - 90) % 360)}>ROTATE GAUCHE</button>
+								<button onClick={showCroppedImage}>CROP</button>
+							</div>
+							<div className="viewer relative z-10 w-48 h-80 bg-gray-200">
+								<img src={croppedImage || ""} alt="" />
+							</div>
+						</>
+					)}
 				</div>
 			</div>
 
