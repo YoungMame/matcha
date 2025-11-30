@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { OnboardingData, OnboardingStep } from '@/types/onboarding';
 import { STEPS, MIN_INTERESTS } from '@/constants/onboarding';
-import { useCompleteProfile, useUploadProfilePicture } from './useProfile';
+import { profileApi } from '@/lib/api/profile';
 
 const initialData: OnboardingData = {
 	firstName: '',
@@ -18,9 +18,6 @@ const initialData: OnboardingData = {
 export const useOnboarding = () => {
 	const [currentStepIndex, setCurrentStepIndex] = useState(0);
 	const [data, setData] = useState<OnboardingData>(initialData);
-
-	const { mutateAsync: uploadPicture } = useUploadProfilePicture();
-	const { mutateAsync: completeProfile } = useCompleteProfile();
 
 	const currentStep = STEPS[currentStepIndex];
 
@@ -91,12 +88,12 @@ export const useOnboarding = () => {
 			throw new Error('Profile picture is required');
 		}
 		
-		await uploadPicture(data.profilePicture);
+		await profileApi.uploadProfilePicture(data.profilePicture);
 
 		// Step 2: Upload additional pictures
 		for (const picture of data.additionalPictures) {
 			if (picture) {
-				await uploadPicture(picture);
+				await profileApi.uploadProfilePicture(picture);
 			}
 		}
 
@@ -123,7 +120,7 @@ export const useOnboarding = () => {
 			bornAt: new Date(data.birthday).toISOString(),
 		};
 
-		return await completeProfile(profileData);
+		return await profileApi.completeProfile(profileData);
 	};
 
 	return {

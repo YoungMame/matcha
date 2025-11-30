@@ -26,7 +26,7 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
-  const { mutate: signup, isPending } = useSignup();
+  const { signup, isPending, error: signupError } = useSignup();
 
   const handleContinue = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +35,7 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
     }
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Check if passwords match
@@ -67,18 +67,16 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
       gender: "men" as const, // Default gender
     };
 
-    signup(signupData, {
-      onSuccess: () => {
-        // Move to confirmation step on success
-        setStep("confirmation");
-      },
-      onError: (error: any) => {
-        console.error("Signup error:", error);
-        setPasswordError(
-          error?.response?.data?.error || "Une erreur est survenue lors de l'inscription"
-        );
-      },
-    });
+    try {
+      await signup(signupData);
+      // Move to confirmation step on success
+      setStep("confirmation");
+    } catch (error: any) {
+      console.error("Signup error:", error);
+      setPasswordError(
+        error?.response?.data?.error || "Une erreur est survenue lors de l'inscription"
+      );
+    }
   };
 
   const handleClose = () => {

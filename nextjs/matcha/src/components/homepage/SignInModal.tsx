@@ -26,16 +26,18 @@ export default function SignInModal({
     password: "",
   });
   
-  const { mutate: login, isPending, error } = useLogin();
+  const { login, isPending, error } = useLogin();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    login(formData, {
-      onSuccess: () => {
-        // Close modal on successful login
-        handleClose();
-      },
-    });
+    try {
+      await login(formData);
+      // Close modal on successful login
+      handleClose();
+    } catch (err) {
+      // Error is already set in the hook
+      console.error("Login error:", err);
+    }
   };
 
   const handleClose = () => {

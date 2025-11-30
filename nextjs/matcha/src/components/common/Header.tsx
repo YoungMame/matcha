@@ -16,7 +16,7 @@ export default function Header() {
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showSignInModal, setShowSignInModal] = useState(false);
   const [language, setLanguage] = useState("FR");
-  const { mutate: logout } = useLogout();
+  const { logout } = useLogout();
 
   // Determine which page we're on
   const isHomePage = pathname === "/";
@@ -37,8 +37,12 @@ export default function Header() {
 
   const userData: any = {user: true};
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
   const handleLanguageChange = () => {

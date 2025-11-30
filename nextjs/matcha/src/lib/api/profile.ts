@@ -62,6 +62,7 @@ export const profileApi = {
    */
   getMyProfile: async (): Promise<any> => {
     const response = await axios.get('/api/private/user/me/profile');
+	console.log('getMyProfile response:', response.data);
     return response.data;
   },
 };

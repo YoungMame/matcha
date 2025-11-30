@@ -1,4 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { authApi } from '@/lib/api/auth';
 import type { LoginRequest, SignupRequest } from '@/types/api/auth';
@@ -14,31 +15,54 @@ import type { LoginRequest, SignupRequest } from '@/types/api/auth';
 export function useLogin() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
-  return useMutation({
-    mutationFn: (data: LoginRequest) => authApi.login(data),
-    onSuccess: () => {
+  const login = async (data: LoginRequest) => {
+    setIsPending(true);
+    setError(null);
+    
+    try {
+      await authApi.login(data);
       // Invalidate and refetch user data
       queryClient.invalidateQueries({ queryKey: ['user'] });
       router.push('/browsing');
-    },
-  });
+    } catch (err) {
+      setError(err as Error);
+      throw err;
+    } finally {
+      setIsPending(false);
+    }
+  };
+
+  return { login, isPending, error };
 }
 
 /**
  * Hook for signing up a new user
- * Returns mutation object with success state
  */
 export function useSignup() {
   const queryClient = useQueryClient();
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
-  return useMutation({
-    mutationFn: (data: SignupRequest) => authApi.signup(data),
-    onSuccess: () => {
+  const signup = async (data: SignupRequest) => {
+    setIsPending(true);
+    setError(null);
+    
+    try {
+      await authApi.signup(data);
       // Invalidate queries on successful signup
       queryClient.invalidateQueries({ queryKey: ['user'] });
-    },
-  });
+    } catch (err) {
+      setError(err as Error);
+      throw err;
+    } finally {
+      setIsPending(false);
+    }
+  };
+
+  return { signup, isPending, error };
 }
 
 /**
@@ -48,15 +72,27 @@ export function useSignup() {
 export function useLogout() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
-  return useMutation({
-    mutationFn: async () => await authApi.logout(),
-    onSuccess: () => {
+  const logout = async () => {
+    setIsPending(true);
+    setError(null);
+    
+    try {
+      await authApi.logout();
       // Clear all cached data
       queryClient.clear();
       router.push('/');
-    },
-  });
+    } catch (err) {
+      setError(err as Error);
+      throw err;
+    } finally {
+      setIsPending(false);
+    }
+  };
+
+  return { logout, isPending, error };
 }
 
 /**

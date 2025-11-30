@@ -24,7 +24,8 @@ export const userProfileApi = {
    * Get a user's profile by ID
    */
   getUserProfile: async ({ userId }: GetUserProfileRequest): Promise<UserProfileResponse> => {
-    const response = await axios.get<UserProfileResponse>(`/api/private/user/${userId}/profile`);
+    const response = await axios.get<UserProfileResponse>(`/api/private/user/view/${userId}`);
+	console.log('getUserProfile response:', response.data);
     return response.data;
   },
 
@@ -32,7 +33,7 @@ export const userProfileApi = {
    * Like a user's profile
    */
   likeProfile: async ({ userId }: LikeProfileRequest): Promise<LikeProfileResponse> => {
-    const response = await axios.post<LikeProfileResponse>('/api/private/like', { userId });
+    const response = await axios.post<LikeProfileResponse>(`/api/private/user/like/${userId}`);
     return response.data;
   },
 
@@ -40,7 +41,7 @@ export const userProfileApi = {
    * Unlike a user's profile
    */
   unlikeProfile: async ({ userId }: UnlikeProfileRequest): Promise<UnlikeProfileResponse> => {
-    const response = await axios.delete<UnlikeProfileResponse>(`/api/private/like/${userId}`);
+    const response = await axios.delete<UnlikeProfileResponse>(`/api/private/user/like/${userId}`);
     return response.data;
   },
 
@@ -48,7 +49,7 @@ export const userProfileApi = {
    * Block a user
    */
   blockProfile: async ({ userId }: BlockProfileRequest): Promise<BlockProfileResponse> => {
-    const response = await axios.post<BlockProfileResponse>('/api/private/block', { userId });
+    const response = await axios.post<BlockProfileResponse>(`/api/private/user/block/${userId}`);
     return response.data;
   },
 
@@ -56,7 +57,7 @@ export const userProfileApi = {
    * Report a user's profile
    */
   reportProfile: async ({ userId, reason }: ReportProfileRequest): Promise<ReportProfileResponse> => {
-    const response = await axios.post<ReportProfileResponse>('/api/private/report', { userId, reason });
+    const response = await axios.post<ReportProfileResponse>(`/api/private/report/${userId}`, { reason });
     return response.data;
   },
 

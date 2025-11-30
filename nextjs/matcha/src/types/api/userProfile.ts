@@ -7,26 +7,21 @@ export interface GetUserProfileRequest {
 }
 
 export interface UserProfileResponse {
-  id: string;
+  id: number;
   username: string;
-  firstName: string;
-  lastName: string;
-  birthday: string;
+  profilePictureIndex: number;
+  profilePictures: string[];
+  bio: string;
+  tags: string[];
+  bornAt: string;
   gender: string;
   orientation: string;
-  bio: string;
-  interests: string[];
-  profilePicture: string | null;
-  additionalPictures: string[];
   location: {
-    distance?: number;
-    city?: string;
+    latitude: number | null;
+    longitude: number | null;
+    city: string | null;
+    country: string | null;
   };
-  fame: number;
-  isOnline: boolean;
-  lastSeen?: string;
-  isLikedByMe?: boolean;
-  isLikedByThem?: boolean;
 }
 
 export interface LikeProfileRequest {

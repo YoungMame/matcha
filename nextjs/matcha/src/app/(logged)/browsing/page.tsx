@@ -79,9 +79,9 @@ export default function BrowsingPage() {
 	// Fetch available interests
 	const { data: availableInterests = [] } = useAvailableInterests();
 
-	// Mutation hooks for like/pass
-	const { mutate: likeUser, isPending: isLiking } = useLikeUser();
-	const { mutate: passUser, isPending: isPassing } = usePassUser();
+	// hooks for like/pass
+	const { likeUser, isLiking } = useLikeUser();
+	const { passUser, isPassing } = usePassUser();
 	
 	// When search params change, update filters
 	useEffect(() => {
@@ -136,26 +136,24 @@ export default function BrowsingPage() {
 		setTimeout(() => setSelectedUser(null), 300); // Clear after animation
 	};
 
-	const handleLike = useCallback((userId: string) => {
-		likeUser(userId, {
-			onSuccess: (data) => {
-				if (data.matched) {
-					console.log("It's a match!", userId);
-					// The MatchingModal will show the match
-				}
-			},
-			onError: (error) => {
-				console.error("Failed to like user:", error);
-			},
-		});
+	const handleLike = useCallback(async (userId: string) => {
+		try {
+			const data = await likeUser(userId);
+			if (data.matched) {
+				console.log("It's a match!", userId);
+				// The MatchingModal will show the match
+			}
+		} catch (error) {
+			console.error("Failed to like user:", error);
+		}
 	}, [likeUser]);
 
-	const handlePass = useCallback((userId: string) => {
-		passUser(userId, {
-			onError: (error) => {
-				console.error("Failed to pass user:", error);
-			},
-		});
+	const handlePass = useCallback(async (userId: string) => {
+		try {
+			await passUser(userId);
+		} catch (error) {
+			console.error("Failed to pass user:", error);
+		}
 	}, [passUser]);
 
 	if (isLoadingProfiles) {

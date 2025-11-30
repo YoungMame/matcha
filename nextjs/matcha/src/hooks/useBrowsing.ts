@@ -1,4 +1,5 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { browsingApi } from '@/lib/api/browsing';
 import type { GetProfilesRequest } from '@/types/api/browsing';
 
@@ -24,19 +25,27 @@ export function useProfiles(filters: GetProfilesRequest = {}) {
  */
 export function useLikeUser() {
   const queryClient = useQueryClient();
+  const [isLiking, setIsLiking] = useState(false);
 
-  return useMutation({
-    mutationFn: (userId: string) => browsingApi.likeUser({ userId }),
-    onSuccess: (data) => {
+  const likeUser = async (userId: string) => {
+    setIsLiking(true);
+    try {
+      const data = await browsingApi.likeUser({ userId });
+      
       // Invalidate profiles to update UI
-      queryClient.invalidateQueries({ queryKey: ['profiles'] });
+      await queryClient.invalidateQueries({ queryKey: ['profiles'] });
       
       // If it's a match, invalidate matches list
       if (data.matched) {
-        queryClient.invalidateQueries({ queryKey: ['matches'] });
+        await queryClient.invalidateQueries({ queryKey: ['matches'] });
       }
-    },
-  });
+      return data;
+    } finally {
+      setIsLiking(false);
+    }
+  };
+
+  return { likeUser, isLiking };
 }
 
 /**
@@ -44,14 +53,20 @@ export function useLikeUser() {
  */
 export function usePassUser() {
   const queryClient = useQueryClient();
+  const [isPassing, setIsPassing] = useState(false);
 
-  return useMutation({
-    mutationFn: (userId: string) => browsingApi.passUser({ userId }),
-    onSuccess: () => {
+  const passUser = async (userId: string) => {
+    setIsPassing(true);
+    try {
+      await browsingApi.passUser({ userId });
       // Invalidate profiles to update UI
-      queryClient.invalidateQueries({ queryKey: ['profiles'] });
-    },
-  });
+      await queryClient.invalidateQueries({ queryKey: ['profiles'] });
+    } finally {
+      setIsPassing(false);
+    }
+  };
+
+  return { passUser, isPassing };
 }
 
 /**

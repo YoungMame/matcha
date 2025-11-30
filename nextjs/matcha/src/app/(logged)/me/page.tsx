@@ -2,21 +2,25 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import Container from "@/components/common/Container";
 import Typography from "@/components/common/Typography";
 import Button from "@/components/common/Button";
 import Alert from "@/components/common/Alert";
 import TextField from "@/components/common/TextField";
-import { useMyProfile, useUpdateProfile, useUploadProfilePicture, useDeleteProfilePicture, useSetProfilePictureIndex } from "@/hooks/useProfile";
+import { useMyProfile } from "@/hooks/useProfile";
+import { profileApi } from "@/lib/api/profile";
 import InterestsStep from "@/components/onboarding/steps/InterestsStep";
 
 export default function MyProfilePage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { data: profile, isLoading, error } = useMyProfile();
-  const { mutate: updateProfile, isPending: isUpdating } = useUpdateProfile();
-  const { mutate: uploadPicture, isPending: isUploading } = useUploadProfilePicture();
-  const { mutate: deletePicture, isPending: isDeleting } = useDeleteProfilePicture();
-  const { mutate: setMainPicture, isPending: isSettingMain } = useSetProfilePictureIndex();
+  
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isSettingMain, setIsSettingMain] = useState(false);
 
   const [isEditing, setIsEditing] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -64,20 +68,70 @@ export default function MyProfilePage() {
       return;
     }
 
-    updateProfile({
-      ...formData,
-      firstName: formData.firstName.trim(),
-      lastName: formData.lastName.trim(),
-      email: formData.email.trim(),
-      bio: formData.bio.trim(),
-      gender: formData.gender as "men" | "women",
-      orientation: formData.orientation as "heterosexual" | "homosexual" | "bisexual" | "other",
-      bornAt: formData.bornAt ? new Date(formData.bornAt).toISOString() : undefined,
-    }, {
-      onSuccess: () => {
+    const updateData = async () => {
+      setIsUpdating(true);
+      try {
+        await profileApi.updateProfile({
+          ...formData,
+          firstName: formData.firstName.trim(),
+          lastName: formData.lastName.trim(),
+          email: formData.email.trim(),
+          bio: formData.bio.trim(),
+          gender: formData.gender as "men" | "women",
+          orientation: formData.orientation as "heterosexual" | "homosexual" | "bisexual" | "other",
+          bornAt: formData.bornAt ? new Date(formData.bornAt).toISOString() : undefined,
+        });
+        queryClient.invalidateQueries({ queryKey: ['profile'] });
+        queryClient.invalidateQueries({ queryKey: ['user'] });
         setIsEditing(false);
+      } catch (err) {
+        console.error(err);
+        setValidationError("Erreur lors de la mise à jour du profil");
+      } finally {
+        setIsUpdating(false);
       }
-    });
+    };
+
+    updateData();
+  };
+
+  const handleUploadPicture = async (file: File) => {
+    setIsUploading(true);
+    try {
+      await profileApi.uploadProfilePicture(file);
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+    } catch (err) {
+      console.error(err);
+      setValidationError("Erreur lors de l'upload de la photo");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleDeletePicture = async (index: number) => {
+    setIsDeleting(true);
+    try {
+      await profileApi.deleteProfilePicture(index);
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+    } catch (err) {
+      console.error(err);
+      setValidationError("Erreur lors de la suppression de la photo");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleSetMainPicture = async (index: number) => {
+    setIsSettingMain(true);
+    try {
+      await profileApi.setProfilePictureIndex(index);
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+    } catch (err) {
+      console.error(err);
+      setValidationError("Erreur lors de la définition de la photo principale");
+    } finally {
+      setIsSettingMain(false);
+    }
   };
 
   const handleCancel = () => {
@@ -383,7 +437,7 @@ export default function MyProfilePage() {
                                 setValidationError("L'image ne doit pas dépasser 5MB");
                                 return;
                               }
-                              uploadPicture(file);
+                              handleUploadPicture(file);
                             }
                           }}
                           disabled={isUploading}
@@ -427,7 +481,7 @@ export default function MyProfilePage() {
                               <Button
                                 variant="secondary"
                                 size="small"
-                                onClick={() => setMainPicture(index)}
+                                onClick={() => handleSetMainPicture(index)}
                                 disabled={isSettingMain}
                                 className="w-full text-xs"
                               >
@@ -437,7 +491,7 @@ export default function MyProfilePage() {
                             <Button
                               variant="outline"
                               size="small"
-                              onClick={() => deletePicture(index)}
+                              onClick={() => handleDeletePicture(index)}
                               disabled={isDeleting}
                               className="w-full text-xs bg-white text-red-500 border-red-500 hover:bg-red-50"
                             >
