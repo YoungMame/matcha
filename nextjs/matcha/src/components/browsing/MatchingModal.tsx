@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Modal from "@/components/common/Modal";
 import Typography from "@/components/common/Typography";
 import Badge from "@/components/common/Badge";
@@ -99,11 +98,10 @@ export default function MatchingModal({
 				<div className="relative h-[45vh] bg-gray-200 dark:bg-gray-700">
 					{allPictures.length > 0 && (
 						<>
-							<Image
+							<img
 								src={allPictures[currentImageIndex]}
 								alt={`${user.firstName} - Photo ${currentImageIndex + 1}`}
-								fill
-								className="object-cover"
+								className="absolute inset-0 w-full h-full object-cover"
 							/>
 
 							{/* Navigation Arrows */}

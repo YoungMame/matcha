@@ -21,6 +21,10 @@ export interface UpdateProfileRequest {
   gender?: 'men' | 'women';
   orientation?: 'heterosexual' | 'homosexual' | 'bisexual' | 'other';
   bornAt?: string;
+  location?: {
+    latitude: number;
+    longitude: number;
+  };
 }
 
 export interface CompleteProfileResponse {

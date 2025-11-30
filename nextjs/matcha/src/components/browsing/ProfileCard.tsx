@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Typography from "@/components/common/Typography";
 import Stack from "@/components/common/Stack";
 
@@ -23,11 +22,10 @@ export default function ProfileCard({
 		>
 			{/* Image */}
 			<div className="relative aspect-3/4 w-full overflow-hidden">
-				<Image
+				<img
 					src={pictureUrl}
 					alt={name}
-					fill
-					className="object-cover group-hover:scale-105 transition-transform duration-300"
+					className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
 				/>
 			</div>
 

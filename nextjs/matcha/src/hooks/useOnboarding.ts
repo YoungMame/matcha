@@ -118,9 +118,24 @@ export const useOnboarding = () => {
 					? 'homosexual' as const
 					: 'heterosexual' as const,
 			bornAt: new Date(data.birthday).toISOString(),
+			
 		};
 
-		return await profileApi.completeProfile(profileData);
+		const response = await profileApi.completeProfile(profileData);
+
+		// Update location with default values (Paris)
+		try {
+			await profileApi.updateProfile({
+				location: {
+					latitude: 48.8566,
+					longitude: 2.3522
+				}
+			});
+		} catch (error) {
+			console.error("Failed to update default location:", error);
+		}
+
+		return response;
 	};
 
 	return {

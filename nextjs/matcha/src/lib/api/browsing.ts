@@ -1,6 +1,7 @@
 import axios from '@/lib/axios';
 import { generateMockProfilesWithMetadata } from '@/mocks/browsing_mocks';
 import { calculateAge } from '@/lib/searchUtils';
+import { profileApi } from '@/lib/api/profile';
 import type {
   GetProfilesRequest,
   GetProfilesResponse,
@@ -21,7 +22,15 @@ export const browsingApi = {
    * Get profiles based on search/filter criteria
    */
   getProfiles: async (params: GetProfilesRequest = {}): Promise<GetProfilesResponse> => {
-    // Mock implementation
+    let userProfile;
+    try {
+      userProfile = await profileApi.getMyProfile();
+	  console.log("Fetched user profile for defaults:", userProfile);
+    } catch (error) {
+      console.error('Failed to fetch user profile for defaults', error);
+    }
+
+    /* Mock implementation
     const mockProfiles = generateMockProfilesWithMetadata(undefined, 20);
     
     const profiles: ProfileResponse[] = mockProfiles.map(p => ({
@@ -51,6 +60,67 @@ export const browsingApi = {
       total: profiles.length,
       hasMore: false
     };
+    */
+
+   console.log("donc les tags sont:", userProfile?.tags);
+
+    const {
+      ageMin = 18,
+      ageMax = 100,
+      fameMin = 0,
+      fameMax = 1000,
+      locationMax = 100,
+      sortBy = 'default',
+    } = params;
+
+	const interests = params.interests ? params.interests.length > 0 ? params.interests :  userProfile?.tags ?? [] : userProfile?.tags ?? [];
+	const lat = userProfile?.location?.latitude || 48.8566;
+	const lng = userProfile?.location?.longitude || 2.3522;
+
+    const tagsParam = interests.length > 0 ? interests.join(',') : 'null';
+    
+    const sortByMap: Record<string, string> = {
+      'age': 'age',
+      'location': 'distance',
+      'fame': 'fameRate',
+      'interests': 'tags',
+      'none': 'default',
+      'default': 'default'
+    };
+    const mappedSortBy = sortByMap[sortBy] || 'default';
+
+    // Backend route: /:minAge/:maxAge/:minFame/:maxFame/:tags/:lat/:lng/:radius/:sortBy
+    const url = `/api/private/browsing/${ageMin}/${ageMax}/${fameMin}/${fameMax}/${tagsParam}/${lat}/${lng}/${locationMax}/${mappedSortBy}`;
+
+    const response = await axios.get<{ users: any[] }>(url);
+    
+    const profiles: ProfileResponse[] = response.data.users.map((u: any) => ({
+      id: u.id.toString(),
+      username: u.firstName.toLowerCase(), // Fallback
+      firstName: u.firstName,
+      lastName: '', // Missing
+      age: calculateAge(u.bornAt),
+      birthday: u.bornAt,
+      gender: u.gender,
+      orientation: '', // Missing
+      bio: '', // Missing
+      interests: u.tags,
+      profilePicture: u.profilePicture,
+      additionalPictures: [], // Missing
+      location: {
+        distance: u.distance,
+        city: 'Unknown', // Missing
+      },
+      fame: u.fameRate,
+      isOnline: false, // Missing
+      lastSeen: undefined, // Missing
+    }));
+
+    return {
+      profiles,
+      total: profiles.length,
+      hasMore: false
+    };
   },
 
   /**
@@ -67,13 +137,5 @@ export const browsingApi = {
   passUser: async (data: PassUserRequest): Promise<PassUserResponse> => {
     const response = await axios.post<PassUserResponse>('/api/private/pass', data);
     return response.data;
-  },
-
-  /**
-   * Get available interests/tags
-   */
-  getAvailableInterests: async (): Promise<string[]> => {
-    const response = await axios.get<{ interests: string[] }>('/api/private/browsing/interests');
-    return response.data.interests;
   },
 };

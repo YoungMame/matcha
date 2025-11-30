@@ -69,13 +69,3 @@ export function usePassUser() {
   return { passUser, isPassing };
 }
 
-/**
- * Hook for fetching available interests/tags
- */
-export function useAvailableInterests() {
-  return useQuery({
-    queryKey: ['interests'],
-    queryFn: () => browsingApi.getAvailableInterests(),
-    staleTime: 60 * 60 * 1000, // 1 hour - interests don't change often
-  });
-}

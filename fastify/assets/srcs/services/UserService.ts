@@ -316,8 +316,9 @@ class UserService {
         hasLikedMe: boolean;
     }> {
         const user = await this.getUser(id);
-        if (!user|| !user.isProfileCompleted)
-            throw new NotFoundError();
+        if (!user|| !user.isProfileCompleted)
+			throw new NotFoundError();
+		
         if (viewerId)
         {
             const isBlocking = await this.isUserBlockedBy(viewerId, user.id);

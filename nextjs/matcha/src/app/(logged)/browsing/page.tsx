@@ -7,7 +7,7 @@ import Stack from "@/components/common/Stack";
 import Button from "@/components/common/Button";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useBrowsing as useBrowsingContext } from "@/contexts/BrowsingContext";
-import { useProfiles, useLikeUser, usePassUser, useAvailableInterests } from "@/hooks/useBrowsing";
+import { useProfiles, useLikeUser, usePassUser } from "@/hooks/useBrowsing";
 import LocationPermissionModal from "@/components/app/LocationPermissionModal";
 import SearchBar from "@/components/browsing/SearchBar";
 import { FilterBar, FilterOptions } from "@/components/browsing/FilterBar";
@@ -15,6 +15,7 @@ import ProfileCard from "@/components/browsing/ProfileCard";
 import MatchingModal from "@/components/browsing/MatchingModal";
 import { UserProfile } from "@/types/userProfile";
 import { parseSearchParams, calculateAge } from "@/lib/searchUtils";
+import { AVAILABLE_INTERESTS } from "@/constants/onboarding";
 
 export default function BrowsingPage() {
 	const router = useRouter();
@@ -70,15 +71,14 @@ export default function BrowsingPage() {
 			fameMax: params.ranges.fame[1],
 			interests: params.selectedInterests,
 			sortBy: sortByMap[params.sortBy] || undefined,
+			lat: coordinates?.latitude ?? undefined,
+			lng: coordinates?.longitude ?? undefined,
 		};
-	}, [filters, searchCriteria]);
+	}, [filters, searchCriteria, coordinates]);
 
 	// Fetch profiles using React Query
 	const { data: profilesData, isLoading: isLoadingProfiles, error: profilesError } = useProfiles(apiParams);
 	
-	// Fetch available interests
-	const { data: availableInterests = [] } = useAvailableInterests();
-
 	// hooks for like/pass
 	const { likeUser, isLiking } = useLikeUser();
 	const { passUser, isPassing } = usePassUser();
@@ -205,7 +205,7 @@ export default function BrowsingPage() {
 				<div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
 					{/* Search Bar */}
 					<SearchBar 
-						availableInterests={availableInterests}
+						availableInterests={AVAILABLE_INTERESTS}
 						initialCriteria={searchCriteria ? {
 							ageRange: searchCriteria.ranges.age,
 							fameRange: searchCriteria.ranges.fame,
@@ -221,7 +221,7 @@ export default function BrowsingPage() {
 					{/* Filter Bar */}
 					<FilterBar
 						onFilterChange={handleFilterChange}
-						availableInterests={availableInterests}
+						availableInterests={AVAILABLE_INTERESTS}
 					/>
 
 					{/* Profile Grid */}

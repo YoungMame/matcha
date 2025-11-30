@@ -13,6 +13,8 @@ export interface GetProfilesRequest {
   sortBy?: 'age' | 'location' | 'fame' | 'interests' | 'none';
   limit?: number;
   offset?: number;
+  lat?: number;
+  lng?: number;
 }
 
 export interface ProfileResponse {
