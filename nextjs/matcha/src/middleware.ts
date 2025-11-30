@@ -38,8 +38,8 @@ export function middleware(request: NextRequest) {
 	);
 
 	// Public routes that should redirect to browsing if already logged in
-	//   const authPaths = ["/"];
-	//   const isAuthPath = authPaths.some((path) => pathname.startsWith(path));
+	  const authPaths = ["/"];
+	  const isAuthPath = authPaths.includes(pathname);
 
 	// Check authentication
 	let isAuthenticated = false;
@@ -56,12 +56,12 @@ export function middleware(request: NextRequest) {
 		return NextResponse.redirect(url);
 	}
 
-	//   if (isAuthPath && isAuthenticated) {
-	//     // Redirect to browsing if already logged in and trying to access login
-	//     const url = request.nextUrl.clone();
-	//     url.pathname = "/browsing";
-	//     return NextResponse.redirect(url);
-	//   }
+	  if (isAuthPath && isAuthenticated) {
+	    // Redirect to browsing if already logged in and trying to access login
+	    const url = request.nextUrl.clone();
+	    url.pathname = "/browsing";
+	    return NextResponse.redirect(url);
+	  }
 
 	return NextResponse.next();
 }

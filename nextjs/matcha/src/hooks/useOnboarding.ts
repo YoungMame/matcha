@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { OnboardingData, OnboardingStep } from '@/types/onboarding';
 import { STEPS, MIN_INTERESTS } from '@/constants/onboarding';
+import { profileApi } from '@/lib/api/profile';
 
 const initialData: OnboardingData = {
 	firstName: '',
@@ -81,30 +82,20 @@ export const useOnboarding = () => {
 
 	const submitOnboarding = async () => {
 		console.log("Submitting onboarding with data:", data);
-		try {
-			// Step 1: Upload profile picture (required)
-			if (data.profilePicture) {
-				const formData = new FormData();
-				formData.append('file', data.profilePicture);
-				
-				await fetch('/api/private/user/me/profile-picture', {
-					method: 'POST',
-					body: formData,
-				});
-			}
+		
+		// Step 1: Upload profile picture (required)
+		if (!data.profilePicture) {
+			throw new Error('Profile picture is required');
+		}
+		
+		await profileApi.uploadProfilePicture(data.profilePicture);
 
-			// Step 2: Upload additional pictures
-			// for (const picture of data.additionalPictures) {
-			// 	if (picture) {
-			// 		const formData = new FormData();
-			// 		formData.append('file', picture);
-					
-			// 		await fetch('/api/private/user/me/profile-picture', {
-			// 			method: 'POST',
-			// 			body: formData,
-			// 		});
-			// 	}
-			// }
+		// Step 2: Upload additional pictures
+		for (const picture of data.additionalPictures) {
+			if (picture) {
+				await profileApi.uploadProfilePicture(picture);
+			}
+		}
 
 		// Map gender from UI values to backend enum ("men"/"women")
 		const genderMap: Record<string, string> = {
@@ -114,34 +105,37 @@ export const useOnboarding = () => {
 			'female': 'women'
 		};
 
-		// Step 3: Update profile with onboarding data
+		// Step 3: Complete profile with onboarding data
 		const profileData = {
+			firstName: data.firstName,
+			lastName: data.lastName,
 			bio: data.biography,
 			tags: data.interests,
-			gender: genderMap[data.gender] || data.gender,
+			gender: (genderMap[data.gender] || data.gender) as 'men' | 'women',
 			orientation: data.interestedInGenders.length === 2 
-				? 'bisexual' 
+				? 'bisexual' as const
 				: data.interestedInGenders.map(g => genderMap[g] || g).includes(genderMap[data.gender] || data.gender)
-					? 'homosexual' 
-					: 'heterosexual',
+					? 'homosexual' as const
+					: 'heterosexual' as const,
 			bornAt: new Date(data.birthday).toISOString(),
-		};			const response = await fetch('/api/private/user/me/profile', {
-				method: 'PUT',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(profileData),
+			
+		};
+
+		const response = await profileApi.completeProfile(profileData);
+
+		// Update location with default values (Paris)
+		try {
+			await profileApi.updateProfile({
+				location: {
+					latitude: 48.8566,
+					longitude: 2.3522
+				}
 			});
-
-			if (!response.ok) {
-				const error = await response.json();
-				console.error('Failed to submit onboarding:', error);
-				throw new Error(error.message || 'Failed to submit onboarding');
-			}
-
-			return await response.json();
 		} catch (error) {
-			console.error('Error submitting onboarding:', error);
-			throw error;
+			console.error("Failed to update default location:", error);
 		}
+
+		return response;
 	};
 
 	return {

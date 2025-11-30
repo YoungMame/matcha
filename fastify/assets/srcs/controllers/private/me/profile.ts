@@ -6,6 +6,9 @@ export const setProfileHandler = async (
     reply: FastifyReply
 ) => {
     const body = request.body as {
+        firstName?: string;
+        lastName?: string;
+        email?: string;
         bio?: string;
         tags?: Array<string>;
         gender?: string;
@@ -18,6 +21,9 @@ export const setProfileHandler = async (
     };
 
     let updateObject: {
+        firstName?: string;
+        lastName?: string;
+        email?: string;
         bio?: string;
         tags?: string[];
         gender?: string;
@@ -25,6 +31,9 @@ export const setProfileHandler = async (
         bornAt?: Date;
     } = {};
 
+    if (body.firstName !== undefined) updateObject.firstName = body.firstName;
+    if (body.lastName !== undefined) updateObject.lastName = body.lastName;
+    if (body.email !== undefined) updateObject.email = body.email;
     if (body.bio !== undefined) updateObject.bio = body.bio;
     if (body.tags !== undefined) updateObject.tags = body.tags;
     if (body.gender !== undefined) updateObject.gender = body.gender;

@@ -91,7 +91,9 @@ services:
         - 443:443
         - 80:80
     networks:
-      - router
+      router:
+        aliases:
+          - matcha.fr
 
   db:
     image: postgres:18-alpine3.22
