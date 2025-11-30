@@ -4,5 +4,8 @@ yarn.lock
 pnpm-lock.yaml
 **/*.log
 **/*.js
+**/*.d.ts
+**/*.d.ts.map
+**/*.js.map
 .DS_Store
 .vscode/

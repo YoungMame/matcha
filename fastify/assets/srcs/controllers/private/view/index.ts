@@ -11,11 +11,11 @@ export const viewProfileHandler = async (
         const user = request.user;
         if (!user || !user.id)
             throw new UnauthorizedError();
-        const data = await request.server.userService.getUserPublic(user.id, params.id);
-        reply.send(data);
+        let data = await request.server.userService.getUserPublic(user.id, params.id);
+        reply.status(200).send(data);
     } catch (error) {
         if (error instanceof AppError)
-            return reply.status(error.statusCode).send({ message: error.message });
-        return reply.status(500).send({ message: 'Internal server error' });
+            return reply.status(error.statusCode).send({ error: error.message });
+        return reply.status(500).send({ error: 'Internal server' });
     }
 };

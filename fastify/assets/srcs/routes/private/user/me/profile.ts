@@ -4,6 +4,7 @@ import { setProfileHandler, getProfileHandler } from "../../../../controllers/pr
 const profileRoutes = async (fastify: FastifyInstance) => {
     fastify.put('/', {
         schema: {
+            
             body: {
                 type: 'object',
                 properties: {
@@ -21,7 +22,6 @@ const profileRoutes = async (fastify: FastifyInstance) => {
                             latitude: { type: 'number' },
                             longitude: { type: 'number' }
                         },
-                        required: ['latitude', 'longitude'],
                         additionalProperties: false
                     }
                 },
@@ -73,15 +73,15 @@ const profileRoutes = async (fastify: FastifyInstance) => {
                         orientation: { type: 'string', enum: ['heterosexual', 'homosexual', 'bisexual'] },
                         isVerified: { type: 'boolean' },
                         isProfileCompleted: { type: 'boolean' },
+                        fameRate: { type: 'number' },
                         location: {
                             type: 'object',
                             properties: {
-                                latitude: { type: 'number', nullable: true },
-                                longitude: { type: 'number', nullable: true },
-                                city: { type: 'string', nullable: true },
-                                country: { type: 'string', nullable: true }
+                                latitude: { type: 'number' },
+                                longitude: { type: 'number' },
+                                city: { type: 'string' },
+                                country: { type: 'string' }
                             },
-                            required: ['latitude', 'longitude', 'city', 'country']
                         },
                         createdAt: { type: 'string', format: 'date-time' }
                     },

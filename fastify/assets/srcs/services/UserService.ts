@@ -63,7 +63,15 @@ class UserService {
         this.userModel.setVerified(userId);
     }
 
-    private async getUser(idOrMail: string | number): Promise<User | null> {
+    public async getUserByUsername(username: string): Promise<User | null> {
+        const userdata = await this.userModel.findByUsername(username);
+        if (!userdata)
+            return (null);
+        let user: User = User.fromRow(userdata);
+        return (user);
+    }
+
+    public async getUser(idOrMail: string | number): Promise<User | null> {
         let userdata: undefined | User = undefined;
         if (typeof idOrMail == 'string')
             userdata = await this.userModel.findByEmail(idOrMail);
@@ -110,7 +118,7 @@ class UserService {
         return false;
     }
 
-    async createUser(email: string, password: string, username: string): Promise<string | undefined> {
+    async createUser(email: string, password: string, username: string, provider: string = 'local'): Promise<string | undefined> {
         if (!(email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)))
             throw new BadRequestError('Invalid email format');
         if (!(username.match(/^[a-zA-Z0-9._\- ]+$/)))
@@ -118,7 +126,7 @@ class UserService {
         if (this.isPasswordCommon(password))
             throw new BadRequestError('Password is too common');
         const hashedPassword = await PasswordManager.hashPassword(password);
-        const userId = await this.userModel.insert(email, hashedPassword, username);
+        const userId = await this.userModel.insert(email, hashedPassword, username, provider);
         const user = await this.getUser(userId);
         if (!user)
             throw new InternalServerError('User not found');
@@ -129,7 +137,7 @@ class UserService {
 
     async login(email: string, password: string) {
         const user = await this.getUser(email);
-        if (!user)
+        if (!user || user.provider !== 'local')
             throw new UnauthorizedError();
         const isValid = await PasswordManager.compare(password, user.passwordHash);
         if (!isValid)
@@ -153,7 +161,8 @@ class UserService {
         gender: string;
         isVerified: boolean;
         isProfileCompleted: boolean;
-        location: { latitude: number | null; longitude: number | null, city: string | null; country: string | null };
+        fameRate: number | undefined;
+        location: { latitude: number | undefined; longitude: number | undefined, city: string | undefined; country: string | undefined };
         createdAt: Date;
     }> {
         const user = await this.getUser(id);
@@ -174,11 +183,12 @@ class UserService {
             gender: user.gender as string,
             isVerified: user.isVerified,
             isProfileCompleted: user.isProfileCompleted,
+            fameRate: user.fameRate,
             location: {
-                latitude: user.location?.latitude || null,
-                longitude: user.location?.longitude || null,
-                city: user.location?.city || null,
-                country: user.location?.country || null
+                latitude: user.location?.latitude,
+                longitude: user.location?.longitude,
+                city: user.location?.city,
+                country: user.location?.country
             },
             createdAt: user.createdAt
         };
@@ -282,7 +292,7 @@ class UserService {
         }
         await this.userModel.update(user.id, {
            profilePictures: user.profilePictures,
-           profilePictureIndex: (user.profilePictureIndex == undefined ? null : user.profilePictureIndex)
+           profilePictureIndex: user.profilePictureIndex
         });
     }
 
@@ -298,7 +308,12 @@ class UserService {
         bornAt: Date;
         gender: string;
         orientation: string;
-        location: { latitude: number | null; longitude: number | null, city: string | null; country: string | null };
+        fameRate: number | undefined;
+        location: { latitude: number | undefined; longitude: number | undefined, city: string | undefined; country: string | undefined };
+        isConnectedWithMe: boolean;
+        chatIdWithMe: number | undefined;
+        haveILiked: boolean;
+        hasLikedMe: boolean;
     }> {
         const user = await this.getUser(id);
         if (!user|| !user.isProfileCompleted)
@@ -315,6 +330,7 @@ class UserService {
             if (!existingView)
             {
                 const view = await this.viewModel.insert(viewerId, user.id);
+                await this.updateFameRate(user.id);
                 this.fastify.webSocketService.sendProfileViewed(user.id, {
                     id: view.id,
                     viewerId: view.viewerId,
@@ -323,6 +339,11 @@ class UserService {
                 await this.fastify.notificationService.createNotification(user.id, view.viewerId, 'view', view.id);
             }
         }
+        const chatWithMe = viewerId ?  (await this.fastify.chatService.getChatBetweenUsers([viewerId || -1, user.id])) : null;
+        const chatIdWithMe = chatWithMe ? chatWithMe.id : undefined;
+        const isConnectedWithMe = chatIdWithMe ? true : false;
+        const hasLikedMe = viewerId ? (await this.likeModel.getLikeBetweenUsers(user.id, viewerId) ? true : false) : false;
+        const haveILiked = viewerId ? (await this.likeModel.getLikeBetweenUsers(viewerId, user.id) ? true : false) : false;
         return {
             id: user.id,
             username: user.username,
@@ -335,12 +356,17 @@ class UserService {
             bornAt: user.bornAt as Date,
             gender: user.gender as string ,
             orientation: user.orientation as string,
+            fameRate: user.fameRate,
             location: {
-                latitude: user.location?.latitude || null,
-                longitude: user.location?.longitude || null,
-                city: user.location?.city || null,
-                country: user.location?.country || null
-            }
+                latitude: user.location?.latitude,
+                longitude: user.location?.longitude,
+                city: user.location?.city,
+                country: user.location?.country
+            },
+            isConnectedWithMe,
+            chatIdWithMe,
+            haveILiked,
+            hasLikedMe
         };
     }
 
@@ -359,6 +385,15 @@ class UserService {
         const existingProfilePicture = receiverUser.profilePictures?.[receiverUser.profilePictureIndex || 0];
         if (!existingProfilePicture)
             throw new BadRequestError('User has no profile picture');
+    }
+
+    private async updateFameRate(userId: number): Promise<number> {
+        const likesReceived = await this.likeModel.getAllByLikedId(userId);
+        const viewsReceived = await this.viewModel.getAllByViewedId(userId);
+
+        const fameRate = (likesReceived.length && viewsReceived.length) ? Number((likesReceived.length / viewsReceived.length).toPrecision(2)) * 1000 : 0;
+        await this.userModel.update(userId, { fameRate });
+        return fameRate;
     }
 
     async sendLike(senderId: number, receiverId: number): Promise<void> {
@@ -385,6 +420,7 @@ class UserService {
             likerId: senderId,
             createdAt: like.createdAt
         };
+        await this.updateFameRate(receiverId);
         this.fastify.webSocketService.sendLike(receiverId, data);
         await this.fastify.notificationService.createNotification(receiverId, senderId, 'like', like.id);
     }
@@ -411,6 +447,7 @@ class UserService {
             createdChatId: chatId,
             removedAt: new Date()
         };
+        await this.updateFameRate(receiverId);
         this.fastify.webSocketService.sendUnlike(receiverId, data);
         await this.fastify.notificationService.createNotification(receiverId, senderId, 'unlike', like.id);
     }

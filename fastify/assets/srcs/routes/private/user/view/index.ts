@@ -25,21 +25,48 @@ const viewRoutes = async (fastify: FastifyInstance) => {
                         bornAt: { type: 'string', format: 'date-time' },
                         gender: { type: 'string', enum: ['male', 'female'] },
                         orientation: { type: 'string', enum: ['heterosexual', 'homosexual', 'bisexual'] },
+                        fameRate: { type: 'number' },
                         location: {
                             type: 'object',
                             properties: {
-                                latitude: { type: 'number', nullable: true },
-                                longitude: { type: 'number', nullable: true },
-                                city: { type: 'string', nullable: true },
-                                country: { type: 'string', nullable: true }
+                                latitude: { type: 'number' },
+                                longitude: { type: 'number' },
+                                city: { type: 'string' },
+                                country: { type: 'string' }
                             },
-                            required: ['latitude', 'longitude', 'city', 'country'],
                         },
+
+                        // Relation infos
+                        isConnectedWithMe: { type: 'boolean' },
+                        chatIdWithMe: { type: ['integer'] },
+                        hasLikedMe: { type: 'boolean' },
+                        haveILiked: { type: 'boolean' },
                     },
                     required: ['id', 'username', 'profilePictures', 'bio', 'tags', 'bornAt', 'location'],
                     additionalProperties: false,
                 },
                 400: {
+                    type: 'object',
+                    properties: {
+                        error: { type: 'string', }
+                    },
+                    additionalProperties: false
+                },
+                401: {
+                    type: 'object',
+                    properties: {
+                        error: { type: 'string', }
+                    },
+                    additionalProperties: false
+                },
+                403: {
+                    type: 'object',
+                    properties: {
+                        error: { type: 'string', }
+                    },
+                    additionalProperties: false
+                },
+                404: {
                     type: 'object',
                     properties: {
                         error: { type: 'string', }

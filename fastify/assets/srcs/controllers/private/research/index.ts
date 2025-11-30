@@ -1,0 +1,48 @@
+import { FastifyRequest, FastifyReply } from 'fastify';
+import { AppError, UnauthorizedError } from '../../../utils/error';
+import { BrowsingFilter, BrowsingUser, BrowsingSort } from '../../../services/BrowsingService';
+
+export const researchUsersHandler = async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+        const {
+            username,
+            minAge,
+            maxAge,
+            minFame,
+            maxFame,
+            tags,
+            lat,
+            lng,
+            radius,
+            sortBy,
+            offset,
+            limit
+        } = request.params as { username: string, minAge: number, maxAge: number, minFame: number, maxFame: number, tags: string, lat: number, lng: number, radius: number, sortBy: string, offset: number, limit: number };
+
+        if (!request.user?.id)
+            throw new UnauthorizedError();
+        const tagsArray = tags ? tags.split(',') : [];
+        let requestFilters: BrowsingFilter = {
+            age: { min: minAge, max: maxAge },
+            fameRate: { min: minFame, max: maxFame },
+            tags: tagsArray
+        };
+        if (!(lat < -90 || lat > 90 || lng < -180 || lng > 180))
+            requestFilters.location = { latitude: lat, longitude: lng };
+        const users: BrowsingUser[] = await request.server.browsingService.researchUsers(
+            request.user.id,
+            username,
+            limit || 20,
+            offset || 0,
+            radius,
+            requestFilters,
+            (sortBy ? sortBy as BrowsingSort : undefined)
+        );
+        return reply.status(200).send({ users });
+    } catch (error) {
+        if (error instanceof AppError) {
+            return reply.status(error.statusCode).send({ error: error.message });
+        }
+        return reply.status(500).send({ error: 'Internal Server Error' });
+    }
+}

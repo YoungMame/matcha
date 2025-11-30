@@ -1,6 +1,6 @@
 import chai from 'chai';
 import { expect } from 'chai';
-import { buildApp } from '../../../../srcs/app';
+import { app } from '../../../setup';
 import { FastifyInstance } from 'fastify';
 
 // import fixtures
@@ -53,7 +53,6 @@ const editProperties = async(app: FastifyInstance, token: string, properties: Ob
 };
 
 describe('User me profile integration tests', async () => {
-    let app: FastifyInstance;
     let token: string;
 
     const userData: UserData = {
@@ -69,15 +68,7 @@ describe('User me profile integration tests', async () => {
         gender: 'men'
     };
 
-    beforeEach(async () => {
-        if (!app) {
-            app = buildApp();
-            await app.ready();
-        }
-    });
-
     it('Should create the app and user', async () => {
-        app = buildApp();
         await app.ready();
         expect(app).to.exist;
         token = await signUpAndGetToken(app, userData) as string;
@@ -116,8 +107,8 @@ describe('User me profile integration tests', async () => {
         expect(meData).to.have.property('isVerified', true);
         expect(meData).to.have.property('isProfileCompleted', true);
         expect(meData).to.have.property('location').that.is.an('object');
-        expect(meData.location).to.have.property('latitude', null);
-        expect(meData.location).to.have.property('longitude', null);
+        expect(meData.location).to.not.have.property('latitude');
+        expect(meData.location).to.not.have.property('longitude');
         expect(meData).to.have.property('createdAt');
     });
 

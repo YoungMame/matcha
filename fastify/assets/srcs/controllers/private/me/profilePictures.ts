@@ -66,7 +66,6 @@ export const addProfilePictureHandler = async (
         }
         return reply.code(200).send({ message: 'User profile picture updated successfully', url: newFileURL });
     } catch (error) {
-        console.error('Error in addProfilePictureHandler:', error);
         if (error instanceof AppError)
             return reply.status(error.statusCode).send({ error: error.message });
         return reply.status(500).send({ error: 'Internal server error' });

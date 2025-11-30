@@ -1,21 +1,15 @@
 import chai from 'chai';
 import { expect } from 'chai';
-import { buildApp } from '../../../srcs/app';
+import { app } from '../../setup';
 import { FastifyInstance } from 'fastify';
 
 // import fixtures
 import { signUpAndGetToken, UserData } from '../fixtures/auth.fixtures';
 
 describe('Websocket connection main test', () => {
-    let app: FastifyInstance;
-
-    beforeEach(async () => {
-        app = buildApp();
-        await app.ready();
-    });
 
     it('should allow multiple ws clients to connect and be able to send', async function (this: any) {
-        this.timeout(5000);
+        this.timeout(15000);
 
         const userA: UserData = {
             username: 'wstestmulti1',
@@ -53,23 +47,20 @@ describe('Websocket connection main test', () => {
         expect(wsA).to.be.ok;
         expect(wsB).to.be.ok;
 
-        it('Should give user geolocation on connect', async function () {
-            this.timeout(5000);
+        await new Promise((resolve) => setTimeout(resolve, 2000)); // wait for connections to be fully established
 
-            const meDataResponse = await app.inject({
-                method: 'GET',
-                url: '/private/me',
-                headers: { cookie: `jwt=${tokenA}` }
-            });
-
-            const meDataJson = await meDataResponse.json();
-            const meData = meDataJson.data;
-
-            expect(meData.location.latitude).to.be.a('number');
-            expect(meData.location.longitude).to.be.a('number');
-            expect(meData.location.city).to.be.a('string');
-            expect(meData.location.country).to.be.a('string');
+        const meDataResponse = await app.inject({
+            method: 'GET',
+            url: '/private/user/me/profile',
+            headers: { 'Cookie': `jwt=${tokenA}` }
         });
+
+        const meData = await meDataResponse.json();
+
+        expect(meData.location.latitude).to.be.a('number');
+        expect(meData.location.longitude).to.be.a('number');
+        expect(meData.location.city).to.be.a('string');
+        expect(meData.location.country).to.be.a('string');
 
         wsA.terminate();
         wsB.terminate();

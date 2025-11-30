@@ -10,8 +10,9 @@ type UserProfile = {
     firstName?: string;
     lastName?: string;
     tags?: string[];
-    profilePictureIndex?: number | null;
+    profilePictureIndex?: number | undefined;
     profilePictures?: string[];
+    fameRate?: number | undefined;
     string?: string[];
     gender?: string;
     isProfileCompleted?: boolean;
@@ -41,11 +42,11 @@ export default class UserModel {
         if (row.profilePictureIndex === null) row.profilePictureIndex = undefined;
     }
 
-    insert = async (email: string, password_hash: string, username: string) => {
+    insert = async (email: string, password_hash: string, username: string, provider: string) => {
         try {
             const result = await this.fastify.pg.query(
-                'INSERT INTO users (email, password_hash, username) VALUES ($1, $2, $3) RETURNING id',
-                [email, password_hash, username]
+                'INSERT INTO users (email, password_hash, username, provider_) VALUES ($1, $2, $3, $4) RETURNING id',
+                [email, password_hash, username, provider]
             );
             return result.rows[0].id;
         } catch (error: Error | any) {
@@ -89,7 +90,7 @@ export default class UserModel {
             'SELECT * FROM users WHERE email=$1', [email]
         );
         if (result.rows.length === 0) {
-            throw new NotFoundError;
+            return null;
         }
         this.nullToUndefined(result.rows[0]);
         const location = await this.findLocationByUserId(result.rows[0].id);
@@ -102,7 +103,7 @@ export default class UserModel {
             'SELECT * FROM users WHERE username=$1', [username]
         );
         if (result.rows.length === 0) {
-            throw new NotFoundError;
+            return null;
         }
         this.nullToUndefined(result.rows[0]);
         const location = await this.findLocationByUserId(result.rows[0].id);
@@ -150,7 +151,7 @@ export default class UserModel {
             );
             if (rows.rows.length === 0)
             {
-                await this.fastify.pg.query(
+                const result = await this.fastify.pg.query(
                     `INSERT INTO locations (user_id, latitude, longitude, city, country) VALUES (${id}, ${location.latitude}, ${location.longitude}, \'${location.city}\', \'${location.country}\');`,
                 );
                 return;
