@@ -28,7 +28,7 @@ export const authApi = {
    */
   logout: async (): Promise<void> => {
     const domain = window.location.hostname;
-    const cookieOptions = `path=/; domain=${domain}; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax`;
+    const cookieOptions = `path=/; domain=.${domain}; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax`;
     document.cookie = `jwt=; ${cookieOptions}`;
   },
 

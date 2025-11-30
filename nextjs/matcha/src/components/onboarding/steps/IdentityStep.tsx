@@ -110,7 +110,7 @@ export default function IdentityStep({
               : "Minimum 50 caractères"}
           </Typography>
           <Typography variant="caption" color="secondary">
-            {biography.length} / 500
+            {biography.trim().length} / 500
           </Typography>
         </div>
       </div>

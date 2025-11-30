@@ -214,9 +214,6 @@ export default function ProfilePage() {
             {/* {profileData.isOnline && (
               <span className="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 rounded-full text-sm">En ligne</span>
             )} */}
-            {hasProfilePicture && (
-              <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 rounded-full text-sm">Photo</span>
-            )}
             {/* {profileData.fame > 0 && (
               <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-100 rounded-full text-sm">Fame {profileData.fame}</span>
             )} */}
