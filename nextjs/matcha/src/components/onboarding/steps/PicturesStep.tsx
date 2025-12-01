@@ -6,8 +6,10 @@ import ErrorModal from "@/components/common/ErrorModal";
 import { MAX_ADDITIONAL_PICTURES } from "@/constants/onboarding";
 import Cropper from 'react-easy-crop'
 import getCroppedImg from '@/utils/cropImage';
+import getImageUrl from '@/utils/getImageUrl';
 import Button from '../../common/Button'
 import IconButton from "@/components/common/IconButton";
+import ImageCropper from "@/components/common/ImageCropper";
 
 declare type Area = {
     width: number;
@@ -176,10 +178,6 @@ export default function PicturesStep({
 		}
 	};
 
-	const getImageUrl = (file: File | null): string | null => {
-		return file ? URL.createObjectURL(file) : null;
-	};
-
 	const hasError = showValidation && !profilePicture;
 
 	const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -325,42 +323,19 @@ export default function PicturesStep({
 							</label>
 						)}
 					</div>
-					{currentCroppingIndex !== null && (<div className="flex flex-col">
-							<div className="relative z-10 w-48 h-80 bg-gray-200">
-								<Cropper
-									image={getImageUrl(currentCroppingIndex == 0 ? profilePicture : additionalPictures[currentCroppingIndex - 1]) || "none"}
-									crop={crop}
-									zoom={zoom}
-									maxZoom={3}
-									rotation={rotation}
-									aspect={CROP_AREA_ASPECT}
-									onCropChange={setCrop}
-									onZoomChange={setZoom}
-									onCropComplete={onCropComplete}
-								/>
-							</div>
-							<div className="flex w-full flex-row justify-between">
-								<IconButton
-									onClick={() => setRotation((rotation + 90) % 180)}
-									size="small"
-									aria-label="Rotate right"
-								>
-									<div>\-</div>
-								</IconButton>
-								<IconButton
-									onClick={() => setRotation((rotation + 90) % 180)}
-									size="small"
-									aria-label="Rotate right"
-								>
-									<div>-/</div>
-								</IconButton>
-							</div>
-							<div className="p-1 flex flex-col items-center">
-
-								<Button onClick={submitImage}>Confirmer</Button>
-							</div>
-						</div>
-					)}
+					{currentCroppingIndex !== null && <ImageCropper
+						profilePicture={profilePicture}
+						additionalPictures={additionalPictures}
+						currentCroppingIndex={currentCroppingIndex}
+						onCropComplete={onCropComplete}
+						submitImage={submitImage}
+						zoom={zoom}
+						setZoom={setZoom}
+						rotation={rotation}
+						setRotation={setRotation}
+						crop={crop}
+						setCrop={setCrop}
+					/>}
 				</div>
 			</div>
 
