@@ -76,7 +76,6 @@ export default function FloatingCard({
         // Check collision with other cards using AABB (Axis-Aligned Bounding Box)
         let collisionDetected = false;
         const otherCards = getOtherCards();
-		console.log("otherCards:", otherCards);
 
         otherCards.forEach((other) => {
           // Rectangle collision detection

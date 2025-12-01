@@ -6,23 +6,9 @@ import ErrorModal from "@/components/common/ErrorModal";
 import { MAX_ADDITIONAL_PICTURES } from "@/constants/onboarding";
 import Cropper from 'react-easy-crop'
 import getCroppedImg from '@/utils/cropImage';
-import RangeSlider from "@/components/common/RangeSlider";
+import Button from '../../common/Button'
+import IconButton from "@/components/common/IconButton";
 
-// declare type Size = {
-//     width: number;
-//     height: number;
-// };
-// declare type MediaSize = {
-//     width: number;
-//     height: number;
-//     naturalWidth: number;
-//     naturalHeight: number;
-// };
-
-declare type Point = {
-    x: number;
-    y: number;
-};
 declare type Area = {
     width: number;
     height: number;
@@ -147,6 +133,7 @@ export default function PicturesStep({
 		}
 
 		onChange("profilePicture", file);
+		setCurrentCroppingIndex(0);
 	};
 
 	const handleAdditionalPictureChange = (index: number, file: File | null) => {
@@ -172,6 +159,7 @@ export default function PicturesStep({
 		const newPictures = [...additionalPictures];
 		newPictures[index] = file;
 		onChange("additionalPictures", newPictures);
+		setCurrentCroppingIndex(index + 1);
 	};
 
 	const removeProfilePicture = () => {
@@ -216,6 +204,11 @@ export default function PicturesStep({
 			const pictureURL = getImageUrl(picture);
 			if (pictureURL == null) return;
 
+			if (croppedAreaPixels.width < 150)
+				return showError("La largeur minimale est de 150 pixels");
+			if (croppedAreaPixels.width > 1080)
+				return showError("La largeur maximale est de 1080 pixels");
+
 			const croppedImage = await getCroppedImg(
 				pictureURL,
 				croppedAreaPixels as Area,
@@ -236,6 +229,8 @@ export default function PicturesStep({
 						return newAdditionalPictures;
 					})()
 			);
+			setRotation(0);
+			setZoom(1);
 		} catch (e) {
 			console.error(e)
 		}
@@ -330,23 +325,41 @@ export default function PicturesStep({
 							</label>
 						)}
 					</div>
-					{currentCroppingIndex !== null && (<>
+					{currentCroppingIndex !== null && (<div className="flex flex-col">
 							<div className="relative z-10 w-48 h-80 bg-gray-200">
 								<Cropper
 									image={getImageUrl(currentCroppingIndex == 0 ? profilePicture : additionalPictures[currentCroppingIndex - 1]) || "none"}
 									crop={crop}
 									zoom={zoom}
+									maxZoom={3}
+									rotation={rotation}
 									aspect={CROP_AREA_ASPECT}
 									onCropChange={setCrop}
 									onZoomChange={setZoom}
 									onCropComplete={onCropComplete}
 								/>
-								{/* TODO create slider component */}
-								<button onClick={() => setRotation((rotation + 90) % 360)}>ROTATE DROITE</button>
-								<button onClick={() => setRotation((rotation - 90) % 360)}>ROTATE GAUCHE</button>
-								<button onClick={submitImage}>Confirmer</button>
 							</div>
-						</>
+							<div className="flex w-full flex-row justify-between">
+								<IconButton
+									onClick={() => setRotation((rotation + 90) % 180)}
+									size="small"
+									aria-label="Rotate right"
+								>
+									<div>\-</div>
+								</IconButton>
+								<IconButton
+									onClick={() => setRotation((rotation + 90) % 180)}
+									size="small"
+									aria-label="Rotate right"
+								>
+									<div>-/</div>
+								</IconButton>
+							</div>
+							<div className="p-1 flex flex-col items-center">
+
+								<Button onClick={submitImage}>Confirmer</Button>
+							</div>
+						</div>
 					)}
 				</div>
 			</div>

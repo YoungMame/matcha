@@ -92,7 +92,7 @@ export const useOnboarding = () => {
 				const formData = new FormData();
 				formData.append('file', data.profilePicture);
 				formData.append('rotation', data.profilePictureSettings.rotation.toString());
-				formData.append('scrop', JSON.stringify(data.profilePictureSettings.crop));
+				formData.append('crop', JSON.stringify(data.profilePictureSettings.crop));
 				
 				await fetch('/api/private/user/me/profile-picture', {
 					method: 'POST',
@@ -105,7 +105,7 @@ export const useOnboarding = () => {
 					const formData = new FormData();
 					formData.append('file', picture);
 					formData.append('rotation', data.additionalPicturesSettings[data.additionalPictures.indexOf(picture)].rotation.toString());
-					formData.append('scrop', JSON.stringify(data.additionalPicturesSettings[data.additionalPictures.indexOf(picture)].crop));
+					formData.append('crop', JSON.stringify(data.additionalPicturesSettings[data.additionalPictures.indexOf(picture)].crop));
 					
 					await fetch('/api/private/user/me/profile-picture', {
 						method: 'POST',
