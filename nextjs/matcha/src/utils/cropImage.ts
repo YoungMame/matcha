@@ -29,15 +29,30 @@ export interface Area {
     y: number;
 }
 
+export type ImageFormat = 'image/jpeg' | 'image/png' | 'image/webp';
+
+export interface CropOptions {
+    format?: ImageFormat;
+    quality?: number;
+}
+
 /**
  * Returns a cropped image as a data URL
+ * @param imageSrc - Source image URL
+ * @param pixelCrop - Crop area in pixels
+ * @param rotation - Rotation in degrees (0-360)
+ * @param flip - Flip options
+ * @param options - Output format and quality options
  */
 export default async function getCroppedImg(
     imageSrc: string,
     pixelCrop: Area,
     rotation = 0,
-    flip = { horizontal: false, vertical: false }
+    flip = { horizontal: false, vertical: false },
+    options: CropOptions = {}
 ): Promise<string | null> {
+    const { format = 'image/jpeg', quality = 0.9 } = options;
+    
     const image = await createImage(imageSrc);
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -86,5 +101,5 @@ export default async function getCroppedImg(
         pixelCrop.height
     );
 
-    return croppedCanvas.toDataURL('image/jpeg');
+    return croppedCanvas.toDataURL(format, quality);
 }

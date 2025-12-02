@@ -32,10 +32,20 @@ export default function ImageCropper({
     crop: { x: number; y: number };
     setCrop: (crop: { x: number; y: number }) => void;
 }) {
+    // Get the current image based on index (0 = profile picture, 1+ = additional pictures)
+    const getCurrentImage = (): File | null => {
+        if (currentCroppingIndex === 0) {
+            return profilePicture;
+        }
+        return additionalPictures[currentCroppingIndex - 1] || null;
+    };
+
+    const imageUrl = getImageUrl(getCurrentImage()) || "none";
+
     return (<div className="flex flex-col">
         <div className="relative z-10 w-48 h-80 bg-gray-200">
             <Cropper
-                image={getImageUrl(currentCroppingIndex === 0 ? profilePicture : (additionalPictures[currentCroppingIndex - 1] || null)) || "none"}
+                image={imageUrl}
                 crop={crop}
                 zoom={zoom}
                 maxZoom={3}
