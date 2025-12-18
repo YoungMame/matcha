@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { OnboardingData, OnboardingStep } from '@/types/onboarding';
 import { STEPS, MIN_INTERESTS } from '@/constants/onboarding';
+import { profileApi } from '@/lib/api/profile';
 import { Fira_Sans_Extra_Condensed } from 'next/font/google';
 
 const initialData: OnboardingData = {
@@ -98,6 +99,7 @@ export const useOnboarding = () => {
 					method: 'POST',
 					body: formData,
 				});
+				// await profileApi.uploadProfilePicture(data.profilePicture);
 			}
 
 			for (const picture of data.additionalPictures) {
@@ -111,6 +113,7 @@ export const useOnboarding = () => {
 						method: 'POST',
 						body: formData,
 					});
+					// await profileApi.uploadProfilePicture(picture);
 				}
 			}
 
@@ -124,38 +127,41 @@ export const useOnboarding = () => {
 			'women': 'women',
 		};
 
-		// Step 3: Update profile with onboarding data
+		// Step 3: Complete profile with onboarding data
 		const profileData = {
 			firstName: data.firstName,
 			lastName: data.lastName,
 			bio: data.biography,
 			tags: data.interests,
-			gender: genderMap[data.gender] || data.gender,
+			gender: (genderMap[data.gender] || data.gender) as 'men' | 'women',
 			orientation: data.interestedInGenders.length === 2 
-				? 'bisexual' 
+				? 'bisexual' as const
 				: data.interestedInGenders.map(g => genderMap[g] || g).includes(genderMap[data.gender] || data.gender)
-					? 'homosexual' 
-					: 'heterosexual',
+					? 'homosexual' as const
+					: 'heterosexual' as const,
 			bornAt: new Date(data.birthday).toISOString(),
 		};		
 		console.log('Submitting profile data:', profileData);
-		const response = await fetch('/api/private/user/me/complete-profile', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(profileData),
+			const response = await profileApi.completeProfile(profileData);
+
+			await profileApi.updateProfile({
+				location: {
+					latitude: 48.8566,
+					longitude: 2.3522
+				}
 			});
 
-			if (!response.ok) {
-				const error = await response.json();
 
-				console.error('Failed to submit onboarding:', error);
-				throw new Error(error.message || 'Failed to submit onboarding');
+			if (!response) {
+				// const error = await response.json();
+
+				console.error('Failed to submit onboarding:');
+				throw new Error( 'Failed to submit onboarding');
 			}
 
-			return await response.json();
+			return response;
 		} catch (error) {
-			console.error('Error submitting onboarding:', error);
-			throw error;
+			console.error("Failed to update default location:", error);
 		}
 	};
 

@@ -12,6 +12,7 @@ import Icon from "@/components/common/Icon";
 import Container from "@/components/common/Container";
 import Card from "@/components/common/Card";
 import Grid from "@/components/common/Grid";
+import Alert from "@/components/common/Alert";
 import IdentityStep from "@/components/onboarding/steps/IdentityStep";
 import InterestsStep from "@/components/onboarding/steps/InterestsStep";
 import PreferencesStep from "@/components/onboarding/steps/PreferencesStep";
@@ -21,6 +22,8 @@ import { useRouter } from "next/navigation";
 export default function OnboardingPage() {
 	const router = useRouter();
 	const [showValidation, setShowValidation] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [submitError, setSubmitError] = useState<string | null>(null);
 
 	const {
 		currentStep,
@@ -60,14 +63,22 @@ export default function OnboardingPage() {
 			return;
 		}
 
+		setIsSubmitting(true);
+		setSubmitError(null);
+
 		try {
-			const res = await submitOnboarding();
-			console.log("Onboarding submitted successfully:", res);
-			// TODO: Navigate to app after successful submission
+			await submitOnboarding();
+			console.log("Onboarding submitted successfully");
 			router.push("/browsing");
-		} catch (error) {
+		} catch (error: any) {
 			console.error("Failed to submit onboarding:", error);
-			// TODO: Show error message to user
+			setSubmitError(
+				error?.response?.data?.error || 
+				error?.message || 
+				"Une erreur est survenue lors de la soumission. Veuillez réessayer."
+			);
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
@@ -173,6 +184,12 @@ export default function OnboardingPage() {
 
 								<div>{renderStepContent()}</div>
 
+								{submitError && (
+									<Alert variant="error">
+										{submitError}
+									</Alert>
+								)}
+
 								<Stack
 									direction="row"
 									justify="between"
@@ -197,9 +214,9 @@ export default function OnboardingPage() {
 										<Button
 											variant="gradient"
 											onClick={handleSubmit}
-											disabled={!allStepsCompleted}
+											disabled={!allStepsCompleted || isSubmitting}
 										>
-											Terminer l'inscription
+											{isSubmitting ? "Envoi en cours..." : "Terminer l'inscription"}
 											<Icon name="check" className="w-5 h-5 ml-2" />
 										</Button>
 									)}

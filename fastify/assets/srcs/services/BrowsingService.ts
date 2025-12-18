@@ -76,6 +76,22 @@ class BrowsingService {
             parameters.push(`%${username}%`);
             usernameIndex = parameters.length;
         }
+
+		// try a basic query on users without filtering first
+		// const noFilterresult = await this.fastify.pg.query(
+		// 	`
+		// 	SELECT u.id, u.username, u.first_name, u.gender, u.profile_pictures, u.profile_picture_index, u.born_at, u.tags, u.fame_rate FROM users u;
+		// 	`,
+		// );
+		// console.log(`BrowsingService: Retrieved ${noFilterresult.rowCount} users without filters.`);
+		// console.log("firstRow:", noFilterresult.rows[0]);
+	
+		// console.log("filters:", filters);
+		// console.log("tagsIndex:", tagsIndex);
+		// console.log("genderIndex:", genderIndex);
+		// console.log("usernameIndex:", usernameIndex);
+		// console.log("parameters:", parameters);
+
         const result = await this.fastify.pg.query(
             `
             SELECT u.id, u.first_name, u.gender, u.profile_pictures, u.profile_picture_index, u.born_at, u.tags, u.fame_rate, distances.distance
@@ -185,15 +201,20 @@ BETWEEN ${filters.age.min} AND ${filters.age.max}
     }
 
     public async browseUsers(userId: number, limit: number = 5, offset: number = 0, radius: number = 25, filters?: BrowsingFilter, sort?: BrowsingSort): Promise<Array<BrowsingUser>> {
-        const user = await this.fastify.userService.getMe(userId);
+        console.log("BrowsingService.browseUsers called with filters:", filters, "and sort:", sort);
+		const user = await this.fastify.userService.getMe(userId);
         const lat = filters?.location?.latitude ?? user.location?.latitude;
         const lng = filters?.location?.longitude ?? user.location?.longitude;
         if (filters?.tags && filters.tags.length === 0) {
+			console.log("Deleting empty tags filter");
             delete filters.tags;
         }
         const bornAt = user.bornAt;
         const fameRate = user.fameRate;
         const tags = user.tags;
+
+		console.log("filterTags:", filters?.tags);
+		console.log("userTags:", tags);
 
         if (lat === undefined || lng === undefined)
             throw new BadRequestError();

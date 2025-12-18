@@ -11,7 +11,8 @@
     "password_salt": "LBK34MYG3IB",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 947
+    "fame_rate": 947,
+    "isProfileCompleted": true
   },
   {
     "username": "Nissim Lane",
@@ -25,7 +26,8 @@
     "password_salt": "JKJ52KQM8UB",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 322
+    "fame_rate": 322,
+    "isProfileCompleted": true
   },
   {
     "username": "Melissa Howe",
@@ -39,7 +41,8 @@
     "password_salt": "QTP78HKO1YV",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 472
+    "fame_rate": 472,
+    "isProfileCompleted": true
   },
   {
     "username": "Damon Woodard",
@@ -53,7 +56,8 @@
     "password_salt": "TAU24SKH1TK",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 757
+    "fame_rate": 757,
+    "isProfileCompleted": true
   },
   {
     "username": "George Phelps",
@@ -67,7 +71,8 @@
     "password_salt": "TLX24UKO6ER",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 862
+    "fame_rate": 862,
+    "isProfileCompleted": true
   },
   {
     "username": "Whitney Franks",
@@ -81,7 +86,8 @@
     "password_salt": "RHA15KHZ8WW",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 755
+    "fame_rate": 755,
+    "isProfileCompleted": true
   },
   {
     "username": "Desiree Shelton",
@@ -95,7 +101,8 @@
     "password_salt": "PVY67WLI2NQ",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 726
+    "fame_rate": 726,
+    "isProfileCompleted": true
   },
   {
     "username": "Yuri Mccormick",
@@ -109,7 +116,8 @@
     "password_salt": "EPX17XUK5RN",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 680
+    "fame_rate": 680,
+    "isProfileCompleted": true
   },
   {
     "username": "Cadman Silva",
@@ -123,7 +131,8 @@
     "password_salt": "VZA66SHD5QX",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 621
+    "fame_rate": 621,
+    "isProfileCompleted": true
   },
   {
     "username": "Zelenia Williams",
@@ -137,7 +146,8 @@
     "password_salt": "HCL95FMO5WO",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 94
+    "fame_rate": 94,
+    "isProfileCompleted": true
   },
   {
     "username": "Brandon Cameron",
@@ -151,7 +161,8 @@
     "password_salt": "LDX68WGR7WF",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 142
+    "fame_rate": 142,
+    "isProfileCompleted": true
   },
   {
     "username": "McKenzie Farley",
@@ -165,7 +176,8 @@
     "password_salt": "DWR66OGT4SI",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 821
+    "fame_rate": 821,
+    "isProfileCompleted": true
   },
   {
     "username": "Brenna Burnett",
@@ -179,7 +191,8 @@
     "password_salt": "JYO68IEN2CR",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 934
+    "fame_rate": 934,
+    "isProfileCompleted": true
   },
   {
     "username": "Nyssa Stark",
@@ -193,7 +206,8 @@
     "password_salt": "QAM32GMQ1KT",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 793
+    "fame_rate": 793,
+    "isProfileCompleted": true
   },
   {
     "username": "Bernard Snow",
@@ -207,7 +221,8 @@
     "password_salt": "UGO51VNO0EW",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 1000
+    "fame_rate": 1000,
+    "isProfileCompleted": true
   },
   {
     "username": "Fay Pennington",
@@ -221,7 +236,8 @@
     "password_salt": "GGV16XUP2XU",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 865
+    "fame_rate": 865,
+    "isProfileCompleted": true
   },
   {
     "username": "Darius Dickerson",
@@ -235,7 +251,8 @@
     "password_salt": "QSP59MYO4VR",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 65
+    "fame_rate": 65,
+    "isProfileCompleted": true
   },
   {
     "username": "Bianca Marks",
@@ -249,7 +266,8 @@
     "password_salt": "SRV75HAN2QK",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 707
+    "fame_rate": 707,
+    "isProfileCompleted": true
   },
   {
     "username": "Burke Wynn",
@@ -263,7 +281,8 @@
     "password_salt": "VSF30QMI2DC",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 778
+    "fame_rate": 778,
+    "isProfileCompleted": true
   },
   {
     "username": "Alisa Patton",
@@ -277,7 +296,8 @@
     "password_salt": "DEO54WIX4HG",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 640
+    "fame_rate": 640,
+    "isProfileCompleted": true
   },
   {
     "username": "Bradley Mcleod",
@@ -291,7 +311,8 @@
     "password_salt": "MRJ37YXA1WN",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 897
+    "fame_rate": 897,
+    "isProfileCompleted": true
   },
   {
     "username": "Paloma Doyle",
@@ -305,7 +326,8 @@
     "password_salt": "YYE68VRL5IE",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 816
+    "fame_rate": 816,
+    "isProfileCompleted": true
   },
   {
     "username": "Mira Blackburn",
@@ -319,7 +341,8 @@
     "password_salt": "RQL28NFM3XV",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 846
+    "fame_rate": 846,
+    "isProfileCompleted": true
   },
   {
     "username": "Hiram Sharpe",
@@ -333,7 +356,8 @@
     "password_salt": "EGM33SJP7CN",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 186
+    "fame_rate": 186,
+    "isProfileCompleted": true
   },
   {
     "username": "Quynn Lambert",
@@ -347,7 +371,8 @@
     "password_salt": "LSG38XGB5IB",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 669
+    "fame_rate": 669,
+    "isProfileCompleted": true
   },
   {
     "username": "Orli Battle",
@@ -361,7 +386,8 @@
     "password_salt": "APY64JNI7CW",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 639
+    "fame_rate": 639,
+    "isProfileCompleted": true
   },
   {
     "username": "Brianna Henderson",
@@ -375,7 +401,8 @@
     "password_salt": "MJL17YTW5OB",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 448
+    "fame_rate": 448,
+    "isProfileCompleted": true
   },
   {
     "username": "Rajah Charles",
@@ -389,7 +416,8 @@
     "password_salt": "QDY78CSP3XU",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 518
+    "fame_rate": 518,
+    "isProfileCompleted": true
   },
   {
     "username": "Tamara Whitfield",
@@ -403,7 +431,8 @@
     "password_salt": "YCX62LOL7HM",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 247
+    "fame_rate": 247,
+    "isProfileCompleted": true
   },
   {
     "username": "Quyn Schwartz",
@@ -417,7 +446,8 @@
     "password_salt": "LGJ08LQN4DT",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 440
+    "fame_rate": 440,
+    "isProfileCompleted": true
   },
   {
     "username": "Edward Travis",
@@ -431,7 +461,8 @@
     "password_salt": "RTB45HCF8SY",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 872
+    "fame_rate": 872,
+    "isProfileCompleted": true
   },
   {
     "username": "Tobias Garcia",
@@ -445,7 +476,8 @@
     "password_salt": "XMB19SNL2TM",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 747
+    "fame_rate": 747,
+    "isProfileCompleted": true
   },
   {
     "username": "Stacy O'Neill",
@@ -459,7 +491,8 @@
     "password_salt": "LEE44ONE0FJ",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 502
+    "fame_rate": 502,
+    "isProfileCompleted": true
   },
   {
     "username": "Odysseus Schneider",
@@ -473,7 +506,8 @@
     "password_salt": "UMY12DFB1WO",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 807
+    "fame_rate": 807,
+    "isProfileCompleted": true
   },
   {
     "username": "Lucy Yang",
@@ -487,7 +521,8 @@
     "password_salt": "UMM38SDI3YJ",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 568
+    "fame_rate": 568,
+    "isProfileCompleted": true
   },
   {
     "username": "Ivan Schmidt",
@@ -501,7 +536,8 @@
     "password_salt": "ODE51RIU5PQ",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 769
+    "fame_rate": 769,
+    "isProfileCompleted": true
   },
   {
     "username": "Theodore Melendez",
@@ -515,7 +551,8 @@
     "password_salt": "AHC48XJG4XN",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 827
+    "fame_rate": 827,
+    "isProfileCompleted": true
   },
   {
     "username": "Florence Buckner",
@@ -529,7 +566,8 @@
     "password_salt": "UHD24MIZ4WT",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 853
+    "fame_rate": 853,
+    "isProfileCompleted": true
   },
   {
     "username": "Tallulah Holloway",
@@ -543,7 +581,8 @@
     "password_salt": "XJD68SWO7SU",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 309
+    "fame_rate": 309,
+    "isProfileCompleted": true
   },
   {
     "username": "Mary Benton",
@@ -557,7 +596,8 @@
     "password_salt": "MIN72TVO4TZ",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 654
+    "fame_rate": 654,
+    "isProfileCompleted": true
   },
   {
     "username": "Orlando Ortiz",
@@ -571,7 +611,8 @@
     "password_salt": "NGE76OXR0VF",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 162
+    "fame_rate": 162,
+    "isProfileCompleted": true
   },
   {
     "username": "Ryder Case",
@@ -585,7 +626,8 @@
     "password_salt": "NRQ65SWC8TL",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 489
+    "fame_rate": 489,
+    "isProfileCompleted": true
   },
   {
     "username": "Dorian Cameron",
@@ -599,7 +641,8 @@
     "password_salt": "EZG50WDO4BU",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 758
+    "fame_rate": 758,
+    "isProfileCompleted": true
   },
   {
     "username": "Ruby Bartlett",
@@ -613,7 +656,8 @@
     "password_salt": "LZI31BSE1GN",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 264
+    "fame_rate": 264,
+    "isProfileCompleted": true
   },
   {
     "username": "Libby Bentley",
@@ -627,7 +671,8 @@
     "password_salt": "WQM42DYK7QX",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 666
+    "fame_rate": 666,
+    "isProfileCompleted": true
   },
   {
     "username": "Vivian Jones",
@@ -641,7 +686,8 @@
     "password_salt": "KNF15ITD6MB",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 220
+    "fame_rate": 220,
+    "isProfileCompleted": true
   },
   {
     "username": "Laurel Ellison",
@@ -655,7 +701,8 @@
     "password_salt": "WFP07FZC7RV",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 713
+    "fame_rate": 713,
+    "isProfileCompleted": true
   },
   {
     "username": "Dale Mcgowan",
@@ -669,7 +716,8 @@
     "password_salt": "MYM57HBC7JP",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 486
+    "fame_rate": 486,
+    "isProfileCompleted": true
   },
   {
     "username": "Candace Preston",
@@ -683,7 +731,8 @@
     "password_salt": "RRW40MMQ8HT",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 315
+    "fame_rate": 315,
+    "isProfileCompleted": true
   },
   {
     "username": "Brynne Hooper",
@@ -697,7 +746,8 @@
     "password_salt": "UCS14XGL8MD",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 609
+    "fame_rate": 609,
+    "isProfileCompleted": true
   },
   {
     "username": "Carissa Reeves",
@@ -711,7 +761,8 @@
     "password_salt": "OCT66BJI6QX",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 871
+    "fame_rate": 871,
+    "isProfileCompleted": true
   },
   {
     "username": "Althea Bowen",
@@ -725,7 +776,8 @@
     "password_salt": "JVF82LWT9OT",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 545
+    "fame_rate": 545,
+    "isProfileCompleted": true
   },
   {
     "username": "Robin Higgins",
@@ -739,7 +791,8 @@
     "password_salt": "PMU14EWE7FH",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 657
+    "fame_rate": 657,
+    "isProfileCompleted": true
   },
   {
     "username": "Chase Aguilar",
@@ -753,7 +806,8 @@
     "password_salt": "USZ64MDH4XT",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 865
+    "fame_rate": 865,
+    "isProfileCompleted": true
   },
   {
     "username": "Mason Saunders",
@@ -767,7 +821,8 @@
     "password_salt": "XSJ41HTT3EC",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 426
+    "fame_rate": 426,
+    "isProfileCompleted": true
   },
   {
     "username": "Burke Boone",
@@ -781,7 +836,8 @@
     "password_salt": "SPK22KVB3QL",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 518
+    "fame_rate": 518,
+    "isProfileCompleted": true
   },
   {
     "username": "Rina Livingston",
@@ -795,7 +851,8 @@
     "password_salt": "VBZ42DFK1SI",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 421
+    "fame_rate": 421,
+    "isProfileCompleted": true
   },
   {
     "username": "Paloma Manning",
@@ -809,7 +866,8 @@
     "password_salt": "NLG52UZU1ZT",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 180
+    "fame_rate": 180,
+    "isProfileCompleted": true
   },
   {
     "username": "Keegan James",
@@ -823,7 +881,8 @@
     "password_salt": "KXQ65QPJ2ST",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 367
+    "fame_rate": 367,
+    "isProfileCompleted": true
   },
   {
     "username": "Avram Shaffer",
@@ -837,7 +896,8 @@
     "password_salt": "DJQ84LEQ6IY",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 718
+    "fame_rate": 718,
+    "isProfileCompleted": true
   },
   {
     "username": "Hyatt Green",
@@ -851,7 +911,8 @@
     "password_salt": "OQC28DFK6NZ",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 123
+    "fame_rate": 123,
+    "isProfileCompleted": true
   },
   {
     "username": "Sheila Coffey",
@@ -865,7 +926,8 @@
     "password_salt": "SWW39GTG8EW",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 524
+    "fame_rate": 524,
+    "isProfileCompleted": true
   },
   {
     "username": "Hu Burch",
@@ -879,7 +941,8 @@
     "password_salt": "LNS98UAJ1GQ",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 460
+    "fame_rate": 460,
+    "isProfileCompleted": true
   },
   {
     "username": "Ann Erickson",
@@ -893,7 +956,8 @@
     "password_salt": "UQK28HLR6UU",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 768
+    "fame_rate": 768,
+    "isProfileCompleted": true
   },
   {
     "username": "Cally Goodwin",
@@ -907,7 +971,8 @@
     "password_salt": "THE32XUA3RE",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 962
+    "fame_rate": 962,
+    "isProfileCompleted": true
   },
   {
     "username": "Sophia Cobb",
@@ -921,7 +986,8 @@
     "password_salt": "VXT85ANH1ZF",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 837
+    "fame_rate": 837,
+    "isProfileCompleted": true
   },
   {
     "username": "Hayden Chen",
@@ -935,7 +1001,8 @@
     "password_salt": "GSL66HMO4TM",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 929
+    "fame_rate": 929,
+    "isProfileCompleted": true
   },
   {
     "username": "Armand Donaldson",
@@ -949,7 +1016,8 @@
     "password_salt": "NNG36UEN8XQ",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 130
+    "fame_rate": 130,
+    "isProfileCompleted": true
   },
   {
     "username": "Talon Winters",
@@ -963,7 +1031,8 @@
     "password_salt": "LFH57NGJ8WW",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 470
+    "fame_rate": 470,
+    "isProfileCompleted": true
   },
   {
     "username": "Amos Bauer",
@@ -977,7 +1046,8 @@
     "password_salt": "JDF53XKO1KZ",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 617
+    "fame_rate": 617,
+    "isProfileCompleted": true
   },
   {
     "username": "Ryder Underwood",
@@ -991,7 +1061,8 @@
     "password_salt": "KIR41RIM3NX",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 563
+    "fame_rate": 563,
+    "isProfileCompleted": true
   },
   {
     "username": "Raymond Kane",
@@ -1005,7 +1076,8 @@
     "password_salt": "MWO48QAT6TK",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 783
+    "fame_rate": 783,
+    "isProfileCompleted": true
   },
   {
     "username": "Breanna Richardson",
@@ -1019,7 +1091,8 @@
     "password_salt": "IOL86CXV2NS",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 106
+    "fame_rate": 106,
+    "isProfileCompleted": true
   },
   {
     "username": "Jael Forbes",
@@ -1033,7 +1106,8 @@
     "password_salt": "TOC84RTV6LW",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 780
+    "fame_rate": 780,
+    "isProfileCompleted": true
   },
   {
     "username": "Malcolm Hardy",
@@ -1047,7 +1121,8 @@
     "password_salt": "YGD06NEO7GM",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 586
+    "fame_rate": 586,
+    "isProfileCompleted": true
   },
   {
     "username": "Kelly Cervantes",
@@ -1061,7 +1136,8 @@
     "password_salt": "UND51ULD1PU",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 42
+    "fame_rate": 42,
+    "isProfileCompleted": true
   },
   {
     "username": "Pascale Mckenzie",
@@ -1075,7 +1151,8 @@
     "password_salt": "JME06YUS4JD",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 352
+    "fame_rate": 352,
+    "isProfileCompleted": true
   },
   {
     "username": "Leigh Steele",
@@ -1089,7 +1166,8 @@
     "password_salt": "XYF37UBX4IN",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 284
+    "fame_rate": 284,
+    "isProfileCompleted": true
   },
   {
     "username": "Nayda Richmond",
@@ -1103,7 +1181,8 @@
     "password_salt": "NHN64GJC0VK",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 849
+    "fame_rate": 849,
+    "isProfileCompleted": true
   },
   {
     "username": "Brandon Levy",
@@ -1117,7 +1196,8 @@
     "password_salt": "NSD28JKS7NM",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 244
+    "fame_rate": 244,
+    "isProfileCompleted": true
   },
   {
     "username": "Gary Michael",
@@ -1131,7 +1211,8 @@
     "password_salt": "RKP55OYU1VC",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 941
+    "fame_rate": 941,
+    "isProfileCompleted": true
   },
   {
     "username": "Colby Wilkinson",
@@ -1145,7 +1226,8 @@
     "password_salt": "EFJ57CPW8EN",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 399
+    "fame_rate": 399,
+    "isProfileCompleted": true
   },
   {
     "username": "Pearl Decker",
@@ -1159,7 +1241,8 @@
     "password_salt": "NWV64DYZ2WV",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 780
+    "fame_rate": 780,
+    "isProfileCompleted": true
   },
   {
     "username": "William Cortez",
@@ -1173,7 +1256,8 @@
     "password_salt": "UHO88TIK1HL",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 820
+    "fame_rate": 820,
+    "isProfileCompleted": true
   },
   {
     "username": "Amir Mcclure",
@@ -1187,7 +1271,8 @@
     "password_salt": "BFY67MML5ZO",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 987
+    "fame_rate": 987,
+    "isProfileCompleted": true
   },
   {
     "username": "Berk Hines",
@@ -1201,7 +1286,8 @@
     "password_salt": "HQX17XBD1MI",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 231
+    "fame_rate": 231,
+    "isProfileCompleted": true
   },
   {
     "username": "Grace Wyatt",
@@ -1215,7 +1301,8 @@
     "password_salt": "XCD32KTK8EG",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 945
+    "fame_rate": 945,
+    "isProfileCompleted": true
   },
   {
     "username": "Alyssa Davis",
@@ -1229,7 +1316,8 @@
     "password_salt": "WQC65DGQ8VG",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 619
+    "fame_rate": 619,
+    "isProfileCompleted": true
   },
   {
     "username": "Simon Adkins",
@@ -1243,7 +1331,8 @@
     "password_salt": "FYC42URQ8WU",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 399
+    "fame_rate": 399,
+    "isProfileCompleted": true
   },
   {
     "username": "Lysandra Gay",
@@ -1257,7 +1346,8 @@
     "password_salt": "TES82EUE3SP",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 798
+    "fame_rate": 798,
+    "isProfileCompleted": true
   },
   {
     "username": "Allistair Petersen",
@@ -1271,7 +1361,8 @@
     "password_salt": "MDN37ARE8NO",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 843
+    "fame_rate": 843,
+    "isProfileCompleted": true
   },
   {
     "username": "Janna Giles",
@@ -1285,7 +1376,8 @@
     "password_salt": "DRT65TES5VR",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 72
+    "fame_rate": 72,
+    "isProfileCompleted": true
   },
   {
     "username": "Elijah Walters",
@@ -1299,7 +1391,8 @@
     "password_salt": "LLV89OXG0BV",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 319
+    "fame_rate": 319,
+    "isProfileCompleted": true
   },
   {
     "username": "Cade Cantrell",
@@ -1313,7 +1406,8 @@
     "password_salt": "VRG52YGF4BC",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 792
+    "fame_rate": 792,
+    "isProfileCompleted": true
   },
   {
     "username": "Melvin George",
@@ -1327,7 +1421,8 @@
     "password_salt": "FUY77FOD7ZT",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 726
+    "fame_rate": 726,
+    "isProfileCompleted": true
   },
   {
     "username": "Colette Koch",
@@ -1341,7 +1436,8 @@
     "password_salt": "PGY83RFE7AN",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 414
+    "fame_rate": 414,
+    "isProfileCompleted": true
   },
   {
     "username": "Macy Haney",
@@ -1355,7 +1451,8 @@
     "password_salt": "MWG44CIP1JX",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 806
+    "fame_rate": 806,
+    "isProfileCompleted": true
   },
   {
     "username": "Noel Reed",
@@ -1369,7 +1466,8 @@
     "password_salt": "EQB68LFP0CD",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 188
+    "fame_rate": 188,
+    "isProfileCompleted": true
   },
   {
     "username": "Asher Flowers",
@@ -1383,7 +1481,8 @@
     "password_salt": "QDO77HYT6BE",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 320
+    "fame_rate": 320,
+    "isProfileCompleted": true
   },
   {
     "username": "Hop Kennedy",
@@ -1397,7 +1496,8 @@
     "password_salt": "XGF36DRV1ID",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 218
+    "fame_rate": 218,
+    "isProfileCompleted": true
   },
   {
     "username": "Isabella Lucas",
@@ -1411,7 +1511,8 @@
     "password_salt": "REC30MNO8OS",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 693
+    "fame_rate": 693,
+    "isProfileCompleted": true
   },
   {
     "username": "Latifah Ramos",
@@ -1425,7 +1526,8 @@
     "password_salt": "GEX61DBQ5NS",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 203
+    "fame_rate": 203,
+    "isProfileCompleted": true
   },
   {
     "username": "Marah Simmons",
@@ -1439,7 +1541,8 @@
     "password_salt": "UHF76XOR1OJ",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 241
+    "fame_rate": 241,
+    "isProfileCompleted": true
   },
   {
     "username": "Stacy Barnes",
@@ -1453,7 +1556,8 @@
     "password_salt": "PCE26XZC0PF",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 471
+    "fame_rate": 471,
+    "isProfileCompleted": true
   },
   {
     "username": "Charity Alexander",
@@ -1467,7 +1571,8 @@
     "password_salt": "IQW54MEP5CY",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 189
+    "fame_rate": 189,
+    "isProfileCompleted": true
   },
   {
     "username": "Lareina Dennis",
@@ -1481,7 +1586,8 @@
     "password_salt": "CQB14QDR1NR",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 322
+    "fame_rate": 322,
+    "isProfileCompleted": true
   },
   {
     "username": "Flavia Cantu",
@@ -1495,7 +1601,8 @@
     "password_salt": "BQG33NQG6KU",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 716
+    "fame_rate": 716,
+    "isProfileCompleted": true
   },
   {
     "username": "Ingrid Scott",
@@ -1509,7 +1616,8 @@
     "password_salt": "MQM94OZD3EJ",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 702
+    "fame_rate": 702,
+    "isProfileCompleted": true
   },
   {
     "username": "Ronan Leon",
@@ -1523,7 +1631,8 @@
     "password_salt": "ORF80HGO8OD",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 840
+    "fame_rate": 840,
+    "isProfileCompleted": true
   },
   {
     "username": "Nero Saunders",
@@ -1537,7 +1646,8 @@
     "password_salt": "ISS66WDK7VG",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 683
+    "fame_rate": 683,
+    "isProfileCompleted": true
   },
   {
     "username": "McKenzie Martinez",
@@ -1551,7 +1661,8 @@
     "password_salt": "KKM13AFI6BY",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 766
+    "fame_rate": 766,
+    "isProfileCompleted": true
   },
   {
     "username": "Quon Roman",
@@ -1565,7 +1676,8 @@
     "password_salt": "SYX81AKQ2CK",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 256
+    "fame_rate": 256,
+    "isProfileCompleted": true
   },
   {
     "username": "McKenzie Miles",
@@ -1579,7 +1691,8 @@
     "password_salt": "CXU06HEE5QD",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 758
+    "fame_rate": 758,
+    "isProfileCompleted": true
   },
   {
     "username": "Rudyard Keller",
@@ -1593,7 +1706,8 @@
     "password_salt": "QIF00MYJ6EV",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 312
+    "fame_rate": 312,
+    "isProfileCompleted": true
   },
   {
     "username": "Zane Salinas",
@@ -1607,7 +1721,8 @@
     "password_salt": "LNI51JUH2MY",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 768
+    "fame_rate": 768,
+    "isProfileCompleted": true
   },
   {
     "username": "Cole Delaney",
@@ -1621,7 +1736,8 @@
     "password_salt": "ICI88FTG4IH",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 399
+    "fame_rate": 399,
+    "isProfileCompleted": true
   },
   {
     "username": "Whoopi Mccarty",
@@ -1635,7 +1751,8 @@
     "password_salt": "CAS11JTP4JD",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 60
+    "fame_rate": 60,
+    "isProfileCompleted": true
   },
   {
     "username": "Kitra Shaw",
@@ -1649,7 +1766,8 @@
     "password_salt": "ZEC71EYX9EX",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 715
+    "fame_rate": 715,
+    "isProfileCompleted": true
   },
   {
     "username": "Hermione Murphy",
@@ -1663,7 +1781,8 @@
     "password_salt": "HCT83ICM6OT",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 980
+    "fame_rate": 980,
+    "isProfileCompleted": true
   },
   {
     "username": "Ariana Kelley",
@@ -1677,7 +1796,8 @@
     "password_salt": "WII18SER7HI",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 291
+    "fame_rate": 291,
+    "isProfileCompleted": true
   },
   {
     "username": "Bertha Sweeney",
@@ -1691,7 +1811,8 @@
     "password_salt": "BIP26DJN3RF",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 454
+    "fame_rate": 454,
+    "isProfileCompleted": true
   },
   {
     "username": "Derek Stafford",
@@ -1705,7 +1826,8 @@
     "password_salt": "FXM16HLC5VF",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 965
+    "fame_rate": 965,
+    "isProfileCompleted": true
   },
   {
     "username": "Kerry Mcfadden",
@@ -1719,7 +1841,8 @@
     "password_salt": "PDJ72OCJ6RE",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 255
+    "fame_rate": 255,
+    "isProfileCompleted": true
   },
   {
     "username": "Ursula Pratt",
@@ -1733,7 +1856,8 @@
     "password_salt": "JIJ33KBG7EU",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 570
+    "fame_rate": 570,
+    "isProfileCompleted": true
   },
   {
     "username": "Porter Watts",
@@ -1747,7 +1871,8 @@
     "password_salt": "VML53CNY7VZ",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 91
+    "fame_rate": 91,
+    "isProfileCompleted": true
   },
   {
     "username": "Harlan Santana",
@@ -1761,7 +1886,8 @@
     "password_salt": "GMM53SSA6PA",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 159
+    "fame_rate": 159,
+    "isProfileCompleted": true
   },
   {
     "username": "Jescie Noble",
@@ -1775,7 +1901,8 @@
     "password_salt": "MDX90XVJ5VD",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 361
+    "fame_rate": 361,
+    "isProfileCompleted": true
   },
   {
     "username": "Raven Savage",
@@ -1789,7 +1916,8 @@
     "password_salt": "DWK92IMH6TL",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 37
+    "fame_rate": 37,
+    "isProfileCompleted": true
   },
   {
     "username": "Silas Best",
@@ -1803,7 +1931,8 @@
     "password_salt": "BOX75SXT6VX",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 722
+    "fame_rate": 722,
+    "isProfileCompleted": true
   },
   {
     "username": "Adele Griffin",
@@ -1817,7 +1946,8 @@
     "password_salt": "GNH77GTH5DN",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 655
+    "fame_rate": 655,
+    "isProfileCompleted": true
   },
   {
     "username": "Madaline Lowe",
@@ -1831,7 +1961,8 @@
     "password_salt": "VIX33OYG5IU",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 27
+    "fame_rate": 27,
+    "isProfileCompleted": true
   },
   {
     "username": "Walter Solis",
@@ -1845,7 +1976,8 @@
     "password_salt": "KYQ71QDG2ME",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 79
+    "fame_rate": 79,
+    "isProfileCompleted": true
   },
   {
     "username": "Nigel Schneider",
@@ -1859,7 +1991,8 @@
     "password_salt": "NUS48NUL1LD",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 121
+    "fame_rate": 121,
+    "isProfileCompleted": true
   },
   {
     "username": "Melyssa Hooper",
@@ -1873,7 +2006,8 @@
     "password_salt": "DAW95QTE0YJ",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 605
+    "fame_rate": 605,
+    "isProfileCompleted": true
   },
   {
     "username": "Rhoda Alston",
@@ -1887,7 +2021,8 @@
     "password_salt": "XIB23ILY6EP",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 433
+    "fame_rate": 433,
+    "isProfileCompleted": true
   },
   {
     "username": "Guy Kane",
@@ -1901,7 +2036,8 @@
     "password_salt": "OAY41RDN6EV",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 263
+    "fame_rate": 263,
+    "isProfileCompleted": true
   },
   {
     "username": "Geraldine Fletcher",
@@ -1915,7 +2051,8 @@
     "password_salt": "VKI26KAS0YT",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 529
+    "fame_rate": 529,
+    "isProfileCompleted": true
   },
   {
     "username": "Risa O'donnell",
@@ -1929,7 +2066,8 @@
     "password_salt": "TDX18WUO5TJ",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 919
+    "fame_rate": 919,
+    "isProfileCompleted": true
   },
   {
     "username": "Keaton Villarreal",
@@ -1943,7 +2081,8 @@
     "password_salt": "FCZ31VDV3DA",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 711
+    "fame_rate": 711,
+    "isProfileCompleted": true
   },
   {
     "username": "Zenaida Simmons",
@@ -1957,7 +2096,8 @@
     "password_salt": "WII42FWH7QT",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 952
+    "fame_rate": 952,
+    "isProfileCompleted": true
   },
   {
     "username": "Clayton Rosario",
@@ -1971,7 +2111,8 @@
     "password_salt": "FNR15YTR3YD",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 518
+    "fame_rate": 518,
+    "isProfileCompleted": true
   },
   {
     "username": "Nichole Melton",
@@ -1985,7 +2126,8 @@
     "password_salt": "EFY45LOB0MF",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 336
+    "fame_rate": 336,
+    "isProfileCompleted": true
   },
   {
     "username": "Gregory Wheeler",
@@ -1999,7 +2141,8 @@
     "password_salt": "VPE43WMH4BR",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 819
+    "fame_rate": 819,
+    "isProfileCompleted": true
   },
   {
     "username": "Theodore Logan",
@@ -2013,7 +2156,8 @@
     "password_salt": "LXJ79CKS1VM",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 376
+    "fame_rate": 376,
+    "isProfileCompleted": true
   },
   {
     "username": "Marshall Mason",
@@ -2027,7 +2171,8 @@
     "password_salt": "JHV00LUW4WJ",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 954
+    "fame_rate": 954,
+    "isProfileCompleted": true
   },
   {
     "username": "Zia Sanders",
@@ -2041,7 +2186,8 @@
     "password_salt": "HKG45CUQ3GX",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 938
+    "fame_rate": 938,
+    "isProfileCompleted": true
   },
   {
     "username": "Wang Tran",
@@ -2055,7 +2201,8 @@
     "password_salt": "NGF52KSS2HH",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 551
+    "fame_rate": 551,
+    "isProfileCompleted": true
   },
   {
     "username": "Tana Heath",
@@ -2069,7 +2216,8 @@
     "password_salt": "IKA89MEE4CD",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 466
+    "fame_rate": 466,
+    "isProfileCompleted": true
   },
   {
     "username": "Kibo Freeman",
@@ -2083,7 +2231,8 @@
     "password_salt": "OGK74RCX5CA",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 81
+    "fame_rate": 81,
+    "isProfileCompleted": true
   },
   {
     "username": "Hasad Branch",
@@ -2097,7 +2246,8 @@
     "password_salt": "ZAI27YET3OK",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 802
+    "fame_rate": 802,
+    "isProfileCompleted": true
   },
   {
     "username": "Lavinia Aguilar",
@@ -2111,7 +2261,8 @@
     "password_salt": "VCE75INM8QX",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 272
+    "fame_rate": 272,
+    "isProfileCompleted": true
   },
   {
     "username": "Damian Mendoza",
@@ -2125,7 +2276,8 @@
     "password_salt": "XLX31OEH8XG",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 311
+    "fame_rate": 311,
+    "isProfileCompleted": true
   },
   {
     "username": "Tamara Santiago",
@@ -2139,7 +2291,8 @@
     "password_salt": "XTI33EVV9TX",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 539
+    "fame_rate": 539,
+    "isProfileCompleted": true
   },
   {
     "username": "Bruno Bray",
@@ -2153,7 +2306,8 @@
     "password_salt": "LYV13KJY6YU",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 925
+    "fame_rate": 925,
+    "isProfileCompleted": true
   },
   {
     "username": "Silas Miller",
@@ -2167,7 +2321,8 @@
     "password_salt": "NVM04JIY1HT",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 90
+    "fame_rate": 90,
+    "isProfileCompleted": true
   },
   {
     "username": "Moana Huber",
@@ -2181,7 +2336,8 @@
     "password_salt": "LXT74NYB6UQ",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 873
+    "fame_rate": 873,
+    "isProfileCompleted": true
   },
   {
     "username": "Zachary Levine",
@@ -2195,7 +2351,8 @@
     "password_salt": "EQD99CIJ5FZ",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 465
+    "fame_rate": 465,
+    "isProfileCompleted": true
   },
   {
     "username": "Cally Bryan",
@@ -2209,7 +2366,8 @@
     "password_salt": "UGB17OLK5WM",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 761
+    "fame_rate": 761,
+    "isProfileCompleted": true
   },
   {
     "username": "Ayanna Aguilar",
@@ -2223,7 +2381,8 @@
     "password_salt": "CYN23KHC2PM",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 227
+    "fame_rate": 227,
+    "isProfileCompleted": true
   },
   {
     "username": "Berk Suarez",
@@ -2237,7 +2396,8 @@
     "password_salt": "SPW88OHP5OD",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 723
+    "fame_rate": 723,
+    "isProfileCompleted": true
   },
   {
     "username": "Oprah Chambers",
@@ -2251,7 +2411,8 @@
     "password_salt": "ILV02CGY8WB",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 584
+    "fame_rate": 584,
+    "isProfileCompleted": true
   },
   {
     "username": "Kuame Phelps",
@@ -2265,7 +2426,8 @@
     "password_salt": "NLK76YLF6JK",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 712
+    "fame_rate": 712,
+    "isProfileCompleted": true
   },
   {
     "username": "Ryder Mack",
@@ -2279,7 +2441,8 @@
     "password_salt": "NWF25CSU1WV",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 209
+    "fame_rate": 209,
+    "isProfileCompleted": true
   },
   {
     "username": "Christine Mays",
@@ -2293,7 +2456,8 @@
     "password_salt": "NOQ04SMD3HG",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 650
+    "fame_rate": 650,
+    "isProfileCompleted": true
   },
   {
     "username": "Kyle Hoffman",
@@ -2307,7 +2471,8 @@
     "password_salt": "GJK77IDS2WT",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 460
+    "fame_rate": 460,
+    "isProfileCompleted": true
   },
   {
     "username": "TaShya Drake",
@@ -2321,7 +2486,8 @@
     "password_salt": "AEL02UYJ2YR",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 756
+    "fame_rate": 756,
+    "isProfileCompleted": true
   },
   {
     "username": "Kessie Molina",
@@ -2335,7 +2501,8 @@
     "password_salt": "PKK78GZG4WG",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 384
+    "fame_rate": 384,
+    "isProfileCompleted": true
   },
   {
     "username": "Veda Leach",
@@ -2349,7 +2516,8 @@
     "password_salt": "QGW25NJJ0UP",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 706
+    "fame_rate": 706,
+    "isProfileCompleted": true
   },
   {
     "username": "Hilary Daniels",
@@ -2363,7 +2531,8 @@
     "password_salt": "NLU27OLR5MQ",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 758
+    "fame_rate": 758,
+    "isProfileCompleted": true
   },
   {
     "username": "Hector Ayala",
@@ -2377,7 +2546,8 @@
     "password_salt": "CFB11VOX7MC",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 270
+    "fame_rate": 270,
+    "isProfileCompleted": true
   },
   {
     "username": "Blossom Shepherd",
@@ -2391,7 +2561,8 @@
     "password_salt": "PVX88YDF6MG",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 147
+    "fame_rate": 147,
+    "isProfileCompleted": true
   },
   {
     "username": "Lunea Salinas",
@@ -2405,7 +2576,8 @@
     "password_salt": "AGY85BTQ2SV",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 144
+    "fame_rate": 144,
+    "isProfileCompleted": true
   },
   {
     "username": "Dean Guerrero",
@@ -2419,7 +2591,8 @@
     "password_salt": "EOB40MOD0XI",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 77
+    "fame_rate": 77,
+    "isProfileCompleted": true
   },
   {
     "username": "Gannon Solis",
@@ -2433,7 +2606,8 @@
     "password_salt": "JCN57TJX8HN",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 844
+    "fame_rate": 844,
+    "isProfileCompleted": true
   },
   {
     "username": "Kenneth Allen",
@@ -2447,7 +2621,8 @@
     "password_salt": "YFU32FYF4LO",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 437
+    "fame_rate": 437,
+    "isProfileCompleted": true
   },
   {
     "username": "Grant Rivas",
@@ -2461,7 +2636,8 @@
     "password_salt": "QMQ65VUU0VY",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 256
+    "fame_rate": 256,
+    "isProfileCompleted": true
   },
   {
     "username": "Uma Campbell",
@@ -2475,7 +2651,8 @@
     "password_salt": "VDR07FML7IQ",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 576
+    "fame_rate": 576,
+    "isProfileCompleted": true
   },
   {
     "username": "Chancellor Hardy",
@@ -2489,7 +2666,8 @@
     "password_salt": "SZR50CVJ5NN",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 897
+    "fame_rate": 897,
+    "isProfileCompleted": true
   },
   {
     "username": "Grady Chen",
@@ -2503,7 +2681,8 @@
     "password_salt": "HDS64CPY8PY",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 389
+    "fame_rate": 389,
+    "isProfileCompleted": true
   },
   {
     "username": "Ebony Sharpe",
@@ -2517,7 +2696,8 @@
     "password_salt": "MEG85MKO0EH",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 315
+    "fame_rate": 315,
+    "isProfileCompleted": true
   },
   {
     "username": "Travis Sweeney",
@@ -2531,7 +2711,8 @@
     "password_salt": "TDW69OMF4HX",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 64
+    "fame_rate": 64,
+    "isProfileCompleted": true
   },
   {
     "username": "Amela Houston",
@@ -2545,7 +2726,8 @@
     "password_salt": "DDV07SMV1XP",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 617
+    "fame_rate": 617,
+    "isProfileCompleted": true
   },
   {
     "username": "Harrison Boyle",
@@ -2559,7 +2741,8 @@
     "password_salt": "TSM34FTP9IT",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 247
+    "fame_rate": 247,
+    "isProfileCompleted": true
   },
   {
     "username": "Walter Callahan",
@@ -2573,7 +2756,8 @@
     "password_salt": "FTS52LAC7YP",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 434
+    "fame_rate": 434,
+    "isProfileCompleted": true
   },
   {
     "username": "Reese Stevens",
@@ -2587,7 +2771,8 @@
     "password_salt": "DUH86HVQ1XW",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 834
+    "fame_rate": 834,
+    "isProfileCompleted": true
   },
   {
     "username": "Kitra Silva",
@@ -2601,7 +2786,8 @@
     "password_salt": "WTF14ZZK6RE",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 501
+    "fame_rate": 501,
+    "isProfileCompleted": true
   },
   {
     "username": "Quinn Rowe",
@@ -2615,7 +2801,8 @@
     "password_salt": "TCA50ICP4JU",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 663
+    "fame_rate": 663,
+    "isProfileCompleted": true
   },
   {
     "username": "Abel Finley",
@@ -2629,7 +2816,8 @@
     "password_salt": "CEF10JQD8TW",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 267
+    "fame_rate": 267,
+    "isProfileCompleted": true
   },
   {
     "username": "Marcia Estrada",
@@ -2643,7 +2831,8 @@
     "password_salt": "HKT66RRX4FX",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 398
+    "fame_rate": 398,
+    "isProfileCompleted": true
   },
   {
     "username": "Castor Hardin",
@@ -2657,7 +2846,8 @@
     "password_salt": "YOI73RWJ8NY",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 546
+    "fame_rate": 546,
+    "isProfileCompleted": true
   },
   {
     "username": "Shad Mcpherson",
@@ -2671,7 +2861,8 @@
     "password_salt": "EKN88LCS5PY",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 557
+    "fame_rate": 557,
+    "isProfileCompleted": true
   },
   {
     "username": "Carlos Marsh",
@@ -2685,7 +2876,8 @@
     "password_salt": "BRK84EDO1NN",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 365
+    "fame_rate": 365,
+    "isProfileCompleted": true
   },
   {
     "username": "Clementine Knowles",
@@ -2699,7 +2891,8 @@
     "password_salt": "ZAF01DXU6EY",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 793
+    "fame_rate": 793,
+    "isProfileCompleted": true
   },
   {
     "username": "Cassandra Phillips",
@@ -2713,7 +2906,8 @@
     "password_salt": "UNY03XWQ5MS",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 2
+    "fame_rate": 2,
+    "isProfileCompleted": true
   },
   {
     "username": "Emmanuel Guthrie",
@@ -2727,7 +2921,8 @@
     "password_salt": "XLM63ZJH3ML",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 894
+    "fame_rate": 894,
+    "isProfileCompleted": true
   },
   {
     "username": "Thor Wiley",
@@ -2741,7 +2936,8 @@
     "password_salt": "OGI42WKR4DP",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 519
+    "fame_rate": 519,
+    "isProfileCompleted": true
   },
   {
     "username": "Baker Perry",
@@ -2755,7 +2951,8 @@
     "password_salt": "WEC23XMT5JC",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 882
+    "fame_rate": 882,
+    "isProfileCompleted": true
   },
   {
     "username": "Cheryl Chaney",
@@ -2769,7 +2966,8 @@
     "password_salt": "JAU74PKW6QU",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 799
+    "fame_rate": 799,
+    "isProfileCompleted": true
   },
   {
     "username": "Ali Mcgee",
@@ -2783,7 +2981,8 @@
     "password_salt": "GHX58LIR7SB",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 378
+    "fame_rate": 378,
+    "isProfileCompleted": true
   },
   {
     "username": "Forrest Woods",
@@ -2797,7 +2996,8 @@
     "password_salt": "ONF72VDC1SG",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 943
+    "fame_rate": 943,
+    "isProfileCompleted": true
   },
   {
     "username": "Kaitlin Berger",
@@ -2811,7 +3011,8 @@
     "password_salt": "FVK61LLI5HV",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 279
+    "fame_rate": 279,
+    "isProfileCompleted": true
   },
   {
     "username": "Kenyon Farmer",
@@ -2825,7 +3026,8 @@
     "password_salt": "YUF25VLI5IS",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 831
+    "fame_rate": 831,
+    "isProfileCompleted": true
   },
   {
     "username": "Wynne Black",
@@ -2839,7 +3041,8 @@
     "password_salt": "YTB34CYT5EU",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 779
+    "fame_rate": 779,
+    "isProfileCompleted": true
   },
   {
     "username": "Pearl Herman",
@@ -2853,7 +3056,8 @@
     "password_salt": "MRW35DWS2IK",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 821
+    "fame_rate": 821,
+    "isProfileCompleted": true
   },
   {
     "username": "Rachel Mueller",
@@ -2867,7 +3071,8 @@
     "password_salt": "PMW43VMQ0KM",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 68
+    "fame_rate": 68,
+    "isProfileCompleted": true
   },
   {
     "username": "Kevin Clemons",
@@ -2881,7 +3086,8 @@
     "password_salt": "BHD37BUV5HM",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 634
+    "fame_rate": 634,
+    "isProfileCompleted": true
   },
   {
     "username": "Reuben Knox",
@@ -2895,7 +3101,8 @@
     "password_salt": "OXJ19INF3DU",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 269
+    "fame_rate": 269,
+    "isProfileCompleted": true
   },
   {
     "username": "Warren Wise",
@@ -2909,7 +3116,8 @@
     "password_salt": "ECP82HNH8YV",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 307
+    "fame_rate": 307,
+    "isProfileCompleted": true
   },
   {
     "username": "Adena Bean",
@@ -2923,7 +3131,8 @@
     "password_salt": "LLN81GCY2FF",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 724
+    "fame_rate": 724,
+    "isProfileCompleted": true
   },
   {
     "username": "Timon Dickson",
@@ -2937,7 +3146,8 @@
     "password_salt": "FTQ18DTR6SI",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 322
+    "fame_rate": 322,
+    "isProfileCompleted": true
   },
   {
     "username": "Dane Lott",
@@ -2951,7 +3161,8 @@
     "password_salt": "MCX36DSA8CK",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 78
+    "fame_rate": 78,
+    "isProfileCompleted": true
   },
   {
     "username": "Jana Meyers",
@@ -2965,7 +3176,8 @@
     "password_salt": "EDD95HFR6PI",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 854
+    "fame_rate": 854,
+    "isProfileCompleted": true
   },
   {
     "username": "Candice Mclaughlin",
@@ -2979,7 +3191,8 @@
     "password_salt": "HPG05HBW8JS",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 692
+    "fame_rate": 692,
+    "isProfileCompleted": true
   },
   {
     "username": "Rebecca Morales",
@@ -2993,7 +3206,8 @@
     "password_salt": "PCG76HTH6ML",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 419
+    "fame_rate": 419,
+    "isProfileCompleted": true
   },
   {
     "username": "Charity Mcclure",
@@ -3007,7 +3221,8 @@
     "password_salt": "ICT22EYW4ED",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 129
+    "fame_rate": 129,
+    "isProfileCompleted": true
   },
   {
     "username": "Linda Sandoval",
@@ -3021,7 +3236,8 @@
     "password_salt": "MEC69FPS7TE",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 588
+    "fame_rate": 588,
+    "isProfileCompleted": true
   },
   {
     "username": "Zeph Ramsey",
@@ -3035,7 +3251,8 @@
     "password_salt": "PNT11GJO3TC",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 982
+    "fame_rate": 982,
+    "isProfileCompleted": true
   },
   {
     "username": "Nolan Robbins",
@@ -3049,7 +3266,8 @@
     "password_salt": "EHJ60DRR5SB",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 121
+    "fame_rate": 121,
+    "isProfileCompleted": true
   },
   {
     "username": "Porter Shields",
@@ -3063,7 +3281,8 @@
     "password_salt": "HAS44WYS6CF",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 902
+    "fame_rate": 902,
+    "isProfileCompleted": true
   },
   {
     "username": "Uriah Blackburn",
@@ -3077,7 +3296,8 @@
     "password_salt": "NDP63NOZ8AD",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 874
+    "fame_rate": 874,
+    "isProfileCompleted": true
   },
   {
     "username": "Carlos Cooper",
@@ -3091,7 +3311,8 @@
     "password_salt": "FQF28FYZ3JI",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 702
+    "fame_rate": 702,
+    "isProfileCompleted": true
   },
   {
     "username": "Uriel Cruz",
@@ -3105,7 +3326,8 @@
     "password_salt": "ALH88KCJ2VI",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 244
+    "fame_rate": 244,
+    "isProfileCompleted": true
   },
   {
     "username": "India Grimes",
@@ -3119,7 +3341,8 @@
     "password_salt": "XNM41RRS8JM",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 191
+    "fame_rate": 191,
+    "isProfileCompleted": true
   },
   {
     "username": "Beck Higgins",
@@ -3133,7 +3356,8 @@
     "password_salt": "IBD61IOF8BG",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 759
+    "fame_rate": 759,
+    "isProfileCompleted": true
   },
   {
     "username": "Dana Welch",
@@ -3147,7 +3371,8 @@
     "password_salt": "WQD29WGO7HQ",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 821
+    "fame_rate": 821,
+    "isProfileCompleted": true
   },
   {
     "username": "Ria Clarke",
@@ -3161,7 +3386,8 @@
     "password_salt": "IWM57LGX2OV",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 668
+    "fame_rate": 668,
+    "isProfileCompleted": true
   },
   {
     "username": "Brennan Byrd",
@@ -3175,7 +3401,8 @@
     "password_salt": "RZC02TEN7XX",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 830
+    "fame_rate": 830,
+    "isProfileCompleted": true
   },
   {
     "username": "Brendan Cooper",
@@ -3189,7 +3416,8 @@
     "password_salt": "JNT65QHO4KV",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 637
+    "fame_rate": 637,
+    "isProfileCompleted": true
   },
   {
     "username": "Daniel Simon",
@@ -3203,7 +3431,8 @@
     "password_salt": "QEN66TNI4PG",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 746
+    "fame_rate": 746,
+    "isProfileCompleted": true
   },
   {
     "username": "Jeanette Estrada",
@@ -3217,7 +3446,8 @@
     "password_salt": "XBR57MQI1FI",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 593
+    "fame_rate": 593,
+    "isProfileCompleted": true
   },
   {
     "username": "Michael Acosta",
@@ -3231,7 +3461,8 @@
     "password_salt": "LIK84LNY4WX",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 103
+    "fame_rate": 103,
+    "isProfileCompleted": true
   },
   {
     "username": "Brenden Rivers",
@@ -3245,7 +3476,8 @@
     "password_salt": "CKM72DEG5VE",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 833
+    "fame_rate": 833,
+    "isProfileCompleted": true
   },
   {
     "username": "Herrod Calhoun",
@@ -3259,7 +3491,8 @@
     "password_salt": "EPC98EFL4AV",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 666
+    "fame_rate": 666,
+    "isProfileCompleted": true
   },
   {
     "username": "Jameson Blackwell",
@@ -3273,7 +3506,8 @@
     "password_salt": "RII63IXC8UX",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 390
+    "fame_rate": 390,
+    "isProfileCompleted": true
   },
   {
     "username": "Adrienne Morgan",
@@ -3287,7 +3521,8 @@
     "password_salt": "JTW12URV2XM",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 19
+    "fame_rate": 19,
+    "isProfileCompleted": true
   },
   {
     "username": "Dieter Baker",
@@ -3301,7 +3536,8 @@
     "password_salt": "RMY29GJD6PW",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 669
+    "fame_rate": 669,
+    "isProfileCompleted": true
   },
   {
     "username": "Leroy Boyer",
@@ -3315,7 +3551,8 @@
     "password_salt": "SOH51TUM5UJ",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 424
+    "fame_rate": 424,
+    "isProfileCompleted": true
   },
   {
     "username": "Constance Gibson",
@@ -3329,7 +3566,8 @@
     "password_salt": "WGQ76YPF1OJ",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 471
+    "fame_rate": 471,
+    "isProfileCompleted": true
   },
   {
     "username": "Ciara Austin",
@@ -3343,7 +3581,8 @@
     "password_salt": "WFY28GQQ5WY",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 302
+    "fame_rate": 302,
+    "isProfileCompleted": true
   },
   {
     "username": "Geoffrey Paul",
@@ -3357,7 +3596,8 @@
     "password_salt": "BQH77DZD6SD",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 494
+    "fame_rate": 494,
+    "isProfileCompleted": true
   },
   {
     "username": "Chadwick Carver",
@@ -3371,7 +3611,8 @@
     "password_salt": "MNK74CHR8TL",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 657
+    "fame_rate": 657,
+    "isProfileCompleted": true
   },
   {
     "username": "Aphrodite Mclaughlin",
@@ -3385,7 +3626,8 @@
     "password_salt": "DYX80XCE1JY",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 489
+    "fame_rate": 489,
+    "isProfileCompleted": true
   },
   {
     "username": "Noah Pugh",
@@ -3399,7 +3641,8 @@
     "password_salt": "XOH38EIU2XO",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 956
+    "fame_rate": 956,
+    "isProfileCompleted": true
   },
   {
     "username": "Kirsten Mcbride",
@@ -3413,7 +3656,8 @@
     "password_salt": "IPL12WNW4VM",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 853
+    "fame_rate": 853,
+    "isProfileCompleted": true
   },
   {
     "username": "Roth Mccullough",
@@ -3427,7 +3671,8 @@
     "password_salt": "HPR55UJY7KJ",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 511
+    "fame_rate": 511,
+    "isProfileCompleted": true
   },
   {
     "username": "Kenneth Berg",
@@ -3441,7 +3686,8 @@
     "password_salt": "REN64NNH0KS",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 544
+    "fame_rate": 544,
+    "isProfileCompleted": true
   },
   {
     "username": "Martin Irwin",
@@ -3455,7 +3701,8 @@
     "password_salt": "QGY46BUP5FF",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 846
+    "fame_rate": 846,
+    "isProfileCompleted": true
   },
   {
     "username": "Kylee Rivas",
@@ -3469,7 +3716,8 @@
     "password_salt": "YMS18OFU8AT",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 801
+    "fame_rate": 801,
+    "isProfileCompleted": true
   },
   {
     "username": "Omar Morin",
@@ -3483,7 +3731,8 @@
     "password_salt": "NND61MOK1VG",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 420
+    "fame_rate": 420,
+    "isProfileCompleted": true
   },
   {
     "username": "Bertha Hampton",
@@ -3497,7 +3746,8 @@
     "password_salt": "SQQ67JPR8FE",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 831
+    "fame_rate": 831,
+    "isProfileCompleted": true
   },
   {
     "username": "Owen Holcomb",
@@ -3511,7 +3761,8 @@
     "password_salt": "EST41MPM3BL",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 697
+    "fame_rate": 697,
+    "isProfileCompleted": true
   },
   {
     "username": "Erich Wright",
@@ -3525,7 +3776,8 @@
     "password_salt": "QIB27III5RM",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 190
+    "fame_rate": 190,
+    "isProfileCompleted": true
   },
   {
     "username": "Carlos Reed",
@@ -3539,7 +3791,8 @@
     "password_salt": "DDM16LOK3EZ",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 269
+    "fame_rate": 269,
+    "isProfileCompleted": true
   },
   {
     "username": "Mariam Nelson",
@@ -3553,7 +3806,8 @@
     "password_salt": "SCH69JHR1QY",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 987
+    "fame_rate": 987,
+    "isProfileCompleted": true
   },
   {
     "username": "Ignatius Wells",
@@ -3567,7 +3821,8 @@
     "password_salt": "BOG14VLL2PW",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 118
+    "fame_rate": 118,
+    "isProfileCompleted": true
   },
   {
     "username": "Magee Nash",
@@ -3581,7 +3836,8 @@
     "password_salt": "FPQ42ZND7OP",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 934
+    "fame_rate": 934,
+    "isProfileCompleted": true
   },
   {
     "username": "Summer Herman",
@@ -3595,7 +3851,8 @@
     "password_salt": "VNV35YCV1QB",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 47
+    "fame_rate": 47,
+    "isProfileCompleted": true
   },
   {
     "username": "Heather Hurley",
@@ -3609,7 +3866,8 @@
     "password_salt": "CEX65CHA8OG",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 85
+    "fame_rate": 85,
+    "isProfileCompleted": true
   },
   {
     "username": "Emmanuel Valenzuela",
@@ -3623,7 +3881,8 @@
     "password_salt": "FBI20RHF2TD",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 920
+    "fame_rate": 920,
+    "isProfileCompleted": true
   },
   {
     "username": "Acton Anderson",
@@ -3637,7 +3896,8 @@
     "password_salt": "BHV10WDP4GL",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 134
+    "fame_rate": 134,
+    "isProfileCompleted": true
   },
   {
     "username": "Lillian Barrera",
@@ -3651,7 +3911,8 @@
     "password_salt": "TNK24HUE3HR",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 721
+    "fame_rate": 721,
+    "isProfileCompleted": true
   },
   {
     "username": "Ashely Osborne",
@@ -3665,7 +3926,8 @@
     "password_salt": "GNK87RQE5WM",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 401
+    "fame_rate": 401,
+    "isProfileCompleted": true
   },
   {
     "username": "Xanthus Nunez",
@@ -3679,7 +3941,8 @@
     "password_salt": "DLF85CSD1RM",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 413
+    "fame_rate": 413,
+    "isProfileCompleted": true
   },
   {
     "username": "Aimee Sweeney",
@@ -3693,7 +3956,8 @@
     "password_salt": "UHF89DHB5YI",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 787
+    "fame_rate": 787,
+    "isProfileCompleted": true
   },
   {
     "username": "Scarlett Wilson",
@@ -3707,7 +3971,8 @@
     "password_salt": "YTH13LJY7PV",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 764
+    "fame_rate": 764,
+    "isProfileCompleted": true
   },
   {
     "username": "Raymond Gill",
@@ -3721,7 +3986,8 @@
     "password_salt": "TWB84BET9EN",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 239
+    "fame_rate": 239,
+    "isProfileCompleted": true
   },
   {
     "username": "Brennan Woodard",
@@ -3735,7 +4001,8 @@
     "password_salt": "LNS89LAZ3FE",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 445
+    "fame_rate": 445,
+    "isProfileCompleted": true
   },
   {
     "username": "Kyla Mcintyre",
@@ -3749,7 +4016,8 @@
     "password_salt": "KBM11HDS5CY",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 802
+    "fame_rate": 802,
+    "isProfileCompleted": true
   },
   {
     "username": "Bevis Kramer",
@@ -3763,7 +4031,8 @@
     "password_salt": "FAG57SYN1IF",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 50
+    "fame_rate": 50,
+    "isProfileCompleted": true
   },
   {
     "username": "Wade Cunningham",
@@ -3777,7 +4046,8 @@
     "password_salt": "JOR79GNU4IY",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 591
+    "fame_rate": 591,
+    "isProfileCompleted": true
   },
   {
     "username": "Myles Mayo",
@@ -3791,7 +4061,8 @@
     "password_salt": "IGK92CQP6RS",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 855
+    "fame_rate": 855,
+    "isProfileCompleted": true
   },
   {
     "username": "Donna Mcleod",
@@ -3805,7 +4076,8 @@
     "password_salt": "BHD91XAH6QV",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 368
+    "fame_rate": 368,
+    "isProfileCompleted": true
   },
   {
     "username": "August Scott",
@@ -3819,7 +4091,8 @@
     "password_salt": "JSM95JGD8KX",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 182
+    "fame_rate": 182,
+    "isProfileCompleted": true
   },
   {
     "username": "Gary Blackwell",
@@ -3833,7 +4106,8 @@
     "password_salt": "EXF21NSU7FN",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 838
+    "fame_rate": 838,
+    "isProfileCompleted": true
   },
   {
     "username": "Iola Atkinson",
@@ -3847,7 +4121,8 @@
     "password_salt": "JBA23ITK2BZ",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 536
+    "fame_rate": 536,
+    "isProfileCompleted": true
   },
   {
     "username": "Quinn Clay",
@@ -3861,7 +4136,8 @@
     "password_salt": "JLK26NYK0PG",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 585
+    "fame_rate": 585,
+    "isProfileCompleted": true
   },
   {
     "username": "Laith Fulton",
@@ -3875,7 +4151,8 @@
     "password_salt": "VOQ82BSF3GH",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 875
+    "fame_rate": 875,
+    "isProfileCompleted": true
   },
   {
     "username": "Chaim Bishop",
@@ -3889,7 +4166,8 @@
     "password_salt": "WPU22RTT1UV",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 592
+    "fame_rate": 592,
+    "isProfileCompleted": true
   },
   {
     "username": "Frances Chaney",
@@ -3903,7 +4181,8 @@
     "password_salt": "LHV84MJC0RD",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 856
+    "fame_rate": 856,
+    "isProfileCompleted": true
   },
   {
     "username": "Dahlia Hoffman",
@@ -3917,7 +4196,8 @@
     "password_salt": "PUX17WVG1FU",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 17
+    "fame_rate": 17,
+    "isProfileCompleted": true
   },
   {
     "username": "Tobias Woodward",
@@ -3931,7 +4211,8 @@
     "password_salt": "KIO84SOW0DP",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 129
+    "fame_rate": 129,
+    "isProfileCompleted": true
   },
   {
     "username": "Jelani Riley",
@@ -3945,7 +4226,8 @@
     "password_salt": "VUZ01MVV3FL",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 795
+    "fame_rate": 795,
+    "isProfileCompleted": true
   },
   {
     "username": "Ashton Shannon",
@@ -3959,7 +4241,8 @@
     "password_salt": "DOH35DMG6NZ",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 68
+    "fame_rate": 68,
+    "isProfileCompleted": true
   },
   {
     "username": "Rajah Pope",
@@ -3973,7 +4256,8 @@
     "password_salt": "BXW25ERS6EJ",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 477
+    "fame_rate": 477,
+    "isProfileCompleted": true
   },
   {
     "username": "Buffy James",
@@ -3987,7 +4271,8 @@
     "password_salt": "KGH34SHP6GE",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 709
+    "fame_rate": 709,
+    "isProfileCompleted": true
   },
   {
     "username": "Demetria Barnett",
@@ -4001,7 +4286,8 @@
     "password_salt": "GFU44OGI1TI",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 186
+    "fame_rate": 186,
+    "isProfileCompleted": true
   },
   {
     "username": "Vaughan Keller",
@@ -4015,7 +4301,8 @@
     "password_salt": "ERW57HHC8SK",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 554
+    "fame_rate": 554,
+    "isProfileCompleted": true
   },
   {
     "username": "Leo Mercado",
@@ -4029,7 +4316,8 @@
     "password_salt": "YXF56OGT8TI",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 328
+    "fame_rate": 328,
+    "isProfileCompleted": true
   },
   {
     "username": "Kibo Chaney",
@@ -4043,7 +4331,8 @@
     "password_salt": "HUC05GRL3BK",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 284
+    "fame_rate": 284,
+    "isProfileCompleted": true
   },
   {
     "username": "Zane Bradley",
@@ -4057,7 +4346,8 @@
     "password_salt": "KGW07TIP8WJ",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 778
+    "fame_rate": 778,
+    "isProfileCompleted": true
   },
   {
     "username": "Zeph Wilson",
@@ -4071,7 +4361,8 @@
     "password_salt": "PEU96XYG8RC",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 306
+    "fame_rate": 306,
+    "isProfileCompleted": true
   },
   {
     "username": "Erich Mcleod",
@@ -4085,7 +4376,8 @@
     "password_salt": "BUJ83EML6EX",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 325
+    "fame_rate": 325,
+    "isProfileCompleted": true
   },
   {
     "username": "Zelenia Monroe",
@@ -4099,7 +4391,8 @@
     "password_salt": "LBY48EWT5RT",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 570
+    "fame_rate": 570,
+    "isProfileCompleted": true
   },
   {
     "username": "Drew Saunders",
@@ -4113,7 +4406,8 @@
     "password_salt": "SJX87VHI0WV",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 837
+    "fame_rate": 837,
+    "isProfileCompleted": true
   },
   {
     "username": "Xavier Norris",
@@ -4127,7 +4421,8 @@
     "password_salt": "LEY01YFO3QM",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 578
+    "fame_rate": 578,
+    "isProfileCompleted": true
   },
   {
     "username": "Nolan Wilkins",
@@ -4141,7 +4436,8 @@
     "password_salt": "BHD75XXY0QS",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 865
+    "fame_rate": 865,
+    "isProfileCompleted": true
   },
   {
     "username": "Stewart Barton",
@@ -4155,7 +4451,8 @@
     "password_salt": "UNB42OHL7BU",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 885
+    "fame_rate": 885,
+    "isProfileCompleted": true
   },
   {
     "username": "May Powers",
@@ -4169,7 +4466,8 @@
     "password_salt": "CVE20VUJ1LE",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 840
+    "fame_rate": 840,
+    "isProfileCompleted": true
   },
   {
     "username": "Kylan Buchanan",
@@ -4183,7 +4481,8 @@
     "password_salt": "YMF62NCB1HK",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 22
+    "fame_rate": 22,
+    "isProfileCompleted": true
   },
   {
     "username": "Nasim Bird",
@@ -4197,7 +4496,8 @@
     "password_salt": "WJS21UFV8OF",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 540
+    "fame_rate": 540,
+    "isProfileCompleted": true
   },
   {
     "username": "Dean Watts",
@@ -4211,7 +4511,8 @@
     "password_salt": "YRN38SIQ3VE",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 286
+    "fame_rate": 286,
+    "isProfileCompleted": true
   },
   {
     "username": "Reagan Villarreal",
@@ -4225,7 +4526,8 @@
     "password_salt": "DNB76VZP3CI",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 30
+    "fame_rate": 30,
+    "isProfileCompleted": true
   },
   {
     "username": "Leilani Alvarado",
@@ -4239,7 +4541,8 @@
     "password_salt": "OPJ52OFJ1RF",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 135
+    "fame_rate": 135,
+    "isProfileCompleted": true
   },
   {
     "username": "Dara Tillman",
@@ -4253,7 +4556,8 @@
     "password_salt": "HQY69BVS0AN",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 835
+    "fame_rate": 835,
+    "isProfileCompleted": true
   },
   {
     "username": "Melanie Bird",
@@ -4267,7 +4571,8 @@
     "password_salt": "BIE86GTV6RT",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 894
+    "fame_rate": 894,
+    "isProfileCompleted": true
   },
   {
     "username": "Kalia Little",
@@ -4281,7 +4586,8 @@
     "password_salt": "UBY11TLP0FC",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 139
+    "fame_rate": 139,
+    "isProfileCompleted": true
   },
   {
     "username": "Abel Craig",
@@ -4295,7 +4601,8 @@
     "password_salt": "NCD77HQD8EB",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 73
+    "fame_rate": 73,
+    "isProfileCompleted": true
   },
   {
     "username": "Nina Lancaster",
@@ -4309,7 +4616,8 @@
     "password_salt": "UPX05INT5AR",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 600
+    "fame_rate": 600,
+    "isProfileCompleted": true
   },
   {
     "username": "Hanae Ayers",
@@ -4323,7 +4631,8 @@
     "password_salt": "HKK86QMX1UP",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 830
+    "fame_rate": 830,
+    "isProfileCompleted": true
   },
   {
     "username": "Silas Haney",
@@ -4337,7 +4646,8 @@
     "password_salt": "PJB28TFU2YE",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 843
+    "fame_rate": 843,
+    "isProfileCompleted": true
   },
   {
     "username": "Odysseus Wilson",
@@ -4351,7 +4661,8 @@
     "password_salt": "NVK46FML5FL",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 470
+    "fame_rate": 470,
+    "isProfileCompleted": true
   },
   {
     "username": "Neville Rowland",
@@ -4365,7 +4676,8 @@
     "password_salt": "OJD27LWN8XP",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 648
+    "fame_rate": 648,
+    "isProfileCompleted": true
   },
   {
     "username": "Kylan Carrillo",
@@ -4379,7 +4691,8 @@
     "password_salt": "KWY27QQO1HN",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 585
+    "fame_rate": 585,
+    "isProfileCompleted": true
   },
   {
     "username": "Mikayla Sexton",
@@ -4393,7 +4706,8 @@
     "password_salt": "TZQ61IEB5EO",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 336
+    "fame_rate": 336,
+    "isProfileCompleted": true
   },
   {
     "username": "Cadman Rosario",
@@ -4407,7 +4721,8 @@
     "password_salt": "KVQ70HTA3US",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 647
+    "fame_rate": 647,
+    "isProfileCompleted": true
   },
   {
     "username": "Odysseus Atkins",
@@ -4421,7 +4736,8 @@
     "password_salt": "LKA94TGB9TW",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 953
+    "fame_rate": 953,
+    "isProfileCompleted": true
   },
   {
     "username": "Declan Norton",
@@ -4435,7 +4751,8 @@
     "password_salt": "DOO38YVD0UL",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 522
+    "fame_rate": 522,
+    "isProfileCompleted": true
   },
   {
     "username": "Cade Goff",
@@ -4449,7 +4766,8 @@
     "password_salt": "LIK60UNM2MI",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 131
+    "fame_rate": 131,
+    "isProfileCompleted": true
   },
   {
     "username": "Blaze Kaufman",
@@ -4463,7 +4781,8 @@
     "password_salt": "NMQ85FSX7UK",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 118
+    "fame_rate": 118,
+    "isProfileCompleted": true
   },
   {
     "username": "Madaline Lawson",
@@ -4477,7 +4796,8 @@
     "password_salt": "YNR78ALT6UF",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 881
+    "fame_rate": 881,
+    "isProfileCompleted": true
   },
   {
     "username": "Logan Gardner",
@@ -4491,7 +4811,8 @@
     "password_salt": "BCF16WHL4YG",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 690
+    "fame_rate": 690,
+    "isProfileCompleted": true
   },
   {
     "username": "Colleen Newman",
@@ -4505,7 +4826,8 @@
     "password_salt": "FFJ21OXY5IT",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 301
+    "fame_rate": 301,
+    "isProfileCompleted": true
   },
   {
     "username": "Camden Clements",
@@ -4519,7 +4841,8 @@
     "password_salt": "CAF34FJI5DT",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 127
+    "fame_rate": 127,
+    "isProfileCompleted": true
   },
   {
     "username": "Emerson Warner",
@@ -4533,7 +4856,8 @@
     "password_salt": "LCH22GYM3EV",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 348
+    "fame_rate": 348,
+    "isProfileCompleted": true
   },
   {
     "username": "Jade Hutchinson",
@@ -4547,7 +4871,8 @@
     "password_salt": "MLS94JYP6BS",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 962
+    "fame_rate": 962,
+    "isProfileCompleted": true
   },
   {
     "username": "Stewart Peters",
@@ -4561,7 +4886,8 @@
     "password_salt": "CUH29KTW9BZ",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 914
+    "fame_rate": 914,
+    "isProfileCompleted": true
   },
   {
     "username": "Ann Castro",
@@ -4575,7 +4901,8 @@
     "password_salt": "LGF53KLA3CI",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 779
+    "fame_rate": 779,
+    "isProfileCompleted": true
   },
   {
     "username": "Alana Nixon",
@@ -4589,7 +4916,8 @@
     "password_salt": "IJV35GPX6RC",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 389
+    "fame_rate": 389,
+    "isProfileCompleted": true
   },
   {
     "username": "Valentine Goodman",
@@ -4603,7 +4931,8 @@
     "password_salt": "IKR47JWW6OM",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 463
+    "fame_rate": 463,
+    "isProfileCompleted": true
   },
   {
     "username": "Savannah Wood",
@@ -4617,7 +4946,8 @@
     "password_salt": "WZO01KIC2OE",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 189
+    "fame_rate": 189,
+    "isProfileCompleted": true
   },
   {
     "username": "Burke Schroeder",
@@ -4631,7 +4961,8 @@
     "password_salt": "GLE89RWF8WH",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 232
+    "fame_rate": 232,
+    "isProfileCompleted": true
   },
   {
     "username": "Palmer Rose",
@@ -4645,7 +4976,8 @@
     "password_salt": "LEN02MJS8IK",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 703
+    "fame_rate": 703,
+    "isProfileCompleted": true
   },
   {
     "username": "Karleigh Merrill",
@@ -4659,7 +4991,8 @@
     "password_salt": "TKW12ZDL3QE",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 355
+    "fame_rate": 355,
+    "isProfileCompleted": true
   },
   {
     "username": "Abra Beck",
@@ -4673,7 +5006,8 @@
     "password_salt": "XNM88HVU0MO",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 307
+    "fame_rate": 307,
+    "isProfileCompleted": true
   },
   {
     "username": "Yeo Mendoza",
@@ -4687,7 +5021,8 @@
     "password_salt": "PDF71WVN3PN",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 16
+    "fame_rate": 16,
+    "isProfileCompleted": true
   },
   {
     "username": "Amber Fowler",
@@ -4701,7 +5036,8 @@
     "password_salt": "INM93QFY6BG",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 449
+    "fame_rate": 449,
+    "isProfileCompleted": true
   },
   {
     "username": "Shana Gallegos",
@@ -4715,7 +5051,8 @@
     "password_salt": "FEA79FCL2SX",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 930
+    "fame_rate": 930,
+    "isProfileCompleted": true
   },
   {
     "username": "Cyrus Watson",
@@ -4729,7 +5066,8 @@
     "password_salt": "MMV11MND3ZE",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 540
+    "fame_rate": 540,
+    "isProfileCompleted": true
   },
   {
     "username": "Megan Hart",
@@ -4743,7 +5081,8 @@
     "password_salt": "QOV67MFI0LN",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 538
+    "fame_rate": 538,
+    "isProfileCompleted": true
   },
   {
     "username": "Kamal Hansen",
@@ -4757,7 +5096,8 @@
     "password_salt": "RRS65VVO1XS",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 139
+    "fame_rate": 139,
+    "isProfileCompleted": true
   },
   {
     "username": "Brooke Clayton",
@@ -4771,7 +5111,8 @@
     "password_salt": "WYY11SDS6JM",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 164
+    "fame_rate": 164,
+    "isProfileCompleted": true
   },
   {
     "username": "Abigail Barker",
@@ -4785,7 +5126,8 @@
     "password_salt": "CTR17BSM0GZ",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 461
+    "fame_rate": 461,
+    "isProfileCompleted": true
   },
   {
     "username": "Chaim Cleveland",
@@ -4799,7 +5141,8 @@
     "password_salt": "MUY31XLW5KL",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 463
+    "fame_rate": 463,
+    "isProfileCompleted": true
   },
   {
     "username": "Forrest Rollins",
@@ -4813,7 +5156,8 @@
     "password_salt": "GGE57JBX6JL",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 553
+    "fame_rate": 553,
+    "isProfileCompleted": true
   },
   {
     "username": "Maisie Pace",
@@ -4827,7 +5171,8 @@
     "password_salt": "KLW80KKW5EW",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 865
+    "fame_rate": 865,
+    "isProfileCompleted": true
   },
   {
     "username": "Eugenia Schroeder",
@@ -4841,7 +5186,8 @@
     "password_salt": "FHV36NNK5HH",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 805
+    "fame_rate": 805,
+    "isProfileCompleted": true
   },
   {
     "username": "Carly Thompson",
@@ -4855,7 +5201,8 @@
     "password_salt": "NHH53HNW6WX",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 30
+    "fame_rate": 30,
+    "isProfileCompleted": true
   },
   {
     "username": "Marny Hill",
@@ -4869,7 +5216,8 @@
     "password_salt": "MML80FLC6AF",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 89
+    "fame_rate": 89,
+    "isProfileCompleted": true
   },
   {
     "username": "Kai Ewing",
@@ -4883,7 +5231,8 @@
     "password_salt": "VSW35VRW8EZ",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 490
+    "fame_rate": 490,
+    "isProfileCompleted": true
   },
   {
     "username": "Vanna Tanner",
@@ -4897,7 +5246,8 @@
     "password_salt": "MIV74VFL6RM",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 236
+    "fame_rate": 236,
+    "isProfileCompleted": true
   },
   {
     "username": "Blaze Howard",
@@ -4911,7 +5261,8 @@
     "password_salt": "FNQ74MRQ6PW",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 893
+    "fame_rate": 893,
+    "isProfileCompleted": true
   },
   {
     "username": "Martena Chan",
@@ -4925,7 +5276,8 @@
     "password_salt": "QWU11FOQ7OY",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 803
+    "fame_rate": 803,
+    "isProfileCompleted": true
   },
   {
     "username": "Caleb Ferguson",
@@ -4939,7 +5291,8 @@
     "password_salt": "BFY34XIY5KS",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 632
+    "fame_rate": 632,
+    "isProfileCompleted": true
   },
   {
     "username": "Bianca Hoover",
@@ -4953,7 +5306,8 @@
     "password_salt": "RNR23EPE9TE",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 413
+    "fame_rate": 413,
+    "isProfileCompleted": true
   },
   {
     "username": "Zeus Roman",
@@ -4967,7 +5321,8 @@
     "password_salt": "KRZ74JUV6MM",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 479
+    "fame_rate": 479,
+    "isProfileCompleted": true
   },
   {
     "username": "Xenos Fox",
@@ -4981,7 +5336,8 @@
     "password_salt": "HRQ67FXT8PY",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 332
+    "fame_rate": 332,
+    "isProfileCompleted": true
   },
   {
     "username": "Avram Schroeder",
@@ -4995,7 +5351,8 @@
     "password_salt": "QEV71QGK8GT",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 325
+    "fame_rate": 325,
+    "isProfileCompleted": true
   },
   {
     "username": "Chelsea Morton",
@@ -5009,7 +5366,8 @@
     "password_salt": "LOO64VXP7UC",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 849
+    "fame_rate": 849,
+    "isProfileCompleted": true
   },
   {
     "username": "Leandra Walter",
@@ -5023,7 +5381,8 @@
     "password_salt": "VDJ91VUR9TE",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 18
+    "fame_rate": 18,
+    "isProfileCompleted": true
   },
   {
     "username": "Stone Fox",
@@ -5037,7 +5396,8 @@
     "password_salt": "KOM16DHT6OQ",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 462
+    "fame_rate": 462,
+    "isProfileCompleted": true
   },
   {
     "username": "Joshua Hampton",
@@ -5051,7 +5411,8 @@
     "password_salt": "ULQ60VTG6NH",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 826
+    "fame_rate": 826,
+    "isProfileCompleted": true
   },
   {
     "username": "Calvin Vaughan",
@@ -5065,7 +5426,8 @@
     "password_salt": "SRF45GGH6KW",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 107
+    "fame_rate": 107,
+    "isProfileCompleted": true
   },
   {
     "username": "Doris Mccarthy",
@@ -5079,7 +5441,8 @@
     "password_salt": "ANF77AXK5GX",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 240
+    "fame_rate": 240,
+    "isProfileCompleted": true
   },
   {
     "username": "Bo Robinson",
@@ -5093,7 +5456,8 @@
     "password_salt": "IRZ56GBD6TB",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 606
+    "fame_rate": 606,
+    "isProfileCompleted": true
   },
   {
     "username": "Yoshi Vance",
@@ -5107,7 +5471,8 @@
     "password_salt": "MBB18JGU2DT",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 577
+    "fame_rate": 577,
+    "isProfileCompleted": true
   },
   {
     "username": "Ori Rutledge",
@@ -5121,7 +5486,8 @@
     "password_salt": "KUW31RIH1FS",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 618
+    "fame_rate": 618,
+    "isProfileCompleted": true
   },
   {
     "username": "Keelie Gilmore",
@@ -5135,7 +5501,8 @@
     "password_salt": "IOJ31GHE6ZM",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 868
+    "fame_rate": 868,
+    "isProfileCompleted": true
   },
   {
     "username": "Walter Moon",
@@ -5149,7 +5516,8 @@
     "password_salt": "LII57HEP4ES",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 159
+    "fame_rate": 159,
+    "isProfileCompleted": true
   },
   {
     "username": "Martena Merrill",
@@ -5163,7 +5531,8 @@
     "password_salt": "CNR42LSJ4DD",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 607
+    "fame_rate": 607,
+    "isProfileCompleted": true
   },
   {
     "username": "Rhoda Rowe",
@@ -5177,7 +5546,8 @@
     "password_salt": "DCO73CNE3TT",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 599
+    "fame_rate": 599,
+    "isProfileCompleted": true
   },
   {
     "username": "Imelda Cote",
@@ -5191,7 +5561,8 @@
     "password_salt": "RZJ29MRY3RU",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 591
+    "fame_rate": 591,
+    "isProfileCompleted": true
   },
   {
     "username": "Carson Mcconnell",
@@ -5205,7 +5576,8 @@
     "password_salt": "OMF72NBV8UR",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 237
+    "fame_rate": 237,
+    "isProfileCompleted": true
   },
   {
     "username": "Emery Gallegos",
@@ -5219,7 +5591,8 @@
     "password_salt": "DWD21KSJ2KU",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 321
+    "fame_rate": 321,
+    "isProfileCompleted": true
   },
   {
     "username": "Shelley Lewis",
@@ -5233,7 +5606,8 @@
     "password_salt": "KVN28BVM2VY",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 340
+    "fame_rate": 340,
+    "isProfileCompleted": true
   },
   {
     "username": "Dylan Knowles",
@@ -5247,7 +5621,8 @@
     "password_salt": "SPP53SYU0MJ",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 115
+    "fame_rate": 115,
+    "isProfileCompleted": true
   },
   {
     "username": "Deborah Colon",
@@ -5261,7 +5636,8 @@
     "password_salt": "BTI36XMN0MJ",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 699
+    "fame_rate": 699,
+    "isProfileCompleted": true
   },
   {
     "username": "Rylee Wise",
@@ -5275,7 +5651,8 @@
     "password_salt": "XSP16AKV2TI",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 759
+    "fame_rate": 759,
+    "isProfileCompleted": true
   },
   {
     "username": "Linda Dejesus",
@@ -5289,7 +5666,8 @@
     "password_salt": "FKX07FEO3AI",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 706
+    "fame_rate": 706,
+    "isProfileCompleted": true
   },
   {
     "username": "Kibo Porter",
@@ -5303,7 +5681,8 @@
     "password_salt": "QIL68MFN1ND",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 292
+    "fame_rate": 292,
+    "isProfileCompleted": true
   },
   {
     "username": "Reuben Calderon",
@@ -5317,7 +5696,8 @@
     "password_salt": "CMJ21SDX5ZQ",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 139
+    "fame_rate": 139,
+    "isProfileCompleted": true
   },
   {
     "username": "Valentine Chan",
@@ -5331,7 +5711,8 @@
     "password_salt": "SGV06RDE4ML",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 696
+    "fame_rate": 696,
+    "isProfileCompleted": true
   },
   {
     "username": "Yeo Graham",
@@ -5345,7 +5726,8 @@
     "password_salt": "QLG15MDH6YZ",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 218
+    "fame_rate": 218,
+    "isProfileCompleted": true
   },
   {
     "username": "Kylee Sharpe",
@@ -5359,7 +5741,8 @@
     "password_salt": "GGX49QHR0DJ",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 142
+    "fame_rate": 142,
+    "isProfileCompleted": true
   },
   {
     "username": "Benjamin Schultz",
@@ -5373,7 +5756,8 @@
     "password_salt": "YGH53NWL9DW",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 517
+    "fame_rate": 517,
+    "isProfileCompleted": true
   },
   {
     "username": "Jenette Clemons",
@@ -5387,7 +5771,8 @@
     "password_salt": "FDB58PXG7SE",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 248
+    "fame_rate": 248,
+    "isProfileCompleted": true
   },
   {
     "username": "Blythe Robertson",
@@ -5401,7 +5786,8 @@
     "password_salt": "AWV10JNR2DL",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 399
+    "fame_rate": 399,
+    "isProfileCompleted": true
   },
   {
     "username": "Solomon Horn",
@@ -5415,7 +5801,8 @@
     "password_salt": "HMK64JIK7UZ",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 666
+    "fame_rate": 666,
+    "isProfileCompleted": true
   },
   {
     "username": "Octavius Diaz",
@@ -5429,7 +5816,8 @@
     "password_salt": "HKS86BTK8KG",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 943
+    "fame_rate": 943,
+    "isProfileCompleted": true
   },
   {
     "username": "Signe Garner",
@@ -5443,7 +5831,8 @@
     "password_salt": "NCU29PQY6HO",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 311
+    "fame_rate": 311,
+    "isProfileCompleted": true
   },
   {
     "username": "Bertha Dillard",
@@ -5457,7 +5846,8 @@
     "password_salt": "LOD49GNN2HS",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 904
+    "fame_rate": 904,
+    "isProfileCompleted": true
   },
   {
     "username": "Tucker Sawyer",
@@ -5471,7 +5861,8 @@
     "password_salt": "YOM41PVS0QV",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 204
+    "fame_rate": 204,
+    "isProfileCompleted": true
   },
   {
     "username": "Cade Carpenter",
@@ -5485,7 +5876,8 @@
     "password_salt": "THE34CJP4CS",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 311
+    "fame_rate": 311,
+    "isProfileCompleted": true
   },
   {
     "username": "Kadeem Adams",
@@ -5499,7 +5891,8 @@
     "password_salt": "WSK34SZU3JO",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 110
+    "fame_rate": 110,
+    "isProfileCompleted": true
   },
   {
     "username": "Elmo Lindsay",
@@ -5513,7 +5906,8 @@
     "password_salt": "OXT11XVI3CZ",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 358
+    "fame_rate": 358,
+    "isProfileCompleted": true
   },
   {
     "username": "Tucker Elliott",
@@ -5527,7 +5921,8 @@
     "password_salt": "WSR15AQQ5BO",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 604
+    "fame_rate": 604,
+    "isProfileCompleted": true
   },
   {
     "username": "Ora Hancock",
@@ -5541,7 +5936,8 @@
     "password_salt": "FQK60FFJ4XK",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 199
+    "fame_rate": 199,
+    "isProfileCompleted": true
   },
   {
     "username": "Paul Dodson",
@@ -5555,7 +5951,8 @@
     "password_salt": "BXR26CWM4KB",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 625
+    "fame_rate": 625,
+    "isProfileCompleted": true
   },
   {
     "username": "Caleb Guy",
@@ -5569,7 +5966,8 @@
     "password_salt": "FYV43ZYJ2SV",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 884
+    "fame_rate": 884,
+    "isProfileCompleted": true
   },
   {
     "username": "Sierra Mack",
@@ -5583,7 +5981,8 @@
     "password_salt": "RWY50PHC1NS",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 311
+    "fame_rate": 311,
+    "isProfileCompleted": true
   },
   {
     "username": "Holmes Rowland",
@@ -5597,7 +5996,8 @@
     "password_salt": "BXV17BVY0GX",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 309
+    "fame_rate": 309,
+    "isProfileCompleted": true
   },
   {
     "username": "Slade Pacheco",
@@ -5611,7 +6011,8 @@
     "password_salt": "XPG32LJB1VX",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 197
+    "fame_rate": 197,
+    "isProfileCompleted": true
   },
   {
     "username": "Amir Copeland",
@@ -5625,7 +6026,8 @@
     "password_salt": "XHL97GAS8VW",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 779
+    "fame_rate": 779,
+    "isProfileCompleted": true
   },
   {
     "username": "Eugenia Harding",
@@ -5639,7 +6041,8 @@
     "password_salt": "EGF81FFV7BP",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 273
+    "fame_rate": 273,
+    "isProfileCompleted": true
   },
   {
     "username": "Dana Howard",
@@ -5653,7 +6056,8 @@
     "password_salt": "DHS66DNK8VH",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 847
+    "fame_rate": 847,
+    "isProfileCompleted": true
   },
   {
     "username": "Caryn Zimmerman",
@@ -5667,7 +6071,8 @@
     "password_salt": "SIU89TAD2BR",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 842
+    "fame_rate": 842,
+    "isProfileCompleted": true
   },
   {
     "username": "Theodore Rosales",
@@ -5681,7 +6086,8 @@
     "password_salt": "QLI32DMC8IJ",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 911
+    "fame_rate": 911,
+    "isProfileCompleted": true
   },
   {
     "username": "William Baldwin",
@@ -5695,7 +6101,8 @@
     "password_salt": "WUS65NUT7RH",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 689
+    "fame_rate": 689,
+    "isProfileCompleted": true
   },
   {
     "username": "Xandra Hickman",
@@ -5709,7 +6116,8 @@
     "password_salt": "CMG31YRV6HW",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 612
+    "fame_rate": 612,
+    "isProfileCompleted": true
   },
   {
     "username": "Mufutau Cunningham",
@@ -5723,7 +6131,8 @@
     "password_salt": "XFE64TVS4WA",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 247
+    "fame_rate": 247,
+    "isProfileCompleted": true
   },
   {
     "username": "Gary Cross",
@@ -5737,7 +6146,8 @@
     "password_salt": "KNW83WPM9ZF",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 920
+    "fame_rate": 920,
+    "isProfileCompleted": true
   },
   {
     "username": "Reed Tran",
@@ -5751,7 +6161,8 @@
     "password_salt": "POE75LRU9HN",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 369
+    "fame_rate": 369,
+    "isProfileCompleted": true
   },
   {
     "username": "Cruz Battle",
@@ -5765,7 +6176,8 @@
     "password_salt": "EFT66UHL5UP",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 592
+    "fame_rate": 592,
+    "isProfileCompleted": true
   },
   {
     "username": "Kasimir Whitley",
@@ -5779,7 +6191,8 @@
     "password_salt": "VQM57GOW0JR",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 827
+    "fame_rate": 827,
+    "isProfileCompleted": true
   },
   {
     "username": "Dillon Chandler",
@@ -5793,7 +6206,8 @@
     "password_salt": "XWA20OWI2MI",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 436
+    "fame_rate": 436,
+    "isProfileCompleted": true
   },
   {
     "username": "Yen Guerrero",
@@ -5807,7 +6221,8 @@
     "password_salt": "EGY98EOY5TQ",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 219
+    "fame_rate": 219,
+    "isProfileCompleted": true
   },
   {
     "username": "Emery Pickett",
@@ -5821,7 +6236,8 @@
     "password_salt": "AED07NRG6BZ",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 754
+    "fame_rate": 754,
+    "isProfileCompleted": true
   },
   {
     "username": "Dane Edwards",
@@ -5835,7 +6251,8 @@
     "password_salt": "AAW58CLH2MA",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 7
+    "fame_rate": 7,
+    "isProfileCompleted": true
   },
   {
     "username": "Leah Church",
@@ -5849,7 +6266,8 @@
     "password_salt": "BHR44TDS6VO",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 194
+    "fame_rate": 194,
+    "isProfileCompleted": true
   },
   {
     "username": "Gage Mcknight",
@@ -5863,7 +6281,8 @@
     "password_salt": "LKX87CBN1WU",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 564
+    "fame_rate": 564,
+    "isProfileCompleted": true
   },
   {
     "username": "Adrienne Hurst",
@@ -5877,7 +6296,8 @@
     "password_salt": "FAQ28PVV2EH",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 890
+    "fame_rate": 890,
+    "isProfileCompleted": true
   },
   {
     "username": "Lisandra Chapman",
@@ -5891,7 +6311,8 @@
     "password_salt": "OFN73YCQ9LP",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 637
+    "fame_rate": 637,
+    "isProfileCompleted": true
   },
   {
     "username": "Chiquita Herring",
@@ -5905,7 +6326,8 @@
     "password_salt": "WQX52KNF6SB",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 722
+    "fame_rate": 722,
+    "isProfileCompleted": true
   },
   {
     "username": "Tarik Frazier",
@@ -5919,7 +6341,8 @@
     "password_salt": "HIB38UXB4DY",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 247
+    "fame_rate": 247,
+    "isProfileCompleted": true
   },
   {
     "username": "Aphrodite Workman",
@@ -5933,7 +6356,8 @@
     "password_salt": "ZJM97EGV7EM",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 944
+    "fame_rate": 944,
+    "isProfileCompleted": true
   },
   {
     "username": "Zeus Cotton",
@@ -5947,7 +6371,8 @@
     "password_salt": "YMB86SBM5MG",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 996
+    "fame_rate": 996,
+    "isProfileCompleted": true
   },
   {
     "username": "Autumn Avery",
@@ -5961,7 +6386,8 @@
     "password_salt": "OMD22SCY6OT",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 724
+    "fame_rate": 724,
+    "isProfileCompleted": true
   },
   {
     "username": "Irma Caldwell",
@@ -5975,7 +6401,8 @@
     "password_salt": "DIH25HRK8TJ",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 580
+    "fame_rate": 580,
+    "isProfileCompleted": true
   },
   {
     "username": "Erich Larsen",
@@ -5989,7 +6416,8 @@
     "password_salt": "VLD56JCD4HD",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 679
+    "fame_rate": 679,
+    "isProfileCompleted": true
   },
   {
     "username": "Jolene Marsh",
@@ -6003,7 +6431,8 @@
     "password_salt": "WPQ92WOR3QL",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 941
+    "fame_rate": 941,
+    "isProfileCompleted": true
   },
   {
     "username": "Malcolm Padilla",
@@ -6017,7 +6446,8 @@
     "password_salt": "QPR74TLW1BR",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 600
+    "fame_rate": 600,
+    "isProfileCompleted": true
   },
   {
     "username": "Vincent Dillon",
@@ -6031,7 +6461,8 @@
     "password_salt": "HAW77XUK1MT",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 438
+    "fame_rate": 438,
+    "isProfileCompleted": true
   },
   {
     "username": "Lacey Burke",
@@ -6045,7 +6476,8 @@
     "password_salt": "OQR41PYC1VN",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 737
+    "fame_rate": 737,
+    "isProfileCompleted": true
   },
   {
     "username": "Alexander Alvarez",
@@ -6059,7 +6491,8 @@
     "password_salt": "TYE09OSN5NL",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 698
+    "fame_rate": 698,
+    "isProfileCompleted": true
   },
   {
     "username": "Oliver Wilkins",
@@ -6073,7 +6506,8 @@
     "password_salt": "SNY83QDA2CZ",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 838
+    "fame_rate": 838,
+    "isProfileCompleted": true
   },
   {
     "username": "Ignatius Cohen",
@@ -6087,7 +6521,8 @@
     "password_salt": "MPS33WCX8RZ",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 165
+    "fame_rate": 165,
+    "isProfileCompleted": true
   },
   {
     "username": "Tatum Sampson",
@@ -6101,7 +6536,8 @@
     "password_salt": "QLU28QRJ7FC",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 899
+    "fame_rate": 899,
+    "isProfileCompleted": true
   },
   {
     "username": "Anika Snyder",
@@ -6115,7 +6551,8 @@
     "password_salt": "PPE93OKT2OV",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 464
+    "fame_rate": 464,
+    "isProfileCompleted": true
   },
   {
     "username": "Heidi Doyle",
@@ -6129,7 +6566,8 @@
     "password_salt": "TJH86ZYO5RP",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 952
+    "fame_rate": 952,
+    "isProfileCompleted": true
   },
   {
     "username": "Noble Cortez",
@@ -6143,7 +6581,8 @@
     "password_salt": "OUY47RPX2NX",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 270
+    "fame_rate": 270,
+    "isProfileCompleted": true
   },
   {
     "username": "Lana Craig",
@@ -6157,7 +6596,8 @@
     "password_salt": "DQU52WYF6CH",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 727
+    "fame_rate": 727,
+    "isProfileCompleted": true
   },
   {
     "username": "Mikayla Dickson",
@@ -6171,7 +6611,8 @@
     "password_salt": "UKF87EAX3OQ",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 809
+    "fame_rate": 809,
+    "isProfileCompleted": true
   },
   {
     "username": "Colin Flynn",
@@ -6185,7 +6626,8 @@
     "password_salt": "IXM80GDW6IM",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 723
+    "fame_rate": 723,
+    "isProfileCompleted": true
   },
   {
     "username": "Shay Goodwin",
@@ -6199,7 +6641,8 @@
     "password_salt": "SMJ52JHQ7QP",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 392
+    "fame_rate": 392,
+    "isProfileCompleted": true
   },
   {
     "username": "Lance Cook",
@@ -6213,7 +6656,8 @@
     "password_salt": "CPN72BTQ3QX",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 161
+    "fame_rate": 161,
+    "isProfileCompleted": true
   },
   {
     "username": "Germaine Logan",
@@ -6227,7 +6671,8 @@
     "password_salt": "LEF34WPV3JY",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 846
+    "fame_rate": 846,
+    "isProfileCompleted": true
   },
   {
     "username": "Yael Fry",
@@ -6241,7 +6686,8 @@
     "password_salt": "YWW27RUX0VK",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 27
+    "fame_rate": 27,
+    "isProfileCompleted": true
   },
   {
     "username": "Nasim Cooper",
@@ -6255,7 +6701,8 @@
     "password_salt": "FHS38RWA9OU",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 948
+    "fame_rate": 948,
+    "isProfileCompleted": true
   },
   {
     "username": "Oleg Manning",
@@ -6269,7 +6716,8 @@
     "password_salt": "CGX79ZGT8EZ",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 832
+    "fame_rate": 832,
+    "isProfileCompleted": true
   },
   {
     "username": "Stuart Mooney",
@@ -6283,7 +6731,8 @@
     "password_salt": "BVY85JUH0GA",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 666
+    "fame_rate": 666,
+    "isProfileCompleted": true
   },
   {
     "username": "Reece Peterson",
@@ -6297,7 +6746,8 @@
     "password_salt": "APN16CCO1OH",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 313
+    "fame_rate": 313,
+    "isProfileCompleted": true
   },
   {
     "username": "Dean Mullins",
@@ -6311,7 +6761,8 @@
     "password_salt": "BIG48YMY2NW",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 192
+    "fame_rate": 192,
+    "isProfileCompleted": true
   },
   {
     "username": "Molly Potts",
@@ -6325,7 +6776,8 @@
     "password_salt": "GPG17KYZ6IE",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 625
+    "fame_rate": 625,
+    "isProfileCompleted": true
   },
   {
     "username": "Octavius Beach",
@@ -6339,7 +6791,8 @@
     "password_salt": "YTB05KNE3TH",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 909
+    "fame_rate": 909,
+    "isProfileCompleted": true
   },
   {
     "username": "Sara Klein",
@@ -6353,7 +6806,8 @@
     "password_salt": "AKR26KYJ3BC",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 411
+    "fame_rate": 411,
+    "isProfileCompleted": true
   },
   {
     "username": "Jescie Colon",
@@ -6367,7 +6821,8 @@
     "password_salt": "RXI81CRX3TQ",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 890
+    "fame_rate": 890,
+    "isProfileCompleted": true
   },
   {
     "username": "Cade Harper",
@@ -6381,7 +6836,8 @@
     "password_salt": "YVR08BOZ2EM",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 924
+    "fame_rate": 924,
+    "isProfileCompleted": true
   },
   {
     "username": "May Rocha",
@@ -6395,7 +6851,8 @@
     "password_salt": "QIO46VPP5SU",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 312
+    "fame_rate": 312,
+    "isProfileCompleted": true
   },
   {
     "username": "Joshua Fulton",
@@ -6409,7 +6866,8 @@
     "password_salt": "BQG22HVA5MV",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 513
+    "fame_rate": 513,
+    "isProfileCompleted": true
   },
   {
     "username": "Lael Madden",
@@ -6423,7 +6881,8 @@
     "password_salt": "TYH36LRX1UP",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 791
+    "fame_rate": 791,
+    "isProfileCompleted": true
   },
   {
     "username": "Imelda Hensley",
@@ -6437,7 +6896,8 @@
     "password_salt": "EBE38PKP3DY",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 912
+    "fame_rate": 912,
+    "isProfileCompleted": true
   },
   {
     "username": "Guy England",
@@ -6451,7 +6911,8 @@
     "password_salt": "JVI81HFB8WL",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 52
+    "fame_rate": 52,
+    "isProfileCompleted": true
   },
   {
     "username": "Maia Hinton",
@@ -6465,7 +6926,8 @@
     "password_salt": "APT39LUL9AC",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 647
+    "fame_rate": 647,
+    "isProfileCompleted": true
   },
   {
     "username": "Kennan Mcpherson",
@@ -6479,7 +6941,8 @@
     "password_salt": "RIT87EPD6WQ",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 421
+    "fame_rate": 421,
+    "isProfileCompleted": true
   },
   {
     "username": "Chantale Dale",
@@ -6493,7 +6956,8 @@
     "password_salt": "TKD26IUS2JG",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 700
+    "fame_rate": 700,
+    "isProfileCompleted": true
   },
   {
     "username": "Zephr Delgado",
@@ -6507,7 +6971,8 @@
     "password_salt": "BMQ18LEB4MT",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 794
+    "fame_rate": 794,
+    "isProfileCompleted": true
   },
   {
     "username": "Rooney Wheeler",
@@ -6521,7 +6986,8 @@
     "password_salt": "TER87BAM4JQ",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 567
+    "fame_rate": 567,
+    "isProfileCompleted": true
   },
   {
     "username": "Rosalyn Donaldson",
@@ -6535,7 +7001,8 @@
     "password_salt": "NHA16EUI1KV",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 257
+    "fame_rate": 257,
+    "isProfileCompleted": true
   },
   {
     "username": "Echo Vang",
@@ -6549,7 +7016,8 @@
     "password_salt": "GGL18TKR1YT",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 312
+    "fame_rate": 312,
+    "isProfileCompleted": true
   },
   {
     "username": "Angela Little",
@@ -6563,7 +7031,8 @@
     "password_salt": "BHI25LVO5MG",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 444
+    "fame_rate": 444,
+    "isProfileCompleted": true
   },
   {
     "username": "Janna Gaines",
@@ -6577,7 +7046,8 @@
     "password_salt": "NJV48MUZ5JE",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 356
+    "fame_rate": 356,
+    "isProfileCompleted": true
   },
   {
     "username": "Timothy Schneider",
@@ -6591,7 +7061,8 @@
     "password_salt": "JCD51YRF1GQ",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 447
+    "fame_rate": 447,
+    "isProfileCompleted": true
   },
   {
     "username": "Nevada Mayo",
@@ -6605,7 +7076,8 @@
     "password_salt": "AIX87DJZ5KB",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 575
+    "fame_rate": 575,
+    "isProfileCompleted": true
   },
   {
     "username": "Mechelle Miller",
@@ -6619,7 +7091,8 @@
     "password_salt": "BBL83UJL5JP",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 590
+    "fame_rate": 590,
+    "isProfileCompleted": true
   },
   {
     "username": "Kaseem Ayala",
@@ -6633,7 +7106,8 @@
     "password_salt": "MJV41SRI8EV",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 125
+    "fame_rate": 125,
+    "isProfileCompleted": true
   },
   {
     "username": "Hasad Carter",
@@ -6647,7 +7121,8 @@
     "password_salt": "DSK43LPT8CM",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 816
+    "fame_rate": 816,
+    "isProfileCompleted": true
   },
   {
     "username": "Guinevere Madden",
@@ -6661,7 +7136,8 @@
     "password_salt": "ZGP82UIE9VF",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 803
+    "fame_rate": 803,
+    "isProfileCompleted": true
   },
   {
     "username": "Kylynn Knowles",
@@ -6675,7 +7151,8 @@
     "password_salt": "UBE67EGR8PD",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 71
+    "fame_rate": 71,
+    "isProfileCompleted": true
   },
   {
     "username": "Marny Berger",
@@ -6689,7 +7166,8 @@
     "password_salt": "JQF34NOF3JS",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 641
+    "fame_rate": 641,
+    "isProfileCompleted": true
   },
   {
     "username": "Iola Drake",
@@ -6703,7 +7181,8 @@
     "password_salt": "QYT43JHD3CK",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 270
+    "fame_rate": 270,
+    "isProfileCompleted": true
   },
   {
     "username": "Karyn Sherman",
@@ -6717,7 +7196,8 @@
     "password_salt": "ZEW50LKZ1CX",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 389
+    "fame_rate": 389,
+    "isProfileCompleted": true
   },
   {
     "username": "Erin Sutton",
@@ -6731,7 +7211,8 @@
     "password_salt": "DWC33HOB2UQ",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 876
+    "fame_rate": 876,
+    "isProfileCompleted": true
   },
   {
     "username": "Gisela Zamora",
@@ -6745,7 +7226,8 @@
     "password_salt": "LQH71NHC2KS",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 24
+    "fame_rate": 24,
+    "isProfileCompleted": true
   },
   {
     "username": "Lila Joyce",
@@ -6759,7 +7241,8 @@
     "password_salt": "JUR12KZA3BE",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 102
+    "fame_rate": 102,
+    "isProfileCompleted": true
   },
   {
     "username": "Raphael Mason",
@@ -6773,7 +7256,8 @@
     "password_salt": "NYT76TSE9RC",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 80
+    "fame_rate": 80,
+    "isProfileCompleted": true
   },
   {
     "username": "Hakeem Hoffman",
@@ -6787,7 +7271,8 @@
     "password_salt": "TBV71CHC2EV",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 203
+    "fame_rate": 203,
+    "isProfileCompleted": true
   },
   {
     "username": "Melodie Davenport",
@@ -6801,7 +7286,8 @@
     "password_salt": "QIG67TVR9RS",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 848
+    "fame_rate": 848,
+    "isProfileCompleted": true
   },
   {
     "username": "Nehru Patton",
@@ -6815,7 +7301,8 @@
     "password_salt": "NLC26UUO6KU",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 914
+    "fame_rate": 914,
+    "isProfileCompleted": true
   },
   {
     "username": "Nehru Rhodes",
@@ -6829,7 +7316,8 @@
     "password_salt": "LOK57BOM6EO",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 76
+    "fame_rate": 76,
+    "isProfileCompleted": true
   },
   {
     "username": "Paki Palmer",
@@ -6843,7 +7331,8 @@
     "password_salt": "MOQ16DIU7SJ",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 450
+    "fame_rate": 450,
+    "isProfileCompleted": true
   },
   {
     "username": "Guy Mcclain",
@@ -6857,7 +7346,8 @@
     "password_salt": "CVJ96YHE5MX",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 804
+    "fame_rate": 804,
+    "isProfileCompleted": true
   },
   {
     "username": "Martin Garcia",
@@ -6871,7 +7361,8 @@
     "password_salt": "OKN52HIF5VG",
     "gender": "men",
     "orientation": "heterosexual",
-    "fame_rate": 38
+    "fame_rate": 38,
+    "isProfileCompleted": true
   },
   {
     "username": "Ira Bailey",
@@ -6885,7 +7376,8 @@
     "password_salt": "IVH19DVB2TF",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 884
+    "fame_rate": 884,
+    "isProfileCompleted": true
   },
   {
     "username": "Mark Bradshaw",
@@ -6899,7 +7391,8 @@
     "password_salt": "IYL68CEM7ON",
     "gender": "men",
     "orientation": "homosexual",
-    "fame_rate": 983
+    "fame_rate": 983,
+    "isProfileCompleted": true
   },
   {
     "username": "Barclay Thornton",
@@ -6913,7 +7406,8 @@
     "password_salt": "HBV44FXY0HI",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 688
+    "fame_rate": 688,
+    "isProfileCompleted": true
   },
   {
     "username": "Ruby Mccormick",
@@ -6927,7 +7421,8 @@
     "password_salt": "NZT59HRM2DV",
     "gender": "men",
     "orientation": "bisexual",
-    "fame_rate": 818
+    "fame_rate": 818,
+    "isProfileCompleted": true
   },
   {
     "username": "Clare Cameron",
@@ -6941,7 +7436,8 @@
     "password_salt": "HCR88CTN4QC",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 882
+    "fame_rate": 882,
+    "isProfileCompleted": true
   },
   {
     "username": "Kato Short",
@@ -6955,7 +7451,8 @@
     "password_salt": "EUE25HRY8UH",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 694
+    "fame_rate": 694,
+    "isProfileCompleted": true
   },
   {
     "username": "Nadine Hodges",
@@ -6969,7 +7466,8 @@
     "password_salt": "DQP04OIE3MW",
     "gender": "women",
     "orientation": "homosexual",
-    "fame_rate": 486
+    "fame_rate": 486,
+    "isProfileCompleted": true
   },
   {
     "username": "Dennis Guy",
@@ -6983,7 +7481,8 @@
     "password_salt": "MSD81NDL1CE",
     "gender": "women",
     "orientation": "bisexual",
-    "fame_rate": 831
+    "fame_rate": 831,
+    "isProfileCompleted": true
   },
   {
     "username": "Hyacinth Hodges",
@@ -6997,6 +7496,7 @@
     "password_salt": "BMX64REK2WU",
     "gender": "women",
     "orientation": "heterosexual",
-    "fame_rate": 880
+    "fame_rate": 880,
+    "isProfileCompleted": true
   }
 ]

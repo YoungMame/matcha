@@ -24,6 +24,7 @@ export default async function privateRoutes(fastify: FastifyInstance, options: F
     fastify.register(wsRoutes, { prefix: '/ws', preHandler: fastify.checkIsCompleted });
     fastify.register(statics, {
         root: path.join(__dirname, '../../../uploads'),
+        decorateReply: false,
         prefix: '/uploads', // optional: default '/'
         // constraints: { host: process.env.HOST || 'localhost' }, // optional: default {}
     });

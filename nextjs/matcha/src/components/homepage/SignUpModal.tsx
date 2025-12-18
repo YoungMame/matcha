@@ -8,6 +8,7 @@ import TextField from "@/components/common/TextField";
 import Button from "@/components/common/Button";
 import Alert from "@/components/common/Alert";
 import { useRouter } from "next/navigation";
+import { useSignup } from "@/hooks/useAuth";
 
 interface SignInModalProps {
   isOpen: boolean;
@@ -15,6 +16,7 @@ interface SignInModalProps {
 }
 
 export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
+  const router = useRouter();
   const [step, setStep] = useState<"email" | "register" | "confirmation">(
     "email"
   );
@@ -23,7 +25,8 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const router = useRouter();
+
+  const { signup, isPending, error: signupError } = useSignup();
 
   const handleContinue = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,37 +57,25 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
     // Clear error if passwords match
     setPasswordError("");
 
+    // Prepare signup data with defaults for missing fields
+    const signupData = {
+      email,
+      username,
+      password,
+      bornAt: "1990-01-01", // Default date of birth
+      orientation: "bisexual" as const, // Default orientation
+      gender: "men" as const, // Default gender
+    };
+
     try {
-      // Prepare signup data with defaults for missing fields
-      const signupData = {
-        email,
-        username,
-        password,
-      };
-
-      const response = await fetch("/api/auth/signup", {
-      	method: "POST",
-      	headers: {
-      		"Content-Type": "application/json",
-      	},
-      	body: JSON.stringify(signupData),
-      });
-
-        console.log("Signup response:", response.body);
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          setPasswordError(
-            errorData.error || "Une erreur est survenue lors de l'inscription"
-          );
-          return;
-        }
-
+      await signup(signupData);
       // Move to confirmation step on success
       setStep("confirmation");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Signup error:", error);
-      setPasswordError("Erreur de connexion au serveur");
+      setPasswordError(
+        error?.response?.data?.error || "Une erreur est survenue lors de l'inscription"
+      );
     }
   };
 
@@ -207,8 +198,8 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
           )}
 
           {/* Register button */}
-          <Button type="submit" variant="gradient" fullWidth>
-            S'inscrire
+          <Button type="submit" variant="gradient" fullWidth disabled={isPending}>
+            {isPending ? "Inscription..." : "S'inscrire"}
           </Button>
         </form>
       ) : (
