@@ -8,3 +8,6 @@
 /nextjs/matcha/build
 
 .github
+
+node_modules
+.DS_Store

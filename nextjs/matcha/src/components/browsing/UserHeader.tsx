@@ -3,7 +3,6 @@ import Link from "next/link";
 import Typography from "@/components/common/Typography";
 import Stack from "@/components/common/Stack";
 import IconButton from "@/components/common/IconButton";
-import Link from "next/dist/client/link";
 
 interface UserHeaderProps {
 	username: string;
