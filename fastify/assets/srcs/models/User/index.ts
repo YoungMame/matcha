@@ -132,6 +132,7 @@ export default class UserModel {
     }
 
     update = async (id: number, user: UserProfile, location?: UserLocation) => {
+        console.log("Updating user ID:", id, "with data:", user, "and location:", location);
         user = this.fixPropertiesCase(user);
         if (user.bornAt instanceof Date) {
             user.bornAt = user.bornAt.toISOString();

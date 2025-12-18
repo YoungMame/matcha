@@ -77,6 +77,7 @@ const profilePictureRoutes = async (fastify: FastifyInstance) => {
     });
     fastify.post('/', {
         schema: {
+            consumes: ['multipart/form-data'],
             response: {
                 200: {
                     type: 'object',

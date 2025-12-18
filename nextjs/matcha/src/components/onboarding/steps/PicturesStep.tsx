@@ -4,13 +4,35 @@ import { useRef, useState } from "react";
 import Typography from "@/components/common/Typography";
 import ErrorModal from "@/components/common/ErrorModal";
 import { MAX_ADDITIONAL_PICTURES } from "@/constants/onboarding";
+import Cropper from 'react-easy-crop'
+import getCroppedImg from '@/utils/cropImage';
+import getImageUrl from '@/utils/getImageUrl';
+import Button from '../../common/Button'
+import IconButton from "@/components/common/IconButton";
+import ImageCropper from "@/components/common/ImageCropper";
+
+declare type Area = {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+};
+
+declare type ImageSettings = {
+	rotation: number;
+	crop: Area;
+}
+
+const CROP_AREA_ASPECT = 9 / 16;
 
 interface PicturesStepProps {
 	profilePicture: File | null;
 	additionalPictures: (File | null)[];
+	profilePictureSettings: ImageSettings;
+	additionalPicturesSettings: ImageSettings[];
 	onChange: (
-		field: "profilePicture" | "additionalPictures",
-		value: File | null | (File | null)[]
+		field: "profilePicture" | "additionalPictures" | "profilePictureSettings" | "additionalPicturesSettings",
+		value: File | null | (File | null)[] | ImageSettings | ImageSettings[]
 	) => void;
 	showValidation?: boolean;
 }
@@ -18,6 +40,8 @@ interface PicturesStepProps {
 export default function PicturesStep({
 	profilePicture,
 	additionalPictures,
+	profilePictureSettings,
+	additionalPicturesSettings,
 	onChange,
 	showValidation = false,
 }: PicturesStepProps) {
@@ -111,6 +135,7 @@ export default function PicturesStep({
 		}
 
 		onChange("profilePicture", file);
+		setCurrentCroppingIndex(0);
 	};
 
 	const handleAdditionalPictureChange = (index: number, file: File | null) => {
@@ -136,6 +161,7 @@ export default function PicturesStep({
 		const newPictures = [...additionalPictures];
 		newPictures[index] = file;
 		onChange("additionalPictures", newPictures);
+		setCurrentCroppingIndex(index + 1);
 	};
 
 	const removeProfilePicture = () => {
@@ -152,11 +178,61 @@ export default function PicturesStep({
 		}
 	};
 
-	const getImageUrl = (file: File | null): string | null => {
-		return file ? URL.createObjectURL(file) : null;
-	};
-
 	const hasError = showValidation && !profilePicture;
+
+	const [crop, setCrop] = useState({ x: 0, y: 0 });
+	const [rotation, setRotation] = useState(0);
+	const [zoom, setZoom] = useState(1);
+	const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+
+	const [croppedImages, setCroppedImages] = useState<string[]>([]);
+	const [currentCroppingIndex, setCurrentCroppingIndex] = useState<number | null>(null);
+
+	const onCropComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
+		setCroppedAreaPixels(croppedAreaPixels)
+	}
+
+	const submitImage = async () => {
+		try {
+			if (currentCroppingIndex === null || croppedAreaPixels === null) return;
+
+			const picture = currentCroppingIndex == 0 ? profilePicture : additionalPictures[currentCroppingIndex - 1];
+			if (picture == null) return;
+
+			const pictureURL = getImageUrl(picture);
+			if (pictureURL == null) return;
+
+			if (croppedAreaPixels.width < 150)
+				return showError("La largeur minimale est de 150 pixels");
+			if (croppedAreaPixels.width > 1080)
+				return showError("La largeur maximale est de 1080 pixels");
+
+			const croppedImage = await getCroppedImg(
+				pictureURL,
+				croppedAreaPixels as Area,
+				rotation
+			)
+			console.log('donee', { croppedImage })
+			const newCroppedImages = [...croppedImages];
+			newCroppedImages[currentCroppingIndex] = croppedImage as string;
+			setCroppedImages(newCroppedImages);
+			setCurrentCroppingIndex(null);
+			onChange(
+				currentCroppingIndex == 0 ? "profilePictureSettings" : "additionalPicturesSettings",
+				currentCroppingIndex == 0
+					? { rotation, crop: croppedAreaPixels as Area }
+					: (() => {
+						const newAdditionalPictures = [...additionalPicturesSettings];
+						newAdditionalPictures[currentCroppingIndex - 1] = { rotation, crop: croppedAreaPixels as Area };
+						return newAdditionalPictures;
+					})()
+			);
+			setRotation(0);
+			setZoom(1);
+		} catch (e) {
+			console.error(e)
+		}
+	}
 
 	return (
 		<div className="space-y-8">
@@ -174,10 +250,10 @@ export default function PicturesStep({
 					</Typography>
 				)}
 
-				<div className="flex items-start gap-4">
+				<div className="flex flex-col lg:flex-row items-start gap-4">
 					<div
 						className={`
-							relative w-48 h-48 rounded-lg border-2 border-dashed
+							relative w-27 h-48 rounded-lg border-2 border-dashed
 							${profilePicture
 								? "border-pink-500"
 								: hasError
@@ -190,7 +266,7 @@ export default function PicturesStep({
 						{profilePicture ? (
 							<>
 								<img
-									src={getImageUrl(profilePicture)!}
+									src={ croppedImages[0] || getImageUrl(profilePicture)! }
 									alt="Profile"
 									className="w-full h-full object-cover"
 								/>
@@ -247,6 +323,19 @@ export default function PicturesStep({
 							</label>
 						)}
 					</div>
+					{currentCroppingIndex !== null && <ImageCropper
+						profilePicture={profilePicture}
+						additionalPictures={additionalPictures}
+						currentCroppingIndex={currentCroppingIndex}
+						onCropComplete={onCropComplete}
+						submitImage={submitImage}
+						zoom={zoom}
+						setZoom={setZoom}
+						rotation={rotation}
+						setRotation={setRotation}
+						crop={crop}
+						setCrop={setCrop}
+					/>}
 				</div>
 			</div>
 
@@ -273,7 +362,7 @@ export default function PicturesStep({
 							{picture ? (
 								<>
 									<img
-										src={getImageUrl(picture)!}
+										src={ croppedImages[index + 1] || getImageUrl(picture)!}
 										alt={`Additional ${index + 1}`}
 										className="w-full h-full object-cover"
 									/>
