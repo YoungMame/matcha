@@ -56,9 +56,13 @@ export const useOnboarding = () => {
 					return !!(
 						data.firstName.trim() &&
 						data.lastName.trim() &&
+						data.firstName.trim().length >= 1 && data.firstName.trim().length <= 50 &&
+						data.lastName.trim().length >= 1 && data.lastName.trim().length <= 50 &&
 						data.birthday &&
 						data.biography.trim() &&
-						data.biography.trim().length >= 50
+						data.biography.trim().length >= 50 && data.biography.trim().length <= 500 &&
+						data.firstName.trim().match(/^[a-zA-Z-\']+$/) &&
+						data.lastName.trim().match(/^[a-zA-Z-\']+$/)
 					);
 				case 'interests':
 					return data.interests.length >= MIN_INTERESTS;

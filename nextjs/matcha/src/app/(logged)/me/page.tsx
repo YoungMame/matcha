@@ -145,7 +145,7 @@ import InterestsStep from "@/components/onboarding/steps/InterestsStep";
 export default function MyProfilePage() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data: profile, isLoading, error } = useMyProfile();
+  const { data: profile, isLoading, error, refetch } = useMyProfile();
   
   const [isUpdating, setIsUpdating] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -167,6 +167,8 @@ export default function MyProfilePage() {
 
   useEffect(() => {
     if (profile) {
+      console.log('Profile data loaded into form:', profile)
+      console.log('Form data before set:', formData)
       setFormData({
         firstName: profile.firstName || "",
         lastName: profile.lastName || "",
@@ -183,8 +185,8 @@ export default function MyProfilePage() {
   const handleSave = () => {
     setValidationError(null);
     
-    if (formData.tags.length < 3) {
-      setValidationError("Vous devez sélectionner au moins 3 centres d'intérêt.");
+    if (formData.tags.length < 1) {
+      setValidationError("Vous devez sélectionner au moins 1 centre d'intérêt.");
       return;
     }
 
@@ -192,10 +194,53 @@ export default function MyProfilePage() {
       setValidationError("Votre bio doit contenir au moins 50 caractères.");
       return;
     }
+    if (formData.bio.trim().length > 500) {
+      setValidationError("Votre bio doit contenir au maximum 500 caractères.");
+      return;
+    }
 
     if (!formData.firstName.trim() || !formData.lastName.trim() || !formData.email.trim()) {
       setValidationError("Veuillez remplir tous les champs obligatoires (Prénom, Nom, Email).");
       return;
+    }
+
+    if (!formData.firstName.trim().match(/^[a-zA-Z-\' ]+$/)) {
+      setValidationError("Le prénom contient des caractères invalides.");
+      return;
+    }
+
+    if (formData.firstName.trim().length > 50 || formData.firstName.trim().length < 1) {
+      setValidationError("Le prénom doit contenir entre 1 et 50 caractères.");
+      return;
+    }
+
+    if (!formData.lastName.trim().match(/^[a-zA-Z-\' ]+$/)) {
+      setValidationError("Le nom contient des caractères invalides.");
+      return;
+    }
+
+    if (formData.lastName.trim().length > 50 || formData.lastName.trim().length < 1) {
+      setValidationError("Le nom doit contenir entre 1 et 50 caractères.");
+      return;
+    }
+
+    if (!formData.email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
+      setValidationError("L'email est invalide.");
+      return;
+    }
+
+    if (formData.bornAt) {
+      const bornDate = new Date(formData.bornAt);
+      if (isNaN(bornDate.getTime())) {
+        setValidationError("La date de naissance est invalide.");
+        return;
+      }
+      const today = new Date();
+      const eighteenYearsAgo = today.setFullYear(today.getFullYear() - 18);
+      if (eighteenYearsAgo - bornDate.getTime() < 0) {
+        setValidationError("Vous devez avoir au moins 18 ans.");
+        return;
+      }
     }
 
     const updateData = async () => {
