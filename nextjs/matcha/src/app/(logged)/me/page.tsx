@@ -167,8 +167,6 @@ export default function MyProfilePage() {
 
   useEffect(() => {
     if (profile) {
-      console.log('Profile data loaded into form:', profile)
-      console.log('Form data before set:', formData)
       setFormData({
         firstName: profile.firstName || "",
         lastName: profile.lastName || "",

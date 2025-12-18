@@ -68,7 +68,6 @@ export default function OnboardingPage() {
 
 		try {
 			await submitOnboarding();
-			console.log("Onboarding submitted successfully");
 			router.push("/browsing");
 		} catch (error: any) {
 			console.error("Failed to submit onboarding:", error);

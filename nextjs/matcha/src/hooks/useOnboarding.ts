@@ -145,7 +145,6 @@ export const useOnboarding = () => {
 					: 'heterosexual' as const,
 			bornAt: new Date(data.birthday).toISOString(),
 		};		
-		console.log('Submitting profile data:', profileData);
 			const response = await profileApi.completeProfile(profileData);
 
 			await profileApi.updateProfile({

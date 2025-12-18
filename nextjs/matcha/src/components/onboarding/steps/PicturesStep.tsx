@@ -212,7 +212,6 @@ export default function PicturesStep({
 				croppedAreaPixels as Area,
 				rotation
 			)
-			console.log('donee', { croppedImage })
 			const newCroppedImages = [...croppedImages];
 			newCroppedImages[currentCroppingIndex] = croppedImage as string;
 			setCroppedImages(newCroppedImages);
