@@ -8,6 +8,16 @@ export interface Like {
     createdAt: Date;
 };
 
+export interface Match {
+    id: number;
+    firstName: string;
+    profilePicture: string | null;
+    age: number;
+    commonInterests: number;
+    distance: number;
+    chatId: number | null;
+}
+
 export default class LikeModel {
     constructor(private fastify: FastifyInstance) {}
 
@@ -120,4 +130,13 @@ export default class LikeModel {
             throw new InternalServerError();
         }
     }
+
+    getMatches = async (userId: number): Promise<Match[]> => {
+        try {
+            const result = await this.fastify.pg.query(
+                `SELECT id, first_name, profile_picture, age, common_interests, distance, chat_id
+                 FROM likes_with_details
+                 WHERE liker_id = $1 AND `,
+                [userId]
+            );
 }

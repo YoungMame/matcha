@@ -457,6 +457,12 @@ class UserService {
         return likes;
     }
 
+    
+    async getMatches(userId: number): Promise<Like[]> {
+        const matches = await this.likeModel.getAllByLikedId(userId);
+        return matches;
+    }
+
     async setUserDisconnected(userId: number): Promise<void> {
         await this.userModel.setUserConnection(userId, false, new Date());
     }
