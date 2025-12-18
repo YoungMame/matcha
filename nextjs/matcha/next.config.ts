@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
         pathname: "/api/private/uploads/**",
       },
     ],
+    domains: ["localhost", "matcha.fr", "mduvey.matcha.fr"]
   },
 };
 

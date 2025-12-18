@@ -3,7 +3,7 @@ import { FilterOptions } from "@/components/browsing/FilterBar/types";
 import { filterProfiles } from "@/lib/searchUtils";
 
 // Available profile pictures
-const FEMALE_PICTURES = [
+const female_PICTURES = [
   "/mock_pictures/femme1.jpg",
   "/mock_pictures/femme2.jpg",
   "/mock_pictures/femme3.jpg",
@@ -11,7 +11,7 @@ const FEMALE_PICTURES = [
   "/mock_pictures/femme5.jpg",
 ];
 
-const MALE_PICTURES = [
+const men_PICTURES = [
   "/mock_pictures/homme1.jpg",
   "/mock_pictures/homme2.jpg",
   "/mock_pictures/homme3.jpg",
@@ -29,7 +29,7 @@ export const mockUserProfiles: UserProfile[] = [
 	  biography: "Passionnée de voyages et de photographie. J'adore découvrir de nouvelles cultures et partager des moments authentiques.",
 	  interests: ["Voyages", "Photographie", "Cuisine", "Yoga"],
 	  gender: "female",
-	  interestedInGenders: ["male"],
+	  interestedInGenders: ["men"],
 	  profilePicture: "/mock_pictures/femme1.jpg",
 	  additionalPictures: ["/mock_pictures/femme2.jpg", "/mock_pictures/femme3.jpg", null, null],
 	  fame: 85,
@@ -43,7 +43,7 @@ export const mockUserProfiles: UserProfile[] = [
 	  biography: "Architecte le jour, artiste la nuit. J'aime créer et explorer l'art sous toutes ses formes.",
 	  interests: ["Architecture", "Art", "Musique", "Randonnée"],
 	  gender: "female",
-	  interestedInGenders: ["male"],
+	  interestedInGenders: ["men"],
 	  profilePicture: "/mock_pictures/femme2.jpg",
 	  additionalPictures: ["/mock_pictures/femme1.jpg", null, null, null],
 	  fame: 62,
@@ -57,7 +57,7 @@ export const mockUserProfiles: UserProfile[] = [
 	  biography: "Étudiante en médecine et amoureuse des animaux. Je cherche quelqu'un avec qui partager de bons moments.",
 	  interests: ["Médecine", "Animaux", "Lecture", "Sport"],
 	  gender: "female",
-	  interestedInGenders: ["male"],
+	  interestedInGenders: ["men"],
 	  profilePicture: "/mock_pictures/femme3.jpg",
 	  additionalPictures: ["/mock_pictures/femme4.jpg", "/mock_pictures/femme5.jpg", "/mock_pictures/femme1.jpg", null],
 	  fame: 45,
@@ -71,7 +71,7 @@ export const mockUserProfiles: UserProfile[] = [
 	  biography: "Développeuse web passionnée par les nouvelles technologies et l'innovation.",
 	  interests: ["Technologie", "Gaming", "Cinéma", "Running"],
 	  gender: "female",
-	  interestedInGenders: ["male"],
+	  interestedInGenders: ["men"],
 	  profilePicture: "/mock_pictures/femme4.jpg",
 	  additionalPictures: ["/mock_pictures/femme5.jpg", null, null, null],
 	  fame: 15,
@@ -85,7 +85,7 @@ export const mockUserProfiles: UserProfile[] = [
 	  biography: "Professeure de danse et amoureuse de la vie. Toujours prête pour de nouvelles aventures !",
 	  interests: ["Danse", "Musique", "Fitness", "Mode"],
 	  gender: "female",
-	  interestedInGenders: ["male"],
+	  interestedInGenders: ["men"],
 	  profilePicture: "/mock_pictures/femme5.jpg",
 	  additionalPictures: ["/mock_pictures/femme1.jpg", "/mock_pictures/femme2.jpg", null, null],
 	  fame: 0,
@@ -99,7 +99,7 @@ export const mockUserProfiles: UserProfile[] = [
 	  biography: "Étudiante en communication, passionnée par les réseaux sociaux et le marketing digital.",
 	  interests: ["Marketing", "Réseaux sociaux", "Café", "Voyage"],
 	  gender: "female",
-	  interestedInGenders: ["male"],
+	  interestedInGenders: ["men"],
 	  profilePicture: "/mock_pictures/femme1.jpg",
 	  additionalPictures: [null, null, null, null],
 	  fame: 0,
@@ -113,7 +113,7 @@ export const mockUserProfiles: UserProfile[] = [
 	  biography: "Chef cuisinière qui aime expérimenter de nouvelles saveurs. Gourmande assumée !",
 	  interests: ["Cuisine", "Gastronomie", "Vin", "Pâtisserie"],
 	  gender: "female",
-	  interestedInGenders: ["male"],
+	  interestedInGenders: ["men"],
 	  profilePicture: "/mock_pictures/femme2.jpg",
 	  additionalPictures: ["/mock_pictures/femme3.jpg", "/mock_pictures/femme4.jpg", "/mock_pictures/femme5.jpg", "/mock_pictures/femme1.jpg"],
 	  fame: 0,
@@ -127,7 +127,7 @@ export const mockUserProfiles: UserProfile[] = [
 	  biography: "Graphiste freelance et amoureuse de la nature. Je cherche quelqu'un de créatif et authentique.",
 	  interests: ["Design", "Nature", "Randonnée", "Photographie"],
 	  gender: "female",
-	  interestedInGenders: ["male"],
+	  interestedInGenders: ["men"],
 	  profilePicture: "/mock_pictures/femme3.jpg",
 	  additionalPictures: ["/mock_pictures/femme2.jpg", null, null, null],
 	  fame: 0,
@@ -141,7 +141,7 @@ export const mockUserProfiles: UserProfile[] = [
 	  biography: "Infirmière dévouée le jour, aventurière le week-end. J'adore les activités en plein air.",
 	  interests: ["Sport", "Nature", "Camping", "Vélo"],
 	  gender: "female",
-	  interestedInGenders: ["male"],
+	  interestedInGenders: ["men"],
 	  profilePicture: "/mock_pictures/femme4.jpg",
 	  additionalPictures: ["/mock_pictures/femme5.jpg", "/mock_pictures/femme1.jpg", null, null],
 	  fame: 0,
@@ -155,7 +155,7 @@ export const mockUserProfiles: UserProfile[] = [
 	  biography: "Musicienne et compositrice. La musique est ma vie et je cherche quelqu'un qui partage cette passion.",
 	  interests: ["Musique", "Concert", "Guitare", "Chant"],
 	  gender: "female",
-	  interestedInGenders: ["male"],
+	  interestedInGenders: ["men"],
 	  profilePicture: "/mock_pictures/femme5.jpg",
 	  additionalPictures: ["/mock_pictures/femme3.jpg", null, null, null],
 	  fame: 0,
@@ -367,11 +367,11 @@ export function generateMockUserProfiles(n: number): UserProfile[] {
       bioTemplates[Math.floor(Math.random() * bioTemplates.length)];
 
     // Random gender and preferences
-    const gender = Math.random() > 0.5 ? "female" : "male";
-    const interestedInGenders = gender === "female" ? ["male"] : ["female"];
+    const gender = Math.random() > 0.5 ? "female" : "men";
+    const interestedInGenders = gender === "female" ? ["men"] : ["female"];
 
     // Select pictures based on gender
-    const picturePool = gender === "female" ? FEMALE_PICTURES : MALE_PICTURES;
+    const picturePool = gender === "female" ? female_PICTURES : men_PICTURES;
     const profilePicture = picturePool[Math.floor(Math.random() * picturePool.length)];
 
     // Generate random additional pictures (0-4 pictures, some can be null)

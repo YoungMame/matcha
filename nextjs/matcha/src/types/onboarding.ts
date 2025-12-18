@@ -15,6 +15,14 @@ export type OnboardingData = {
   // Step 4: Pictures
   profilePicture: File | null;
   additionalPictures: (File | null)[];
+  profilePictureSettings: {
+    rotation: number;
+    crop: { x: number; y: number; width: number; height: number };
+  };
+  additionalPicturesSettings: {
+    rotation: number;
+    crop: { x: number; y: number; width: number; height: number };
+  }[];
 };
 
 export type OnboardingStep =

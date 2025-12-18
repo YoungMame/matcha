@@ -59,11 +59,15 @@ export const AVAILABLE_INTERESTS = [
 ];
 
 export const GENDER_OPTIONS = [
-  { value: "male", label: "Homme" },
-  { value: "female", label: "Femme" },
-  { value: "non-binary", label: "Non-binaire" },
-  { value: "other", label: "Autre" },
+  { value: "men", label: "Homme" },
+  { value: "women", label: "Femme" },
 ];
+
+export const ORIENTATION_OPTIONS = [
+  { value: "heterosexual", label: "Hétérosexuel" },
+  { value: "homosexual", label: "Homosexuel" },
+  { value: "bisexual", label: "Bisexuel" },
+]
 
 export const MIN_INTERESTS = 3;
 export const MAX_ADDITIONAL_PICTURES = 4;

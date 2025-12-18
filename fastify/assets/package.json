@@ -19,6 +19,7 @@
 		"image-dimensions": "^2.5.0",
 		"pg": "^8.16.3",
 		"pump": "^3.0.3",
+		"sharp": "^0.34.5",
 		"text-case": "^1.2.9"
 	},
 	"devDependencies": {

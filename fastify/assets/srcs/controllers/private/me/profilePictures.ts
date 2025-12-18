@@ -2,6 +2,15 @@ import { FastifyRequest, FastifyReply, FastifyRequestUser } from 'fastify';
 import { AppError, UnauthorizedError, ForbiddenError, NotFoundError, BadRequestError } from '../../../utils/error';
 import path from 'path';
 import fs from 'fs';
+import sharp from 'sharp';
+import { imageDimensionsFromData } from 'image-dimensions';
+
+type Crop = {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
 
 export const setProfilePictureIndexHandler = async (
     request: FastifyRequest,
@@ -33,10 +42,28 @@ export const addProfilePictureHandler = async (
         const user = request.user;
         const userId: number = (user as any)?.id;
         if (!userId)
-            throw new UnauthorizedError();
+            throw new UnauthorizedError();  
+
+        const rotation = Number((request.body as { rotation?: { value: string } }).rotation?.value) || 0;
+        const rawCrop = (request.body as { crop?: { value: string } })?.crop?.value;
+        let crop: Crop | undefined;
+        if (typeof rawCrop === 'string') {
+            try {
+                const parsed = JSON.parse(rawCrop);
+                crop = parsed && typeof parsed === 'object' ? parsed : undefined;
+            } catch (e) {
+                throw new BadRequestError('Invalid crop JSON');
+            }
+        } else if (rawCrop && typeof rawCrop === 'object') {
+            crop = rawCrop as Crop;
+        }
+
 
         const file = request.fileMeta;
         if (!file)
+            throw (new BadRequestError());
+
+        if (!request.fileBuffer)
             throw (new BadRequestError());
 
         const picturesDir = path.join(__dirname, '..', '..', '..', '..', 'uploads', userId.toString());
@@ -48,7 +75,25 @@ export const addProfilePictureHandler = async (
         const newFilePath = path.join(picturesDir, newFileName);
         const newFileURL = `https://${process.env.DOMAIN || 'localhost'}/api/private/uploads/${userId}/${newFileName}`;
         const dest = fs.createWriteStream(newFilePath);
-        dest.write(request.fileBuffer);
+
+        const currentSize = await imageDimensionsFromData(request.fileBuffer);
+        if (!currentSize)
+            throw new BadRequestError('Unrecognized file format');
+
+        let newBuffer;
+        try {
+            newBuffer = await sharp(request.fileBuffer).rotate(rotation || 0).extract({
+                left: Math.round(crop?.x || 0),
+                top: Math.round(crop?.y || 0),
+                width: Math.round(crop?.width || currentSize.width),
+                height: Math.round(crop?.height || currentSize.height)
+            }).toBuffer();
+        } catch (error) {
+            throw new BadRequestError('Failed to process image with given crop/rotation');
+        }
+
+        console.log('Saving new profile picture to', newFilePath);
+        dest.write(newBuffer);
         dest.end();
 
         // dest.on('finish', () => {

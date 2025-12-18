@@ -25,7 +25,6 @@ export const browsingApi = {
     let userProfile;
     try {
       userProfile = await profileApi.getMyProfile();
-	  console.log("Fetched user profile for defaults:", userProfile);
     } catch (error) {
       console.error('Failed to fetch user profile for defaults', error);
     }

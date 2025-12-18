@@ -68,7 +68,6 @@ export default function OnboardingPage() {
 
 		try {
 			await submitOnboarding();
-			console.log("Onboarding submitted successfully");
 			router.push("/browsing");
 		} catch (error: any) {
 			console.error("Failed to submit onboarding:", error);
@@ -132,6 +131,8 @@ export default function OnboardingPage() {
 					<PicturesStep
 						profilePicture={data.profilePicture}
 						additionalPictures={data.additionalPictures}
+						profilePictureSettings={data.profilePictureSettings}
+						additionalPicturesSettings={data.additionalPicturesSettings}
 						onChange={(field, value) => {
 							updateData({ [field]: value });
 							if (showValidation) {

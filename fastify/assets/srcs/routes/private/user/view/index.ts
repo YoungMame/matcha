@@ -23,7 +23,7 @@ const viewRoutes = async (fastify: FastifyInstance) => {
                         bio: { type: 'string', maxLength: 100 },
                         tags: { type: 'array', items: { type: 'string' } },
                         bornAt: { type: 'string', format: 'date-time' },
-                        gender: { type: 'string', enum: ['male', 'female'] },
+                        gender: { type: 'string', enum: ['men', 'women'] },
                         orientation: { type: 'string', enum: ['heterosexual', 'homosexual', 'bisexual'] },
                         fameRate: { type: 'number' },
                         location: {

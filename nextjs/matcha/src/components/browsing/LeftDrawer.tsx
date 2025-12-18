@@ -12,7 +12,7 @@ type Tab = "matches" | "messages";
 interface Match {
   id: string;
   name: string;
-  pictureUrl: string;
+  pictureUrl: string | null;
 }
 
 interface Conversation {
@@ -33,6 +33,9 @@ interface LeftDrawerProps {
   onConversationClick?: (conversationId: string) => void;
   activeTab?: Tab;
   onTabChange?: (tab: Tab) => void;
+  meLoading: boolean;
+  meError: string | null;
+  onRetryMe: () => void;
 }
 
 export default function LeftDrawer({
@@ -43,6 +46,9 @@ export default function LeftDrawer({
   onConversationClick,
   activeTab: controlledActiveTab,
   onTabChange,
+  meLoading,
+  meError,
+  onRetryMe,
 }: LeftDrawerProps) {
   const [internalActiveTab, setInternalActiveTab] = useState<Tab>("matches");
 
@@ -72,7 +78,28 @@ export default function LeftDrawer({
       <UserHeader
         username={currentUser.username}
         pictureUrl={currentUser.pictureUrl}
+        isLoading={meLoading}
+        error={meError}
       />
+      {
+      meError ? (
+        <Stack
+          direction="column"
+          align="center"
+          justify="center"
+          className="p-4"
+        >
+          <Typography color="error">
+            {meError}
+          </Typography>
+          <button
+            onClick={onRetryMe}
+            className="mt-2 px-4 py-2 bg-red-700 text-white rounded"
+          >
+            Réessayer
+          </button>
+        </Stack>
+      ) : null}
 
       {/* Tabs */}
       <Stack
@@ -123,7 +150,7 @@ export default function LeftDrawer({
                   key={match.id}
                   id={match.id}
                   name={match.name}
-                  pictureUrl={match.pictureUrl}
+                  pictureUrl={match.pictureUrl || "/default-profile.svg"}
                   onClick={() => onMatchClick?.(match.id)}
                 />
               ))

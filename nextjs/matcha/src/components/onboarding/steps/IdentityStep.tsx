@@ -33,6 +33,8 @@ export default function IdentityStep({
 
   const hasFirstNameError = showValidation && !firstName.trim();
   const hasLastNameError = showValidation && !lastName.trim();
+  const lastNameRegexError = showValidation && !lastName.trim().match(/^[a-zA-Z-']+$/);
+  const firstNameRegexError = showValidation && !firstName.trim().match(/^[a-zA-Z-']+$/);
   const hasBirthdayError = showValidation && !birthday;
   const hasBiographyError =
     showValidation && (!biography.trim() || biography.trim().length < 50);
@@ -46,7 +48,7 @@ export default function IdentityStep({
           onChange={(e) => onChange("firstName", e.target.value)}
           placeholder="Entrez votre prénom"
           required
-          error={hasFirstNameError ? "Le prénom est requis" : undefined}
+          error={(firstNameRegexError ? "Le prénom contient des caractères invalides" : undefined) || (hasFirstNameError ? "Le prénom est requis" : undefined)}
         />
         <TextField
           label="Nom de famille"
@@ -54,7 +56,7 @@ export default function IdentityStep({
           onChange={(e) => onChange("lastName", e.target.value)}
           placeholder="Entrez votre nom de famille"
           required
-          error={hasLastNameError ? "Le nom de famille est requis" : undefined}
+          error={(lastNameRegexError ? "Le nom de famille contient des caractères invalides" : undefined) || (hasLastNameError ? "Le nom de famille est requis" : undefined)}
         />
       </div>
 
