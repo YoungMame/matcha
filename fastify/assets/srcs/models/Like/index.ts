@@ -12,9 +12,6 @@ export interface Match {
     id: number;
     firstName: string;
     profilePicture: string | null;
-    age: number;
-    commonInterests: number;
-    distance: number;
     chatId: number | null;
 }
 
@@ -133,10 +130,42 @@ export default class LikeModel {
 
     getMatches = async (userId: number): Promise<Match[]> => {
         try {
-            const result = await this.fastify.pg.query(
-                `SELECT id, first_name, profile_picture, age, common_interests, distance, chat_id
-                 FROM likes_with_details
-                 WHERE liker_id = $1 AND `,
+            const likes_result = await this.fastify.pg.query(
+                `SELECT 
+                    liker.id,
+                    liker.first_name,
+                    liker.profiles_pictures[liker.profile_picture_index + 1] as profile_picture,
+                    likes.created_at,
+                    (
+                        SELECT chats.id
+                        FROM chats
+                        WHERE chats.id IN (
+                            SELECT chat_id FROM chat_participants WHERE user_id = $1
+                        )
+                        AND chats.id IN (
+                            SELECT chat_id FROM chat_participants WHERE user_id = liker.id
+                        )
+                        LIMIT 1
+                    ) as chat_id
+                FROM likes
+                JOIN users liker ON likes.liker_id = liker.id
+                WHERE likes.liked_id = $1
+                AND EXISTS (
+                    SELECT 1 FROM likes AS reciprocal_likes
+                    WHERE reciprocal_likes.liker_id = $1
+                    AND reciprocal_likes.liked_id = likes.liker_id
+                )
+                ORDER BY likes.created_at DESC`,
                 [userId]
             );
+            return (likes_result.rows.map((row: { id: number, first_name: string, profile_picture: string |null, chat_id: number | null, created_at: Date}) => ({
+                id: row.id,
+                firstName: row.first_name,
+                profilePicture: row.profile_picture,
+                chatId: row.chat_id
+            })));
+        } catch {
+            throw new InternalServerError();
+        }
+    }
 }
