@@ -21,10 +21,11 @@ export const getMatchesHandler = async (
     try {
         const user = request.user as FastifyRequestUser | undefined;
         const userId = user?.id;
+        const { offset, limit } = request.params as { offset: number, limit: number };
         if (!userId)
             throw new UnauthorizedError();
-        const likes = await request.server.userService.getLikes(userId);
-        return reply.code(200).send({ likes });
+        const matches = await request.server.userService.getMatches(offset, limit, userId);
+        return reply.code(200).send({ matches });
     } catch (error) {
         if (error instanceof AppError)
             return reply.status(error.statusCode).send({ error: error.message });

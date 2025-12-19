@@ -128,7 +128,7 @@ export default class LikeModel {
         }
     }
 
-    getMatches = async (userId: number): Promise<Match[]> => {
+    getMatches = async (userId: number, offset: number, limit: number): Promise<Match[]> => {
         try {
             const likes_result = await this.fastify.pg.query(
                 `SELECT 
@@ -155,8 +155,9 @@ export default class LikeModel {
                     WHERE reciprocal_likes.liker_id = $1
                     AND reciprocal_likes.liked_id = likes.liker_id
                 )
-                ORDER BY likes.created_at DESC`,
-                [userId]
+                ORDER BY likes.created_at DESC
+                OFFSET $2 LIMIT $3`,
+                [userId, offset, limit]
             );
             return (likes_result.rows.map((row: { id: number, first_name: string, profile_picture: string |null, chat_id: number | null, created_at: Date}) => ({
                 id: row.id,

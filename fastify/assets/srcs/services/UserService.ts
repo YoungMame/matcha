@@ -11,7 +11,7 @@ import { FastifyInstance } from 'fastify';
 import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError, ForbiddenError, ConflictError } from "../utils/error";
 import commonPasswords from '../utils/1000-most-common-passwords.json';
 import { WebSocketMessageTypes, WebSocketMessageDataTypes } from "./WebSocketService";
-import { Like } from "../models/Like";
+import { Like, Match } from "../models/Like";
 import { getCityAndCountryFromCoords } from "../utils/geoloc";
 
 class UserService {
@@ -458,8 +458,8 @@ class UserService {
     }
 
     
-    async getMatches(userId: number): Promise<Like[]> {
-        const matches = await this.likeModel.getAllByLikedId(userId);
+    async getMatches(userId: number, offset: number, limit: number): Promise<Match[]> {
+        const matches = await this.likeModel.getMatches(userId, offset, limit);
         return matches;
     }
 

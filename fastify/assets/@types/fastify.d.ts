@@ -20,6 +20,7 @@ declare module 'fastify' {
       sendLike(senderId: number, receiverId: number): Promise<void>;
       sendUnlike(senderId: number, receiverId: number): Promise<void>;
       getLikes(userId: number): Promise<Like[]>;
+      getMatches(userId: number, offset: number, limit: number): Promise<Match[]>;
       setUserConnected(userId: number): Promise<void>;
       setUserDisconnected(userId: number): Promise<void>;
       getUserConnectionStatus(userId: number, targetId: number): Promise<{ isConnected: boolean; lastConnection: Date | undefined } | null>;
