@@ -167,7 +167,7 @@ export default class LikeModel {
                 profilePicture: row.profile_picture,
                 chatId: row.chat_id
             })));
-        } catch {
+        } catch (error) {
             throw new InternalServerError();
         }
     }

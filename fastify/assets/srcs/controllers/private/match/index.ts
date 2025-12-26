@@ -1,18 +1,5 @@
 import { FastifyRequest, FastifyReply, FastifyRequestUser } from 'fastify';
-import { AppError, UnauthorizedError } from '../../../utils/error';
-
-// matches: { type: 'array', items: { 
-//     type: 'object',
-//     properties: {
-//         id: { type: 'integer' },
-//         firstName: { type: 'string' },
-//         profilePicture: { type: 'string', nullable: true },
-//         age: { type: 'integer' },
-//         commonInterests: { type: 'integer' },
-//         distance: { type: 'number' },
-//         chatId: { type: 'integer', nullable: true }
-//     }
-// }}
+import { AppError, BadRequestError, UnauthorizedError } from '../../../utils/error';
 
 export const getMatchesHandler = async (
     request: FastifyRequest,
@@ -24,7 +11,12 @@ export const getMatchesHandler = async (
         const { offset, limit } = request.params as { offset: string, limit: string };
         if (!userId)
             throw new UnauthorizedError();
-        const matches = await request.server.userService.getMatches(userId, Number(offset), Number(limit));
+        const nOffset = Number(offset);
+        const nLimit = Number(limit);
+        if (isNaN(nOffset) || isNaN(nLimit) || nOffset < 0 || nLimit <= 0) {
+            throw new BadRequestError();
+        }
+        const matches = await request.server.userService.getMatches(userId, nOffset, nLimit);
         return reply.code(200).send({ matches });
     } catch (error) {
         if (error instanceof AppError)

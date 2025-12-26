@@ -260,7 +260,7 @@ class UserService {
         if (!user)
             throw new NotFoundError();
         if (user.profilePictures.length < 1)
-            throw new BadRequestError('Cannot delete the last profile picture');
+            throw new BadRequestError();
         const pictureToRemove = user.profilePictures && user.profilePictures[pictureIndex];
         if (!pictureToRemove)
             throw new NotFoundError();
@@ -282,10 +282,10 @@ class UserService {
 
         user.profilePictures = user.profilePictures.filter((_, index) => index !== pictureIndex);
         if (user.profilePictureIndex !== undefined) {
-            if (pictureIndex < user.profilePictureIndex) {
-                user.profilePictureIndex = user.profilePictures.length > 0 ? user.profilePictureIndex - 1 : undefined;
-            } else if (pictureIndex === user.profilePictureIndex) {
-                user.profilePictureIndex = user.profilePictures.length > 0 ? 0 : undefined;
+            if (pictureIndex == user.profilePictureIndex) {
+                user.profilePictureIndex = (user.profilePictures.length === 0) ? undefined : 0;
+            } else {
+                user.profilePictureIndex = 0;
             }
         }
         await this.userModel.update(user.id, {
