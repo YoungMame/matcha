@@ -7,8 +7,8 @@ const matchRoutes = async (fastify: FastifyInstance) => {
             params: {
                 type: 'object',
                 properties: {
-                    offset: { type: 'integer' },
-                    limit: { type: 'integer' }
+                    offset: { type: 'string', format: 'int32' },
+                    limit: { type: 'string', format: 'int32' }
                 },
                 required: ['offset', 'limit'],
                 additionalProperties: false

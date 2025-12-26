@@ -166,7 +166,6 @@ class UserService {
         createdAt: Date;
     }> {
         const user = await this.getUser(id);
-        console.log("Retrieved user:", user);
         if (!user || !user.isProfileCompleted)
             throw new NotFoundError();
         return {
@@ -260,7 +259,7 @@ class UserService {
         const user = await this.getUser(id);
         if (!user)
             throw new NotFoundError();
-        if (user.profilePictures.length <= 1)
+        if (user.profilePictures.length < 1)
             throw new BadRequestError('Cannot delete the last profile picture');
         const pictureToRemove = user.profilePictures && user.profilePictures[pictureIndex];
         if (!pictureToRemove)
@@ -284,7 +283,7 @@ class UserService {
         user.profilePictures = user.profilePictures.filter((_, index) => index !== pictureIndex);
         if (user.profilePictureIndex !== undefined) {
             if (pictureIndex < user.profilePictureIndex) {
-                user.profilePictureIndex -= 1;
+                user.profilePictureIndex = user.profilePictures.length > 0 ? user.profilePictureIndex - 1 : undefined;
             } else if (pictureIndex === user.profilePictureIndex) {
                 user.profilePictureIndex = user.profilePictures.length > 0 ? 0 : undefined;
             }

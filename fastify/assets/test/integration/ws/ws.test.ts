@@ -18,8 +18,8 @@ describe('Websocket connection main test', () => {
             firstName: 'Test',
             lastName: 'User',
             bornAt: '2000-01-01',
-            bio: 'Nice user bio',
-            tags: ['test', 'user'],
+            bio: 'This is a test user. lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            tags: ['test', 'user', 'forty_two'],
             orientation: 'heterosexual',
             gender: 'men'
         };
@@ -30,8 +30,8 @@ describe('Websocket connection main test', () => {
             firstName: 'Test',
             lastName: 'User',
             bornAt: '2000-01-01',
-            bio: 'Nice user bio',
-            tags: ['test', 'user'],
+            bio: 'This is a test user. lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            tags: ['test', 'user', 'forty_two'],
             orientation: 'heterosexual',
             gender: 'men'
         };

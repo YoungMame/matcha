@@ -28,7 +28,9 @@ export const signUpAndGetToken = async (app: FastifyInstance, userData: UserData
         }
     });
 
+
     if (signUpResponse.statusCode !== 201) {
+        console.log('Sign up response:', signUpResponse);
         throw new Error(`Failed to sign up user: ${signUpResponse.body}, code: ${signUpResponse.statusCode}`);
     }
 
@@ -39,6 +41,10 @@ export const signUpAndGetToken = async (app: FastifyInstance, userData: UserData
         method: 'GET',
         url: `/auth/verify-email/${userId}/${emailCode}`
     });
+    if (verifyEmailResponse.statusCode !== 200) {
+        console.log('Verify email response:', verifyEmailResponse);
+        throw new Error(`Failed to verify email: ${verifyEmailResponse.body}`);
+    }
 
     const verifiedJwtResponse = await app.inject({
         method: 'POST',
@@ -48,28 +54,38 @@ export const signUpAndGetToken = async (app: FastifyInstance, userData: UserData
             password: userData.password
         }
     });
+    if (verifiedJwtResponse.statusCode !== 203) {
+        console.log('Verified JWT response:', verifiedJwtResponse);
+        throw new Error(`Failed to login user: ${verifiedJwtResponse.body}`);
+    }
     const verifiedJwt = verifiedJwtResponse.cookies?.find((c: any) => c.name === 'jwt')?.value;
 
+    const completeProfilePayload = {
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        bio: userData.bio,
+        tags: userData.tags,
+        gender: userData.gender,
+        orientation: userData.orientation,
+        bornAt: new Date(userData.bornAt)
+    }
     const completedProfileResponse = await app.inject({
         method: 'POST',
         url: '/private/user/me/complete-profile',
         headers: {
             'Cookie': `jwt=${verifiedJwt}`
         },
-        payload: {
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            bio: userData.bio,
-            tags: userData.tags,
-            gender: userData.gender,
-            orientation: userData.orientation,
-            bornAt: new Date(userData.bornAt)
-        }
+        payload: completeProfilePayload
     });
+    if (completedProfileResponse.statusCode !== 201) {
+        console.log('userData:', completeProfilePayload);
+        throw new Error(`Failed to complete profile: ${completedProfileResponse.body}`);
+    }
     const jwtCookie2 = completedProfileResponse.cookies?.find((c: any) => c.name === 'jwt')?.value;
 
     if (jwtCookie2)
         return jwtCookie2;
+    console.log('No JWT cookie found after login');
     return undefined;
 }
 
@@ -91,7 +107,7 @@ export const quickUser = async (app: FastifyInstance): Promise<{ userData: UserD
         password: 'fsdaf!ADAasf2321!!!!',
         firstName: `Quick${concat}`,
         lastName: 'TestUser',
-        bio: `Nice description for quick user ${concat}`,
+        bio: `Nice description for quick user ${concat}, lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
         tags: ['quick', 'test', 'user'],
         bornAt: '2000-01-01',
         orientation: 'bisexual',

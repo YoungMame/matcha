@@ -130,35 +130,39 @@ export default class LikeModel {
 
     getMatches = async (userId: number, offset: number, limit: number): Promise<Match[]> => {
         try {
+            console.log('userId: ', userId, '(type:', typeof userId, ')');
+            console.log('offset: ', offset, '(type:', typeof offset, ')');
+            console.log('limit: ', limit, '(type:', typeof limit, ')');
             const likes_result = await this.fastify.pg.query(
                 `SELECT 
-                    liker.id,
-                    liker.first_name,
-                    liker.profiles_pictures[liker.profile_picture_index + 1] as profile_picture,
+                    liked.id,
+                    liked.first_name,
+                    liked.profile_pictures[liked.profile_picture_index + 1] as profile_picture,
                     likes.created_at,
                     (
                         SELECT chats.id
                         FROM chats
                         WHERE chats.id IN (
-                            SELECT chat_id FROM chat_participants WHERE user_id = $1
+                            SELECT chat_id FROM chats_users WHERE user_id = $1
                         )
                         AND chats.id IN (
-                            SELECT chat_id FROM chat_participants WHERE user_id = liker.id
+                            SELECT chat_id FROM chats_users WHERE user_id = liked.id
                         )
                         LIMIT 1
                     ) as chat_id
                 FROM likes
-                JOIN users liker ON likes.liker_id = liker.id
-                WHERE likes.liked_id = $1
+                JOIN users AS liked ON likes.liked_id = liked.id
+                WHERE likes.liker_id = $1
                 AND EXISTS (
-                    SELECT 1 FROM likes AS reciprocal_likes
-                    WHERE reciprocal_likes.liker_id = $1
-                    AND reciprocal_likes.liked_id = likes.liker_id
+                    SELECT 1 FROM likes AS reciprocal
+                    WHERE reciprocal.liker_id = liked.id
+                    AND reciprocal.liked_id = $1
                 )
                 ORDER BY likes.created_at DESC
                 OFFSET $2 LIMIT $3`,
                 [userId, offset, limit]
             );
+            console.log('likes_result.rows:', likes_result.rows);
             return (likes_result.rows.map((row: { id: number, first_name: string, profile_picture: string |null, chat_id: number | null, created_at: Date}) => ({
                 id: row.id,
                 firstName: row.first_name,

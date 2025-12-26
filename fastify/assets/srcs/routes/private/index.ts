@@ -6,6 +6,7 @@ import notificationsRoutes from './notifications';
 import reportRoutes from './report';
 import browsingRoutes from './browsing';
 import researchRoutes from './research';
+import matchRoutes from './match';
 import statics from '@fastify/static';
 import path from 'path';
 
@@ -21,6 +22,7 @@ export default async function privateRoutes(fastify: FastifyInstance, options: F
     fastify.register(reportRoutes, { prefix: '/report', preHandler: fastify.checkIsCompleted });
     fastify.register(browsingRoutes, { prefix: '/browsing', preHandler: fastify.checkIsCompleted });
     fastify.register(researchRoutes, { prefix: '/research', preHandler: fastify.checkIsCompleted });
+    fastify.register(matchRoutes, { prefix: '/match', preHandler: fastify.checkIsCompleted });
     fastify.register(wsRoutes, { prefix: '/ws', preHandler: fastify.checkIsCompleted });
     fastify.register(statics, {
         root: path.join(__dirname, '../../../uploads'),

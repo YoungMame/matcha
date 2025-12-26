@@ -91,7 +91,7 @@ describe('Browsing filters and sorting', async () => {
 
     it('should be able to give the best corresponding users', async function (this: any) {
         this.timeout(5000);
-        const token1 = await createUserWithProfile(app, 'browsingtestuser1', 'browsingtestuser1@gmail.com', 'Test@1234!fjfsfas', 'Browsing', 'TestUser1', 'I am browsing test user 1', ['music', 'sport', 'travel', 'art'], '1995-06-15', 'heterosexual', 'women');
+        const token1 = await createUserWithProfile(app, 'browsingtestuser1', 'browsingtestuser1@gmail.com', 'Test@1234!fjfsfas', 'Browsing', 'TestUser1', 'I am browsing test user 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, Lorem ipsum dolor sit amet, consectetur adipiscing elit, Lorem ipsum dolor sit amet, consectetur adipiscing elit, Lorem ', ['music', 'sport', 'travel', 'art'], '1995-06-15', 'heterosexual', 'women');
 
         // Build corresponding users
         const { userData: data2, token: token2 } = await quickUser(app); // #1 Perfect match
@@ -100,7 +100,7 @@ describe('Browsing filters and sorting', async () => {
         await setLocalisation(app, token2, 69.8566, 2.3622);
         
         const { userData: data3, token: token3 } = await quickUser(app); // #2 Almost perfect match
-        await setTags(app, token3, ['music', 'art']);
+        await setTags(app, token3, ['music', 'art', 'whatever']);
         await setBirthDate(app, token3, '1994-08-20');
         await setLocalisation(app, token3, 69.854, 2.5522);
 
@@ -145,7 +145,7 @@ describe('Browsing filters and sorting', async () => {
 
     it('should be able to research users by username', async function (this: any) {
         this.timeout(5000);
-        const token1 = await createUserWithProfile(app, 'researchtestuser1', 'researchtestuser1@gmail.com', 'Test@1234!fjfsfas', 'Test', 'TestUser1', 'I am browsing test user 1', ['music', 'sport', 'travel', 'art'], '1995-06-15', 'heterosexual', 'women');
+        const token1 = await createUserWithProfile(app, 'researchtestuser1', 'researchtestuser1@gmail.com', 'Test@1234!fjfsfas', 'Test', 'TestUser1', 'I am browsing test user 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, Lorem ipsum dolor sit amet, consectetur adipiscing elit, Lorem ipsum dolor sit amet, consectetur adipiscing elit, Lorem ', ['music', 'sport', 'travel', 'art'], '1995-06-15', 'heterosexual', 'women');
         await setLocalisation(app, token1, 89.8566, 52.3522);
         const { userData: data2, token: token2 } = await quickUser(app);
         await setTags(app, token2, ['music', 'sport', 'travel']);

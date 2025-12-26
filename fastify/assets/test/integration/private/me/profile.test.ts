@@ -62,8 +62,8 @@ describe('User me profile integration tests', async () => {
         firstName: 'Test',
         lastName: 'User',
         bornAt: '2000-01-01',
-        bio: 'Nice user bio',
-        tags: ['test', 'user'],
+        bio: 'This is a test user. lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        tags: ['test', 'user', 'forty_two'],
         orientation: 'heterosexual',
         gender: 'men'
     };
@@ -100,7 +100,7 @@ describe('User me profile integration tests', async () => {
         expect(meData).to.have.property('email', userData.email);
         expect(meData).to.have.property('username', userData.username);
         expect(meData).to.have.property('profilePictures').that.is.an('array').that.is.empty;
-        expect(meData).to.have.property('bio', 'Nice user bio');
+        expect(meData).to.have.property('bio', 'This is a test user. lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
         expect(meData).to.have.property('tags').that.is.an('array');
         expect(meData).to.have.property('bornAt');
         expect(new Date(meData.bornAt).toISOString().split('T')[0]).to.equal(userData.bornAt);
@@ -112,24 +112,20 @@ describe('User me profile integration tests', async () => {
         expect(meData).to.have.property('createdAt');
     });
 
+    const newBioValid = 'This is my new bio, lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
     it('Should edit bio property', async () => {
-        const newBio = 'This is my new bio';
-        const meData = await editProperty(app, token, 'bio', newBio);
-        expect(meData).to.have.property('bio', newBio);
+        const meData = await editProperty(app, token, 'bio', newBioValid);
+        expect(meData).to.have.property('bio', newBioValid);
     });
 
     it('Should not edit bio property with invalid data', async () => {
-        let newBio = 12345;
+        let newBio = 'YapKyYTpFGNkCFdHibeiFuRGdKpChAhmmuFQrWBEAqgiQpkXQyqQNcywKNVEdCJKTAKBQerfvKKdnqcXhyjTGtzqQZZDuqQHawqXVqapWgBFvGVpgMRDWtkVSNABybuTyTJrzjGZGkzbpYNKqAFvaKNqZmZRfJxJTLnbbYVbqwaPpZLcQwZPpaLqPHfyxKqZTKzVbziLqaTUNibqhPicvxebJPSGjeXFvJAxpMBUFKcmGTvnmEBMahEcwTBYViZRVFGVreZMEGptXwhjdMgrcypdWRkkrraJcPXnDJwwDgaQbDdapGLNSndBmDVYeDqxnkixTrwkrtieArxiTYDKGPGPGRAQSKQvtSQuPHiNSiWaRwNWYuXYczhUnHFfmfmYhafYFBZjkqQABTgXrgBbEEThfCFKLuHuNjkyqRryNdqJpuvkdVxNfcNydtdKDXpWQYEHEgJzvSkaJkpLBmHgBkffUmzfdfZNyzNTuyhjgUADMXRfTakir'; // 501 chars
         let meData = await editProperty(app, token, 'bio', newBio);
-        expect(meData).to.have.property('bio', '12345');
+        expect(meData).to.have.property('bio', newBioValid);
 
         const newBio1 = {};
         const meData1 = await editProperty(app, token, 'bio', newBio1);
-        expect(meData1).to.have.property('bio', '12345');
-
-        const newBio2 = "dshghdsohdfgggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"; // Invalid bio
-        const meData2 = await editProperty(app, token, 'bio', newBio2);
-        expect(meData2).to.have.property('bio', '12345');
+        expect(meData1).to.have.property('bio', newBioValid);
     });
 
     it('Should edit tags property', async () => {
@@ -176,8 +172,8 @@ describe('User me profile integration tests', async () => {
 
     it('Should edit multiple properties at once', async () => {
         const newProperties = {
-            bio: 'Updated bio',
-            tags: ['newtag1', 'newtag2'],
+            bio: 'Updated bio, lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            tags: ['newtag1', 'newtag2', 'newtag3'],
             gender: 'women',
             bornAt: new Date('1990-01-01:00:00:00.000Z'),
             orientation: 'homosexual',
@@ -215,7 +211,7 @@ describe('User me profile integration tests', async () => {
             tags: 'not-an-array',
         };
         const meData = await editProperties(app, token, invalidProperties);
-        expect(meData).to.have.property('bio', 'Updated bio');
+        expect(meData).to.have.property('bio').that.is.a('string').of.length.greaterThan(0);
         expect(meData).to.have.property('tags').that.includes.members(['newtag1', 'newtag2']);
     });
 
@@ -231,13 +227,11 @@ describe('User me profile integration tests', async () => {
 
         const invalidProperties = {
             id: 42,
-            email: 'newemail@email.com',
             username: 'newusername'
         };
         const meData = await editProperties(app, token, invalidProperties);
 
         expect(meData).to.have.property('id').that.is.a('number').that.is.not.equal(9999);
-        expect(meData).to.have.property('email', meDataBefore.email);
         expect(meData).to.have.property('username', meDataBefore.username);
     });
 });

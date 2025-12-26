@@ -52,8 +52,8 @@ describe('User picture integration tests', async () => {
         lastName: 'User',
         password: 'ghhgdhgdF123!',
         bornAt: '2000-01-01',
-        bio: 'Nice user bio',
-        tags: ['test', 'user'],
+        bio: 'This is a test user. lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        tags: ['test', 'user', 'forty_two'],
         orientation: 'heterosexual',
         gender: 'men'
     };
@@ -167,7 +167,7 @@ describe('User picture integration tests', async () => {
             url: `/private/user/me/profile-picture/5`,
             headers: {
                 'Cookie': `jwt=${token}`
-            }
+            } 
         });
         expect(removePictureResponse.statusCode).to.equal(404);
     });

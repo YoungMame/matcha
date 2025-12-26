@@ -4,7 +4,7 @@ import { app } from '../../setup';
 import { FastifyInstance } from 'fastify';
 
 // import fixtures
-import { signUpAndGetToken, quickUser, UserData } from '../fixtures/auth.fixtures';
+import { quickUser } from '../fixtures/auth.fixtures';
 
 // import utils
 import { wait } from '../utils/wait';
