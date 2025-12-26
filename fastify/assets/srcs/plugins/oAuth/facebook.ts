@@ -28,27 +28,22 @@ export default fp(async function(fastify, opts) {
     // The service provider redirect the user here after successful login
     fastify.get('/auth/login/facebook/callback/', async function (request, reply) {
         const { token } = await this.facebookOAuth2.getAccessTokenFromAuthorizationCodeFlow(request);
-        console.log('getNewAccessTokenUsingRefreshToken:', token.access_token);
         const fields = ['id', 'name', 'email', 'birthday', 'gender'].join(',');
         const graphRes = await fetch(`https://graph.facebook.com/me?fields=${fields}&access_token=${token.access_token}`);
         if (!graphRes.ok) {
             const text = await graphRes.text();
-            console.log('Failed to fetch facebook userinfo:', text);
             return reply.status(500).send({ error: 'Failed to fetch facebook userinfo' });
         }
 
         const userInfos = await graphRes.json();
         if (!userInfos || !userInfos.email || !userInfos.name) {
-            console.log('Invalid user info received from Facebook:', userInfos);
             return reply.status(400).send({ error: 'Invalid user info received from Facebook' });
         }
 
         const existigUser = await this.userService.getUser(userInfos.email || '');
         if (existigUser && existigUser.provider !== 'facebook') {
-            console.log('User tried to login with facebook but email is already used with another provider');
             return reply.status(400).send({ error: 'Email already used with another provider' });
         } else if (existigUser && existigUser.provider === 'facebook') {
-            console.log('Existing facebook user logged in:', existigUser.id);
             const jwt = await fastify.jwt.sign({ id: existigUser.id, email: existigUser.email, username: existigUser.username, isVerified: existigUser.isVerified, isCompleted: existigUser.isProfileCompleted });
 
             reply.setCookie('jwt', jwt, { 
@@ -59,7 +54,6 @@ export default fp(async function(fastify, opts) {
             });
             reply.status(201).send({ message: 'User logged in successfully' });
         } else {
-            console.log('Creating new user from facebook infos');
             let isUsernameTaken = true;
             let baseUsername = userInfos.name;
             let retryCount = 0;

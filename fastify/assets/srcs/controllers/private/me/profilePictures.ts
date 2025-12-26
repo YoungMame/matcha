@@ -92,7 +92,6 @@ export const addProfilePictureHandler = async (
             throw new BadRequestError('Failed to process image with given crop/rotation');
         }
 
-        console.log('Saving new profile picture to', newFilePath);
         dest.write(newBuffer);
         dest.end();
 
@@ -123,7 +122,9 @@ export const removeProfilePictureHandler = async (
 ) => {
     const {
         index
-    } = request.params as any   
+    } = request.params as {
+        index: string
+    }   
 
     try {
         const user = request.user;
@@ -131,7 +132,7 @@ export const removeProfilePictureHandler = async (
         if (!userId)
             throw new UnauthorizedError();
 
-        await request.server.userService.removeUserProfilePicture(userId, index);
+        await request.server.userService.removeUserProfilePicture(userId, Number(index));
         return reply.code(200).send({ message: 'User profile picture removed successfully' });
     } catch (error) {
         if (error instanceof AppError)

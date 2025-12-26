@@ -49,9 +49,9 @@ CREATE TABLE if not exists notifications (
 );
 
 CREATE VIEW notifications_details AS
-SELECT bu.*, u_author.username AS author_username
-FROM notifications bu
-JOIN users u_author ON u_author.id = bu.author_id;
+SELECT notif.*, u_author.username AS author_username
+FROM notifications notif
+JOIN users u_author ON u_author.id = notif.author_id;
 
 ALTER TABLE notifications
 ADD FOREIGN KEY (user_id) REFERENCES users(id)

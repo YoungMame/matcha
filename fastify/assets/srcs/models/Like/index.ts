@@ -8,6 +8,13 @@ export interface Like {
     createdAt: Date;
 };
 
+export interface Match {
+    id: number;
+    firstName: string;
+    profilePicture: string | null;
+    chatId: number | null;
+}
+
 export default class LikeModel {
     constructor(private fastify: FastifyInstance) {}
 
@@ -116,6 +123,50 @@ export default class LikeModel {
                 likedId: result.rows[0].liked_id,
                 createdAt: result.rows[0].created_at
             };
+        } catch (error) {
+            throw new InternalServerError();
+        }
+    }
+
+    getMatches = async (userId: number, offset: number, limit: number): Promise<Match[]> => {
+        try {
+            const likes_result = await this.fastify.pg.query(
+                `SELECT 
+                    liked.id,
+                    liked.first_name,
+                    liked.profile_pictures[liked.profile_picture_index + 1] as profile_picture,
+                    likes.created_at,
+                    (
+                        SELECT chats.id
+                        FROM chats
+                        WHERE chats.id IN (
+                            SELECT chat_id FROM chats_users WHERE user_id = $1
+                        )
+                        AND chats.id IN (
+                            SELECT chat_id FROM chats_users WHERE user_id = liked.id
+                        )
+                        LIMIT 1
+                    ) as chat_id
+                FROM likes
+                JOIN users AS liked ON likes.liked_id = liked.id
+                WHERE likes.liker_id = $1
+                AND EXISTS (
+                    SELECT 1 FROM likes AS reciprocal
+                    WHERE reciprocal.liker_id = liked.id
+                    AND reciprocal.liked_id = $1
+                )
+                ORDER BY likes.created_at DESC
+                OFFSET $2 LIMIT $3`,
+                [userId, offset, limit]
+            );
+            if (likes_result.rows.length === 0)
+                return [];
+            return (likes_result.rows.map((row: { id: number, first_name: string, profile_picture: string |null, chat_id: number | null, created_at: Date}) => ({
+                id: row.id,
+                firstName: row.first_name,
+                profilePicture: row.profile_picture,
+                chatId: row.chat_id
+            })));
         } catch (error) {
             throw new InternalServerError();
         }

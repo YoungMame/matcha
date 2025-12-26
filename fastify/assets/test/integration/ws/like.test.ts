@@ -253,6 +253,24 @@ describe('Websocket like test', () => {
         const chat = await app.chatService.getChatBetweenUsers([userAData.id as number, userBData.id as number]);
         expect(chat).to.be.an('object');
         expect(chat.id).to.be.a('number').and.equal(chatId);
+
+        const res = await app.inject({
+            method: 'GET',
+            url: `/private/match/0/10`,
+            headers: {
+                'Cookie': `jwt=${tokenA}`
+            }
+        });
+        console.log('get matches response:', res.body);
+        expect(res.statusCode).to.equal(200);
+        const resData = JSON.parse(res.body);
+        const matches = resData.matches;
+        const match = matches.find((m: any) => m.id === userBData.id);
+        expect(match).to.be.an('object');
+        expect(match.chatId).to.equal(chatId);
+
+        ws1.terminate();
+        ws2.terminate();
     });
 
     it('should not be able to like a user who blocked me', async function (this: any) {

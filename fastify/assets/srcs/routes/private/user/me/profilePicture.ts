@@ -7,7 +7,7 @@ const profilePictureRoutes = async (fastify: FastifyInstance) => {
             params: {
                 type: 'object',
                 properties: {
-                    index: { type: 'integer', minimum: 0 }
+                    index: { type: 'string', format: 'int32' }
                 },
                 required: ['index'],
                 additionalProperties: false
@@ -44,7 +44,7 @@ const profilePictureRoutes = async (fastify: FastifyInstance) => {
             params: {
                 type: 'object',
                 properties: {
-                    index: { type: 'integer', minimum: 0 }
+                    index: { type: 'string', format: 'int32' }
                 },
                 required: ['index'],
                 additionalProperties: false

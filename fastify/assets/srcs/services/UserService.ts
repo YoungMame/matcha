@@ -11,7 +11,7 @@ import { FastifyInstance } from 'fastify';
 import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError, ForbiddenError, ConflictError } from "../utils/error";
 import commonPasswords from '../utils/1000-most-common-passwords.json';
 import { WebSocketMessageTypes, WebSocketMessageDataTypes } from "./WebSocketService";
-import { Like } from "../models/Like";
+import { Like, Match } from "../models/Like";
 import { getCityAndCountryFromCoords } from "../utils/geoloc";
 
 class UserService {
@@ -166,7 +166,6 @@ class UserService {
         createdAt: Date;
     }> {
         const user = await this.getUser(id);
-        console.log("Retrieved user:", user);
         if (!user || !user.isProfileCompleted)
             throw new NotFoundError();
         return {
@@ -260,8 +259,8 @@ class UserService {
         const user = await this.getUser(id);
         if (!user)
             throw new NotFoundError();
-        if (user.profilePictures.length <= 1)
-            throw new BadRequestError('Cannot delete the last profile picture');
+        if (user.profilePictures.length < 1)
+            throw new BadRequestError();
         const pictureToRemove = user.profilePictures && user.profilePictures[pictureIndex];
         if (!pictureToRemove)
             throw new NotFoundError();
@@ -283,10 +282,10 @@ class UserService {
 
         user.profilePictures = user.profilePictures.filter((_, index) => index !== pictureIndex);
         if (user.profilePictureIndex !== undefined) {
-            if (pictureIndex < user.profilePictureIndex) {
-                user.profilePictureIndex -= 1;
-            } else if (pictureIndex === user.profilePictureIndex) {
-                user.profilePictureIndex = user.profilePictures.length > 0 ? 0 : undefined;
+            if (pictureIndex == user.profilePictureIndex) {
+                user.profilePictureIndex = (user.profilePictures.length === 0) ? undefined : 0;
+            } else {
+                user.profilePictureIndex = 0;
             }
         }
         await this.userModel.update(user.id, {
@@ -455,6 +454,11 @@ class UserService {
     async getLikes(userId: number): Promise<Like[]> {
         const likes = await this.likeModel.getAllByLikedId(userId);
         return likes;
+    }
+
+    async getMatches(userId: number, offset: number, limit: number): Promise<Match[]> {
+        const matches = await this.likeModel.getMatches(userId, offset, limit);
+        return matches;
     }
 
     async setUserDisconnected(userId: number): Promise<void> {

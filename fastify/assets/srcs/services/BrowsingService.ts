@@ -201,20 +201,16 @@ BETWEEN ${filters.age.min} AND ${filters.age.max}
     }
 
     public async browseUsers(userId: number, limit: number = 5, offset: number = 0, radius: number = 25, filters?: BrowsingFilter, sort?: BrowsingSort): Promise<Array<BrowsingUser>> {
-        console.log("BrowsingService.browseUsers called with filters:", filters, "and sort:", sort);
 		const user = await this.fastify.userService.getMe(userId);
         const lat = filters?.location?.latitude ?? user.location?.latitude;
         const lng = filters?.location?.longitude ?? user.location?.longitude;
         if (filters?.tags && filters.tags.length === 0) {
-			console.log("Deleting empty tags filter");
             delete filters.tags;
         }
         const bornAt = user.bornAt;
         const fameRate = user.fameRate;
         const tags = user.tags;
 
-		console.log("filterTags:", filters?.tags);
-		console.log("userTags:", tags);
 
         if (lat === undefined || lng === undefined)
             throw new BadRequestError();
