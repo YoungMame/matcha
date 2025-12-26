@@ -457,7 +457,6 @@ class UserService {
         return likes;
     }
 
-    
     async getMatches(userId: number, offset: number, limit: number): Promise<Match[]> {
         const matches = await this.likeModel.getMatches(userId, offset, limit);
         return matches;

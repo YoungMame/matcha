@@ -79,12 +79,6 @@ CREATE TABLE if not exists blocked_users (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE VIEW likes_with_details AS
-SELECT likes.*, u_liker.username AS liker_username, u_liked.username AS liked_username
-FROM likes likes
-JOIN users u_liker ON u_liker.id = likes.liker_id;
-JOIN users u_liked ON u_liked.id = likes.liked_id;
-
 CREATE VIEW blocked_with_username AS
 SELECT bu.*, u_origin.username AS blocker_username, u_target.username AS blocked_username
 FROM blocked_users bu
