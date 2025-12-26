@@ -1,4 +1,5 @@
 import UserModel from "../models/User";
+import fp from 'fastify-plugin';
 import { MapUser, MapUserCluster } from "../models/User";
 import { FastifyInstance } from 'fastify';
 import { BadRequestError } from "../utils/error";
@@ -12,7 +13,7 @@ class MapService {
         this.userModel = new UserModel(fastify);
     }
 
-    async getNearUsers(level: number, latitude: number, longitude: number, radius: number) {
+    async getNearUsers(level: number, latitude: number, longitude: number, radius: number): Promise<{ users: MapUser[], clusters: MapUserCluster[] }> {
         if (isNaN(level) || isNaN(latitude) || isNaN(longitude) || isNaN(radius))
             throw new BadRequestError();
         if (level != 0 && level != 1 && level != 2)
@@ -22,15 +23,19 @@ class MapService {
         if (radius > 90)
             radius = 90;
 
+        const data = {
+            users: [] as MapUser[],
+            clusters: [] as MapUserCluster[]
+        }
         if (level = 0)
-        {
-            const users = await this.userModel.getUsersFromLocation(latitude, longitude, radius);
-            return users;
-        }
+            data.users = await this.userModel.getUsersFromLocation(latitude, longitude, radius);
         else
-        {
-            const users = await this.userModel.getUsersCountByLocation(level, latitude, longitude, radius);
-            return users;
-        }
+            data.clusters = await this.userModel.getUsersCountByLocation(level, latitude, longitude, radius);
+        return data;
     }
 }
+
+export default fp(async (fastify: FastifyInstance) => {
+    const mapService = new MapService(fastify);
+    fastify.decorate('mapService', mapService);
+});

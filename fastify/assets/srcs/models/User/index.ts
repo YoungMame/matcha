@@ -31,7 +31,6 @@ export type MapUserCluster = {
     latitude: number
     longitude: number
     count: number
-    area: string
 }
 
 export type MapUser = {
@@ -126,7 +125,7 @@ export default class UserModel {
         return result.rows[0];
     }
 
-    getUsersFromLocation = async (lat: number, lgn: number, radius: number): Promise<{id: number, firstName: string, profilePictureUrl: string, latitude: number, longitude: number}[]> => {
+    getUsersFromLocation = async (lat: number, lgn: number, radius: number): Promise<MapUser[]> => {
         const result = await this.fastify.pg.query(
             `SELECT u.id, u.first_name, u.profile_picture_url, locations.latitude, locations.longitude
             FROM locations
@@ -139,13 +138,13 @@ export default class UserModel {
         return result.rows.map((row: { id: number, first_name: string, profile_picture_url: string, latitude: number, longitude: number }) => { return { id: row.id, firstName: row.first_name, profilePictureUrl: row.profile_picture_url, latitude: row.latitude, longitude: row.longitude }});
     }
 
-    getUsersCountByLocation = async (level: number, lat: number, lgn: number, radius: number): Promise<{count: number, area: string, latitude: number, longitude: number}[]> => {
+    getUsersCountByLocation = async (level: number, lat: number, lgn: number, radius: number): Promise<MapUserCluster[]> => {
         const areaName = (level == 1) ? 'city' : (level == 2) ? 'country' : null;
         if (!areaName)
             return [];
 
         const result = await this.fastify.pg.query(
-            `SELECT ${areaName} AS area, count(${areaName}) AS count, avg(latitude) AS latitude, avg(longitude) AS longitude
+            `SELECT count(${areaName}) AS count, avg(latitude) AS latitude, avg(longitude) AS longitude
             FROM locations
             WHERE ${areaName} IS NOT NULL
             AND user_id IS NOT NULL
@@ -153,7 +152,7 @@ export default class UserModel {
             GROUP BY ${areaName}`,
             [lat, lgn, radius]
         );
-        return result.rows.map((row: { area: string, count: number, latitude: number, longitude: number }) => { return { area: row.area, count: row.count, latitude: row.latitude, longitude: row.longitude }});
+        return result.rows.map((row: { count: number, latitude: number, longitude: number }) => { return { count: row.count, latitude: row.latitude, longitude: row.longitude }});
     }
 
     setVerified = async (id: number) => {
