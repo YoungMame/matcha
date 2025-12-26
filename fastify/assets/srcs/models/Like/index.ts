@@ -159,6 +159,8 @@ export default class LikeModel {
                 OFFSET $2 LIMIT $3`,
                 [userId, offset, limit]
             );
+            if (likes_result.rows.length === 0)
+                return [];
             return (likes_result.rows.map((row: { id: number, first_name: string, profile_picture: string |null, chat_id: number | null, created_at: Date}) => ({
                 id: row.id,
                 firstName: row.first_name,
