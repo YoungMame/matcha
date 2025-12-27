@@ -44,7 +44,7 @@ const mapRoutes = async (fastify: FastifyInstance) => {
                 400: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string', }
+                        error: { type: 'string', }
                     },
                     additionalProperties: false
                 },

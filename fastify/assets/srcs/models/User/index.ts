@@ -144,7 +144,7 @@ export default class UserModel {
             return [];
 
         const result = await this.fastify.pg.query(
-            `SELECT count(${areaName}) AS count, avg(latitude) AS latitude, avg(longitude) AS longitude
+            `SELECT count(*) AS count, avg(latitude) AS latitude, avg(longitude) AS longitude
             FROM locations
             WHERE ${areaName} IS NOT NULL
             AND user_id IS NOT NULL

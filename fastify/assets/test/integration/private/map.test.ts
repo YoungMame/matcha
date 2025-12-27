@@ -8,7 +8,7 @@ import { quickUser } from '../fixtures/auth.fixtures';
 // import utils
 import { setLocalisation } from '../utils/browsing';
 
-describe('User picture integration tests', async () => {
+describe('Map integration tests', async () => {
 
     it('should be able to fetch user on level 0', async () => {
         const { userData: data1, token: token1 } = await quickUser(app);

@@ -16,7 +16,7 @@ class MapService {
     async getNearUsers(level: number, latitude: number, longitude: number, radius: number): Promise<{ users: MapUser[], clusters: MapUserCluster[] }> {
         if (isNaN(level) || isNaN(latitude) || isNaN(longitude) || isNaN(radius))
             throw new BadRequestError();
-        if (level != 0 && level != 1 && level != 2)
+        if (level !== 0 && level !== 1 && level !== 2)
             throw new BadRequestError();
         if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180 || radius < 0)
             throw new BadRequestError();
