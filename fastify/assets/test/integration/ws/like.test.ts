@@ -261,7 +261,6 @@ describe('Websocket like test', () => {
                 'Cookie': `jwt=${tokenA}`
             }
         });
-        console.log('get matches response:', res.body);
         expect(res.statusCode).to.equal(200);
         const resData = JSON.parse(res.body);
         const matches = resData.matches;
