@@ -20,14 +20,12 @@ class MapService {
             throw new BadRequestError();
         if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180 || radius < 0)
             throw new BadRequestError();
-        if (radius > 90)
-            radius = 90;
 
         const data = {
             users: [] as MapUser[],
             clusters: [] as MapUserCluster[]
         }
-        if (level = 0)
+        if (level == 0)
             data.users = await this.userModel.getUsersFromLocation(latitude, longitude, radius);
         else
             data.clusters = await this.userModel.getUsersCountByLocation(level, latitude, longitude, radius);

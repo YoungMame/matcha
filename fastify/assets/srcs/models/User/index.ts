@@ -127,7 +127,7 @@ export default class UserModel {
 
     getUsersFromLocation = async (lat: number, lgn: number, radius: number): Promise<MapUser[]> => {
         const result = await this.fastify.pg.query(
-            `SELECT u.id, u.first_name, u.profile_picture_url, locations.latitude, locations.longitude
+            `SELECT u.id, u.first_name, u.profile_pictures[u.profile_picture_index] AS profile_picture, locations.latitude, locations.longitude
             FROM locations
             JOIN users AS u ON locations.user_id = u.id
             WHERE locations.user_id IS NOT NULL

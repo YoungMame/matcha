@@ -1,16 +1,17 @@
 import { FastifyInstance } from 'fastify';
-import { getMatchesHandler } from '../../../controllers/private/match';
+import { getNearUsersHandler } from '../../../controllers/private/map';
 
 const mapRoutes = async (fastify: FastifyInstance) => {
-    fastify.get('/:level/:latitude/:longitude/:radius', {
+    fastify.get('/', {
         schema: {
-            params: {
+            debug: true,
+            querystring: {
                 type: 'object',
                 properties: {
-                    level: { type: 'string', format: 'int32' },
-                    latitude: { type: 'string', format: 'int32' },
-                    longitude: { type: 'string', format: 'int32' },
-                    radius: { type: 'string', format: 'int32' }
+                    level: { type: 'string' },
+                    latitude: { type: 'string' },
+                    longitude: { type: 'string' },
+                    radius: { type: 'string' }
                 },
                 required: ['level', 'latitude', 'longitude', 'radius'],
                 additionalProperties: false
@@ -34,7 +35,7 @@ const mapRoutes = async (fastify: FastifyInstance) => {
                             properties: {
                                 latitude: { type: 'number' },
                                 longitude: { type: 'number' },
-                                userCount: { type: 'integer' },
+                                count: { type: 'integer' },
                             }
                         }}
                     },
@@ -56,7 +57,7 @@ const mapRoutes = async (fastify: FastifyInstance) => {
                 }
             }
         },
-        handler: getMatchesHandler
+        handler: getNearUsersHandler
     });
 }
 
