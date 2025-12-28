@@ -113,6 +113,10 @@ declare module 'fastify' {
       researchUsers(userId: number, username: string, limit: number = 5, offset: number = 0, radius: number = 25, filters?: BrowsingFilter, sort?: BrowsingSort): Promise<Array<BrowsingUser>>;
     };
 
+    mapService: {
+      getNearUsers(level: number, latitude: number, longitude: number, radius: number): Promise<{users: MapUser[], clusters: MapUserCluster[]}>;
+    }
+
     nodemailer: any;
 
     facebookOAuth2: OAuth2Namespace;
