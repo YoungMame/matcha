@@ -11,6 +11,10 @@ export default function MyProfilePage() {
     return <div>Error loading profile: {error.message}</div>;
   }
 
+  if (isLoading || !profile) {
+    return <div>Loading profile...</div>;
+  }
+
   return <>
     <UsersMap currentPos={{ lat: profile?.location?.latitude, lng: profile?.location?.longitude }}  />
   </>;
