@@ -31,6 +31,17 @@ function parseTags(s: string) {
   return s.split(',').map(t => t.trim()).filter(Boolean);
 }
 
+const firstNamesArray = ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve', 'Frank', 'Grace', 'Hank', 'Ivy', 'Jack'];
+const lastNamesArray = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez'];
+
+function getRandomFirstName() {
+    return firstNamesArray[Math.floor(Math.random() * firstNamesArray.length)];
+}
+
+function getRandomLastName() {
+    return lastNamesArray[Math.floor(Math.random() * lastNamesArray.length)];
+}
+
 // async function waitForDbReady(retries = 60, delayMs = 2000) {
 //   for (let i = 0; i < retries; i++) {
 //     const probeClient = new Client({
@@ -77,17 +88,19 @@ async function seed() {
                 u.orientation,
                 parseTags(u.tags),
                 u.fame_rate,
-				u.isProfileCompleted ,
+				        u.isProfileCompleted ,
                 [pp], // profile_pictures as SQL array
                 0, // profile_pictures_index
-                new Date(u.born_at).toISOString()
+                new Date(u.born_at).toISOString(),
+                getRandomFirstName(),
+                getRandomLastName()
                 );
-                return `($${base + 1},$${base + 2},$${base + 3},$${base + 4},$${base + 5},$${base + 6},$${base + 7},$${base + 8},$${base + 9},$${base + 10},$${base + 11},$${base + 12})`;
+                return `($${base + 1},$${base + 2},$${base + 3},$${base + 4},$${base + 5},$${base + 6},$${base + 7},$${base + 8},$${base + 9},$${base + 10},$${base + 11},$${base + 12}, $${base + 13}, $${base + 14})`;
             }).join(',');
 
             const insertUsersSql = `
                 INSERT INTO users
-                (username, email, bio, password_hash, gender, orientation, tags, fame_rate, is_profile_completed, profile_pictures, profile_picture_index, born_at)
+                (username, email, bio, password_hash, gender, orientation, tags, fame_rate, is_profile_completed, profile_pictures, profile_picture_index, born_at, first_name, last_name)
                 VALUES ${rows}
             `;
             await client.query(insertUsersSql, values);

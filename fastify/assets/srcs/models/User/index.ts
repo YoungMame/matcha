@@ -36,7 +36,7 @@ export type MapUserCluster = {
 export type MapUser = {
     id: number
     firstName: string
-    profilePictureUrl: string
+    profilePicture: string
     latitude: number
     longitude: number
 }
@@ -127,15 +127,15 @@ export default class UserModel {
 
     getUsersFromLocation = async (lat: number, lgn: number, radius: number): Promise<MapUser[]> => {
         const result = await this.fastify.pg.query(
-            `SELECT u.id, u.first_name, u.profile_pictures[u.profile_picture_index] AS profile_picture, locations.latitude, locations.longitude
+            `SELECT u.id, u.first_name, u.profile_pictures[u.profile_picture_index + 1] AS profile_picture, locations.latitude, locations.longitude
             FROM locations
             JOIN users AS u ON locations.user_id = u.id
             WHERE locations.user_id IS NOT NULL
             AND 6371 * acos(least(1, greatest(-1, cos(radians(locations.latitude)) * cos(radians($1)) * cos(radians($2) - radians(locations.longitude)) + sin(radians(locations.latitude)) * sin(radians($1))))) < $3`,
             [lat, lgn, radius]
         );
-
-        return result.rows.map((row: { id: number, first_name: string, profile_picture_url: string, latitude: number, longitude: number }) => { return { id: row.id, firstName: row.first_name, profilePictureUrl: row.profile_picture_url, latitude: row.latitude, longitude: row.longitude }});
+        console.log('getUsersFromLocation result:', result.rows);
+        return result.rows.map((row: { id: number, first_name: string, profile_picture: string, latitude: number, longitude: number }) => { return { id: row.id, firstName: row.first_name, profilePicture: row.profile_picture, latitude: row.latitude, longitude: row.longitude }});
     }
 
     getUsersCountByLocation = async (level: number, lat: number, lgn: number, radius: number): Promise<MapUserCluster[]> => {

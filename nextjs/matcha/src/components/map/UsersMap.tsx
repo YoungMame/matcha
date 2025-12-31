@@ -3,9 +3,11 @@
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { mapApi } from '@/lib/api/map';
 import { UsersMapResponse, MapUser, MapCluster } from '@/types/api/usersMap';
-import maplibregl, { Marker } from 'maplibre-gl';
+import maplibregl from 'maplibre-gl';
+import Map, { MapRef, Marker } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 const LEVEL1_ZOOM = 5;
@@ -24,10 +26,9 @@ export default function UsersMap({ currentPos }: { currentPos: { lat?: number; l
     const [clusters, setClusters] = useState<Array<MapCluster>>([]);
     const [lastSignificantMove, setLastSignificantMove] = useState<{ lat: number; lng: number }>({ lat: center.lat, lng: center.lng });
     const [lastSignificantZoom, setLastSignificantZoom] = useState<number>(zoom);
-    const [markersElements, setMarkersElements] = useState<Array<HTMLElement>>([]);
+    const [firstFetchDone, setFirstFetchDone] = useState<boolean>(false);
 
-    const mapContainer = useRef<HTMLDivElement | null>(null);
-    const map = useRef<maplibregl.Map | null>(null);
+    const map = useRef<MapRef>(null);
 
     function haversineDistance(lat1: number, lng1: number, lat2: number, lng2: number) {
         const R = 6371;
@@ -49,36 +50,16 @@ export default function UsersMap({ currentPos }: { currentPos: { lat?: number; l
         return haversineDistance(northWest.lat, northWest.lng, northEast.lat, northEast.lng);
     }
 
-    useEffect(() => {
-        if (map.current) return;
+    const onMoveEnd = (evt: { viewState: { latitude: number; longitude: number } }) => {
+        const center = evt.viewState;
+        setCenter({ lat: center.latitude, lng: center.longitude });
+    };
 
-        if (!mapContainer.current) return;
-
-        map.current = new maplibregl.Map({
-            container: mapContainer.current,
-            style: 'https://tiles.openfreemap.org/styles/bright',
-            center: [center.lng, center.lat],
-            zoom: zoom
-        });
-
-        setRadius(getScreenWidthInKM() / 2);
-
-        map.current.addControl(new maplibregl.FullscreenControl());
-        map.current.addControl(new maplibregl.NavigationControl());
-
-        map.current.on('moveend', () => {
-            if (!map.current) return;
-            const center = map.current.getCenter();
-            setCenter({ lat: center.lat, lng: center.lng });
-        });
-
-        map.current.on('zoomend', () => {
-            if (!map.current) return;
-            const zoom = map.current.getZoom();
-            setZoom(zoom);
-            setLevel(zoom < LEVEL1_ZOOM ? zoom < LEVEL2_ZOOM ? 2 : 1 : 0 );
-        });
-    }, []);
+    const onZoomEnd = (evt: { viewState: { zoom: number } }) => {
+        const zoom = evt.viewState.zoom;
+        setZoom(zoom);
+        setLevel(zoom < LEVEL1_ZOOM ? zoom < LEVEL2_ZOOM ? 2 : 1 : 0 );
+    };
 
     useEffect(() => {
         const distance = haversineDistance(
@@ -88,18 +69,20 @@ export default function UsersMap({ currentPos }: { currentPos: { lat?: number; l
             lastSignificantMove.lng
         );
         const radius = getScreenWidthInKM() / 2;
+        setRadius(radius);
+
         const neededRadius = radius * 2 * SIGNIFICANT_MOVE_DISTANCE;
 
         const zoomDiff = Math.abs(lastSignificantZoom - zoom);
 
-        if (distance > neededRadius || zoomDiff > SIGNIFICANT_ZOOM_CHANGE) {
+        if (distance > neededRadius || zoomDiff > SIGNIFICANT_ZOOM_CHANGE || !firstFetchDone) {
             console.log('Significant move detected, updating data...');
             setLastSignificantMove({ lat: center.lat, lng: center.lng });
             setLastSignificantZoom(zoom);
-            setRadius(radius);
+            setFirstFetchDone(true);
             queryClient.invalidateQueries({ queryKey: ['map'] });
         }
-    }, [center, zoom, lastSignificantMove]);
+    }, [center, zoom, lastSignificantMove, radius]);
 
 
     const { isPending, error, data, isFetching } = useQuery({
@@ -118,50 +101,6 @@ export default function UsersMap({ currentPos }: { currentPos: { lat?: number; l
             setUsers(data.users);
             setClusters(data.clusters);
         }
-
-        markersElements.forEach(el => el.remove());
-        setMarkersElements([]);
-
-        data?.users.forEach(user => {
-            const el = document.createElement('div');
-            el.className = 'marker';
-            el.style.opacity = '1';
-            el.style.fillOpacity = '1';
-            el.style.width = '50px';
-            el.style.height = '50px';
-            el.style.backgroundImage = `url(${user.profilePicture || '/default-profile.svg'})`;
-            el.style.backgroundPosition = 'center';
-            el.style.backgroundSize = 'cover';
-            el.style.borderRadius = '50%';
-            el.style.border = '5px solid red';
-            el.title = user.firstName;
-            el.onclick = () => {
-                router.push(`/profile/${user.id}`);
-            }
-            new Marker({ element: el })
-                .setLngLat([user.longitude, user.latitude])
-                .addTo(map.current!);
-            setMarkersElements(prev => [...prev, el]);
-        });
-
-        data?.clusters.forEach(user => {
-            const el = document.createElement('div');
-            el.className = 'marker';
-            el.style.opacity = '1';
-            el.style.fillOpacity = '1';
-            el.style.width = '50px';
-            el.style.height = '50px';
-            el.style.backgroundColor = 'rgba(0, 123, 255, 0.7)';
-            el.style.display = 'flex';
-            el.style.alignItems = 'center';
-            el.innerHTML = `<span style="color: white; font-weight: bold; width: 100%; text-align: center;">${user.count}</span>`;
-            el.style.borderRadius = '50%';
-            el.style.border = '2px solid white';
-            new Marker({ element: el })
-                .setLngLat([user.longitude, user.latitude])
-                .addTo(map.current!);
-            setMarkersElements(prev => [...prev, el]);
-        });
     }, [data]);
 
     return (
@@ -173,7 +112,33 @@ export default function UsersMap({ currentPos }: { currentPos: { lat?: number; l
                 {isFetching && <div>Loading map data...</div>}
                 {error && <div>An error has occurred: {(error as Error).message}</div>}
                 {!isFetching && !error && <div>Map data loaded. Users: {users.length}, Clusters: {clusters.length}</div>}
-                <div ref={mapContainer} className='position-absolute w-100 h-100'>
+                <div className='position-absolute w-100 h-100'>
+                    <Map
+                        ref={map}
+                        onMoveEnd={onMoveEnd}
+                        onZoomEnd={onZoomEnd}
+                        initialViewState={{
+                            longitude: center.lng,
+                            latitude: center.lat,
+                            zoom: zoom
+                        }}
+                        style={{ width: '100%', height: '100%' }}
+                        mapLib={maplibregl}
+                        mapStyle='https://tiles.openfreemap.org/styles/bright'
+                    >
+                        {users.map((user) => (
+                            <Marker
+                                key={`user-${user.id}`}
+                                longitude={user.longitude}
+                                latitude={user.latitude}
+                                onClick={() => router.push(`/profile/${user.id}`)}
+                                >
+                                <h1>{user.firstName}</h1>
+                                <h1>{user.profilePicture}</h1>
+                                <div className='rounded-full w-12 h-12 border-white cursor-pointer'><Image src={`${user.profilePicture}`} alt={user.firstName} width={48} height={48} />{user.profilePicture}</div>
+                            </Marker>
+                        ))}
+                    </Map>
                 </div>
             </div>
         </div>
