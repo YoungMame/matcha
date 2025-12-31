@@ -127,14 +127,16 @@ export default class UserModel {
 
     getUsersFromLocation = async (lat: number, lgn: number, radius: number): Promise<MapUser[]> => {
         const result = await this.fastify.pg.query(
-            `SELECT u.id, u.first_name, u.profile_pictures[u.profile_picture_index + 1] AS profile_picture, locations.latitude, locations.longitude
+            `SELECT u.id, u.first_name, u.profile_pictures[u.profile_picture_index + 1] AS profile_picture, locations.latitude, locations.longitude,
+            6371 * acos(least(1, greatest(-1, cos(radians(locations.latitude)) * cos(radians($1)) * cos(radians($2) - radians(locations.longitude)) + sin(radians(locations.latitude)) * sin(radians($1))))) AS distance
             FROM locations
             JOIN users AS u ON locations.user_id = u.id
             WHERE locations.user_id IS NOT NULL
-            AND 6371 * acos(least(1, greatest(-1, cos(radians(locations.latitude)) * cos(radians($1)) * cos(radians($2) - radians(locations.longitude)) + sin(radians(locations.latitude)) * sin(radians($1))))) < $3`,
+            AND 6371 * acos(least(1, greatest(-1, cos(radians(locations.latitude)) * cos(radians($1)) * cos(radians($2) - radians(locations.longitude)) + sin(radians(locations.latitude)) * sin(radians($1))))) < $3
+            ORDER BY distance ASC
+            LIMIT 100`,
             [lat, lgn, radius]
         );
-        console.log('getUsersFromLocation result:', result.rows);
         return result.rows.map((row: { id: number, first_name: string, profile_picture: string, latitude: number, longitude: number }) => { return { id: row.id, firstName: row.first_name, profilePicture: row.profile_picture, latitude: row.latitude, longitude: row.longitude }});
     }
 
@@ -143,15 +145,32 @@ export default class UserModel {
         if (!areaName)
             return [];
 
-        const result = await this.fastify.pg.query(
-            `SELECT count(*) AS count, avg(latitude) AS latitude, avg(longitude) AS longitude
-            FROM locations
-            WHERE ${areaName} IS NOT NULL
-            AND user_id IS NOT NULL
-            AND 6371 * acos(least(1, greatest(-1, cos(radians(latitude)) * cos(radians($1)) * cos(radians($2) - radians(longitude)) + sin(radians(latitude)) * sin(radians($1))))) < $3
-            GROUP BY ${areaName}`,
-            [lat, lgn, radius]
-        );
+        let result;
+        if (level == 1 && radius < 300) {
+            result = await this.fastify.pg.query(
+                `SELECT count(*) AS count, avg(latitude) AS latitude, avg(longitude) AS longitude
+                FROM (
+                    SELECT latitude, longitude
+                    FROM locations
+                    WHERE ${areaName} IS NOT NULL
+                    AND user_id IS NOT NULL
+                    AND 6371 * acos(least(1, greatest(-1, cos(radians(latitude)) * cos(radians($1)) * cos(radians($2) - radians(longitude)) + sin(radians(latitude)) * sin(radians($1))))) < $3
+                ) AS filtered
+                `,
+                [lat, lgn, radius]
+            );
+        }
+        else
+        {
+            result = await this.fastify.pg.query(
+                `SELECT count(*) AS count, avg(latitude) AS latitude, avg(longitude) AS longitude
+                FROM locations
+                WHERE ${areaName} IS NOT NULL
+                AND user_id IS NOT NULL
+                GROUP BY ${areaName}`,
+                []
+            );
+        }
         return result.rows.map((row: { count: number, latitude: number, longitude: number }) => { return { count: row.count, latitude: row.latitude, longitude: row.longitude }});
     }
 

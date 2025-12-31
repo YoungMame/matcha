@@ -76,7 +76,7 @@ export default function UsersMap({ currentPos }: { currentPos: { lat?: number; l
         const zoomDiff = Math.abs(lastSignificantZoom - zoom);
 
         if (distance > neededRadius || zoomDiff > SIGNIFICANT_ZOOM_CHANGE || !firstFetchDone) {
-            console.log('Significant move detected, updating data...');
+            // console.log('Significant move detected, updating data...');
             setLastSignificantMove({ lat: center.lat, lng: center.lng });
             setLastSignificantZoom(zoom);
             setFirstFetchDone(true);
@@ -88,15 +88,13 @@ export default function UsersMap({ currentPos }: { currentPos: { lat?: number; l
     const { isPending, error, data, isFetching } = useQuery({
         queryKey: ['map'],
         queryFn: async () => {
-            console.log('refetching')
-            const response: UsersMapResponse = await mapApi.getNearUsers(level.toString(), center.lat.toFixed(6), center.lng.toFixed(6), (radius * 111.32).toFixed(6));
-            console.log('Fetched map data:', response);
+            const response: UsersMapResponse = await mapApi.getNearUsers(level.toString(), center.lat.toFixed(6), center.lng.toFixed(6), radius.toFixed(6));
+            // console.log('Fetched map data:', response);
             return response;
         },
     });
 
     useEffect(() => {
-        console.log('Map data updated:', data);
         if (data) {
             setUsers(data.users);
             setClusters(data.clusters);
@@ -115,8 +113,8 @@ export default function UsersMap({ currentPos }: { currentPos: { lat?: number; l
                 <div className='position-absolute w-100 h-100'>
                     <Map
                         ref={map}
-                        onMoveEnd={onMoveEnd}
-                        onZoomEnd={onZoomEnd}
+                        onMove={onMoveEnd}
+                        onZoom={onZoomEnd}
                         initialViewState={{
                             longitude: center.lng,
                             latitude: center.lat,
@@ -133,9 +131,19 @@ export default function UsersMap({ currentPos }: { currentPos: { lat?: number; l
                                 latitude={user.latitude}
                                 onClick={() => router.push(`/profile/${user.id}`)}
                                 >
-                                <h1>{user.firstName}</h1>
-                                <h1>{user.profilePicture}</h1>
-                                <div className='rounded-full w-12 h-12 border-white cursor-pointer'><Image src={`${user.profilePicture}`} alt={user.firstName} width={48} height={48} />{user.profilePicture}</div>
+                                <Image className='rounded-full w-24 h-24' unoptimized src={user.profilePicture || '/default-profile.svg'} alt={user.firstName} width={24} height={24} />
+                            </Marker>
+                        ))}
+
+                        {clusters.map((cluster, index) => (
+                            <Marker
+                                key={`cluster-${index}`}
+                                longitude={cluster.longitude}
+                                latitude={cluster.latitude}
+                            >
+                                <div className='bg-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center border-2 border-white'>
+                                    {cluster.count}
+                                </div>
                             </Marker>
                         ))}
                     </Map>
