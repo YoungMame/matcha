@@ -145,7 +145,7 @@ import InterestsStep from "@/components/onboarding/steps/InterestsStep";
 export default function MyProfilePage() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data: profile, isLoading, error, refetch } = useMyProfile();
+  const { data: profile, isLoading, error } = useMyProfile();
   
   const [isUpdating, setIsUpdating] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
