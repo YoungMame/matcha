@@ -117,6 +117,7 @@ BETWEEN ${filters.age.min} AND ${filters.age.max}
             `,
             parameters
         );
+
         return result.rows.map((row: {
             id: number;
             first_name: string;

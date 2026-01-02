@@ -17,7 +17,7 @@ export const browseUsersHandler = async (request: FastifyRequest, reply: Fastify
             offset,
             limit
         } = request.params as { minAge: number, maxAge: number, minFame: number, maxFame: number, tags: string, lat: number, lng: number, radius: number, sortBy: string, offset: number, limit: number };
-
+        console.log('Browsing with params:', request.params);
         if (!request.user?.id)
             throw new UnauthorizedError();
         const tagsArray = tags ? tags.split(',') : [];
@@ -36,6 +36,7 @@ export const browseUsersHandler = async (request: FastifyRequest, reply: Fastify
             requestFilters,
             (sortBy ? sortBy as BrowsingSort : undefined)
         );
+        console.log(`Found ${users.length} users for browsing`);
         return reply.status(200).send({ users });
     } catch (error) {
         if (error instanceof AppError) {

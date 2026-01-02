@@ -24,6 +24,8 @@ export default function ProfileCard({
 			{/* Image */}
 			<div className="relative aspect-3/4 w-full overflow-hidden">
 				<Image
+					width={48}
+					height={48}
 					unoptimized
 					src={pictureUrl}
 					alt={name}

@@ -25,7 +25,6 @@ export const userProfileApi = {
    */
   getUserProfile: async ({ userId }: GetUserProfileRequest): Promise<UserProfileResponse> => {
     const response = await axios.get<UserProfileResponse>(`/api/private/user/view/${userId}`);
-	console.log('getUserProfile response:', response.data);
     return response.data;
   },
 
