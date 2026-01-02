@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, use } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Typography from "@/components/common/Typography";
 import Stack from "@/components/common/Stack";
@@ -83,7 +83,6 @@ export default function BrowsingPage() {
 	const { likeUser, isLiking } = useLikeUser();
 	const { passUser, isPassing } = usePassUser();
 	
-	// When search params change, update filters
 	useEffect(() => {
 		if (searchCriteria) {
 			setFilters(searchCriteria);

@@ -165,6 +165,7 @@ export const useOnboarding = () => {
 			return response;
 		} catch (error) {
 			console.error("Failed to update default location:", error);
+			throw error;
 		}
 	};
 

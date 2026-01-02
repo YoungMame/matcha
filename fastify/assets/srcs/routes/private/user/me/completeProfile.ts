@@ -32,7 +32,7 @@ const completeProfileRoutes = async (fastify: FastifyInstance) => {
                     firstName: { type: 'string', minLength: 1, maxLength: 50, pattern: '[a-zA-Z-\' ]' },
                     lastName: { type: 'string', minLength: 1, maxLength: 50, pattern: '[a-zA-Z-\' ]' },
                     bio: { type: 'string', minLength: 50, maxLength: 500 },
-                    tags: { type: 'array', items: { type: 'string', minLength: 1, maxLength: 30, pattern: '[a-zA-Z_]' }, minItems: 3 },
+                    tags: { type: 'array', items: { type: 'string', minLength: 1, maxLength: 30 }, minItems: 3 },
                     gender: { type: 'string', enum: ['men', 'women'] },
                     orientation: { type: 'string', enum: ['heterosexual', 'homosexual', 'bisexual', 'other'] },
                     bornAt: { type: 'string', format: 'date-time' },

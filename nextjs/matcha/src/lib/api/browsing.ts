@@ -61,8 +61,6 @@ export const browsingApi = {
     };
     */
 
-   console.log("donc les tags sont:", userProfile?.tags);
-
     const {
       ageMin = 18,
       ageMax = 100,
