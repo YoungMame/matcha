@@ -5,8 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Typography from "@/components/common/Typography";
 import Stack from "@/components/common/Stack";
 import Button from "@/components/common/Button";
+import Icon from "@/components/common/Icon";
 import { useGeolocation } from "@/hooks/useGeolocation";
-import { useBrowsing as useBrowsingContext } from "@/contexts/BrowsingContext";
 import { useProfiles, useLikeUser, usePassUser } from "@/hooks/useBrowsing";
 import LocationPermissionModal from "@/components/app/LocationPermissionModal";
 import SearchBar from "@/components/browsing/SearchBar";
@@ -20,7 +20,6 @@ import { AVAILABLE_INTERESTS } from "@/constants/onboarding";
 export default function BrowsingPage() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const { selectedMatchUserId, closeMatchModal } = useBrowsingContext();
 	const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isFromMatch, setIsFromMatch] = useState(false);
@@ -122,16 +121,10 @@ export default function BrowsingPage() {
 		}
 	}, [profiles]);
 	
-	// Watch for match modal state from context
-	useEffect(() => {
-		if (selectedMatchUserId) {
-			handleOpenProfile(selectedMatchUserId, true);
-		}
-	}, [selectedMatchUserId, profiles, handleOpenProfile]);
+	// Watch for match modal state from context - MOVED TO LAYOUT
 
 	const handleCloseModal = () => {
 		setIsModalOpen(false);
-		closeMatchModal();
 		setTimeout(() => setSelectedUser(null), 300); // Clear after animation
 	};
 
@@ -203,19 +196,31 @@ export default function BrowsingPage() {
 			<div className="flex-1 overflow-y-auto">
 				<div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
 					{/* Search Bar */}
-					<SearchBar 
-						availableInterests={AVAILABLE_INTERESTS}
-						initialCriteria={searchCriteria ? {
-							ageRange: searchCriteria.ranges.age,
-							fameRange: searchCriteria.ranges.fame,
-							locationRange: searchCriteria.ranges.location,
-							interests: searchCriteria.selectedInterests,
-						} : undefined}
-						onSearch={(criteria) => {
-							console.log("Search criteria:", criteria);
-							// The URL update is already handled in handleSubmit
-						}}
-					/>
+					<div className="flex flex-row items-start justify-center gap-4">
+						<div className="w-full max-w-2xl">
+							<SearchBar 
+								availableInterests={AVAILABLE_INTERESTS}
+								initialCriteria={searchCriteria ? {
+									ageRange: searchCriteria.ranges.age,
+									fameRange: searchCriteria.ranges.fame,
+									locationRange: searchCriteria.ranges.location,
+									interests: searchCriteria.selectedInterests,
+								} : undefined}
+								onSearch={(criteria) => {
+									console.log("Search criteria:", criteria);
+									// The URL update is already handled in handleSubmit
+								}}
+							/>
+						</div>
+						<Button
+							variant="secondary"
+							onClick={() => router.push("/map")}
+							className="h-[50px] px-6 shadow-lg border border-gray-300 dark:border-gray-600 hover:border-indigo-400 dark:hover:border-indigo-500 bg-white dark:bg-gray-800"
+						>
+							<Icon name="map" className="mr-2 h-5 w-5" />
+							Carte
+						</Button>
+					</div>
 
 					{/* Filter Bar */}
 					<FilterBar

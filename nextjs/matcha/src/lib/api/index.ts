@@ -12,6 +12,7 @@ export { authApi } from './auth';
 export { profileApi } from './profile';
 export { browsingApi } from './browsing';
 export { userProfileApi } from './userProfile';
+export { matchesApi } from './matches';
 
 // Add other API modules here as they are created:
 // export { chatApi } from './chat';

@@ -4,7 +4,7 @@
 import { useMyProfile } from "@/hooks/useProfile";
 import UsersMap from "@/components/map/UsersMap";
 
-export default function MyProfilePage() {
+export default function MapPage() {
   const { data: profile, isLoading, error } = useMyProfile();
 
   if (error) {

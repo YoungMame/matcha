@@ -1,5 +1,4 @@
 import axios from '@/lib/axios';
-import { generateMockProfilesWithMetadata } from '@/mocks/browsing_mocks';
 import { calculateAge } from '@/lib/searchUtils';
 import { profileApi } from '@/lib/api/profile';
 import type {
@@ -89,7 +88,10 @@ export const browsingApi = {
     // Backend route: /:minAge/:maxAge/:minFame/:maxFame/:tags/:lat/:lng/:radius/:sortBy
     const url = `/api/private/browsing/${ageMin}/${ageMax}/${fameMin}/${fameMax}/${tagsParam}/${lat}/${lng}/${locationMax}/${mappedSortBy}`;
 
+    console.log('Fetching profiles with URL:', url);
+
     const response = await axios.get<{ users: any[] }>(url);
+
     
     const profiles: ProfileResponse[] = response.data.users.map((u: any) => ({
       id: u.id.toString(),

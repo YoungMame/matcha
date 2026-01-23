@@ -2,13 +2,17 @@
 
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { mapApi } from '@/lib/api/map';
 import { UsersMapResponse, MapUser, MapCluster } from '@/types/api/usersMap';
 import maplibregl from 'maplibre-gl';
 import Map, { MapRef, Marker } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import MatchingModal from '../browsing/MatchingModal';
+import { useUserProfile } from '@/hooks/useUserProfile';
+import { useLikeUser, usePassUser } from '@/hooks/useBrowsing';
+import { UserProfile } from '@/types/userProfile';
 
 const LEVEL1_ZOOM = 5;
 const LEVEL2_ZOOM = 3;
@@ -17,7 +21,7 @@ const SIGNIFICANT_ZOOM_CHANGE = 0.5; // From Zoom fraction change
 
 export default function UsersMap({ currentPos }: { currentPos: { lat?: number; lng?: number } }) {
     const queryClient = useQueryClient();
-    const router = useRouter();
+    // const router = useRouter(); // Removed unused router
     const [zoom, setZoom] = useState(13);
     const [level, setLevel] = useState(0);
     const [radius, setRadius] = useState(0);
@@ -27,6 +31,34 @@ export default function UsersMap({ currentPos }: { currentPos: { lat?: number; l
     const [lastSignificantMove, setLastSignificantMove] = useState<{ lat: number; lng: number }>({ lat: center.lat, lng: center.lng });
     const [lastSignificantZoom, setLastSignificantZoom] = useState<number>(zoom);
     const [firstFetchDone, setFirstFetchDone] = useState<boolean>(false);
+    
+    // Modal state
+    const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // Profile data and actions
+    const { data: userProfileData } = useUserProfile(selectedUserId || '');
+    const { likeUser } = useLikeUser();
+    const { passUser } = usePassUser();
+
+    // Transform API response to UI model
+    const modalUser: UserProfile | null = userProfileData ? {
+        id: userProfileData.id.toString(),
+        username: userProfileData.username,
+        firstName: userProfileData.username,
+        lastName: '',
+        birthday: userProfileData.bornAt,
+        biography: userProfileData.bio,
+        interests: userProfileData.tags,
+        gender: userProfileData.gender,
+        interestedInGenders: [],
+        fame: 0,
+        distance: 0,
+        profilePicture: (userProfileData.profilePictures && userProfileData.profilePictures.length > 0)
+            ? (userProfileData.profilePictures[userProfileData.profilePictureIndex] || userProfileData.profilePictures[0])
+            : null,
+        additionalPictures: (userProfileData.profilePictures || []).filter((_, i) => i !== userProfileData.profilePictureIndex),
+    } : null;
 
     const map = useRef<MapRef>(null);
 
@@ -101,6 +133,34 @@ export default function UsersMap({ currentPos }: { currentPos: { lat?: number; l
         }
     }, [data]);
 
+    const handleMarkerClick = (userId: string) => {
+        setSelectedUserId(userId);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setTimeout(() => setSelectedUserId(null), 300);
+    };
+
+    const handleLike = async (userId: string) => {
+        try {
+            await likeUser(userId);
+            handleCloseModal();
+        } catch (error) {
+            console.error("Failed to like user:", error);
+        }
+    };
+
+    const handlePass = async (userId: string) => {
+        try {
+            await passUser(userId);
+            handleCloseModal();
+        } catch (error) {
+            console.error("Failed to pass user:", error);
+        }
+    };
+
     return (
         <div className='flex flex-col'>
             <p>Zoom: {zoom}</p>
@@ -129,7 +189,7 @@ export default function UsersMap({ currentPos }: { currentPos: { lat?: number; l
                                 key={`user-${user.id}`}
                                 longitude={user.longitude}
                                 latitude={user.latitude}
-                                onClick={() => router.push(`/profile/${user.id}`)}
+                                onClick={() => handleMarkerClick(user.id)}
                                 >
                                 <Image className='rounded-full w-24 h-24' unoptimized src={user.profilePicture || '/default-profile.svg'} alt={user.firstName} width={24} height={24} />
                             </Marker>
@@ -149,6 +209,14 @@ export default function UsersMap({ currentPos }: { currentPos: { lat?: number; l
                     </Map>
                 </div>
             </div>
+            
+            <MatchingModal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                user={modalUser}
+                onLike={handleLike}
+                onPass={handlePass}
+            />
         </div>
     );
 }

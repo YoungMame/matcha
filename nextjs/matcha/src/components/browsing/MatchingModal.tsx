@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Modal from "@/components/common/Modal";
 import Typography from "@/components/common/Typography";
 import Badge from "@/components/common/Badge";
@@ -26,6 +27,7 @@ interface MatchingModalProps {
 	user: UserProfile | null;
 	onLike?: (userId: string) => void;
 	onPass?: (userId: string) => void;
+	onChat?: (userId: string) => void;
 	isFromMatch?: boolean; // When true, shows chat icon instead of heart
 }
 
@@ -35,8 +37,10 @@ export default function MatchingModal({
 	user,
 	onLike,
 	onPass,
+	onChat,
 	isFromMatch = false,
 }: MatchingModalProps) {
+	const router = useRouter();
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
 	if (!user) return null;
@@ -44,7 +48,7 @@ export default function MatchingModal({
 	// Get all available pictures
 	const allPictures = [
 		user.profilePicture,
-		...user.additionalPictures,
+		...(user.additionalPictures || []),
 	].filter((pic): pic is string => pic !== null);
 
 	// Calculate age from birthday
@@ -81,6 +85,11 @@ export default function MatchingModal({
 		onClose();
 	};
 
+	const handleChat = () => {
+		onChat?.(user.id);
+		onClose();
+	};
+
 	const handlePass = () => {
 		onPass?.(user.id);
 		onClose();
@@ -88,6 +97,11 @@ export default function MatchingModal({
 
 	const handleModalClose = () => {
 		setCurrentImageIndex(0); // Reset to first image when closing
+		onClose();
+	};
+
+	const handleViewProfile = () => {
+		router.push(`/profile?id=${user.id}`);
 		onClose();
 	};
 
@@ -193,7 +207,26 @@ export default function MatchingModal({
 									</svg>
 								</IconButton>
 								<IconButton
-									onClick={handleLike}
+									onClick={handleViewProfile}
+									variant="secondary"
+									aria-label="Voir le profil"
+								>
+									<svg
+										className="w-8 h-8"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+									>
+										<path
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											strokeWidth={2}
+											d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+										/>
+									</svg>
+								</IconButton>
+								<IconButton
+									onClick={isFromMatch ? handleChat : handleLike}
 									variant="success"
 									aria-label={isFromMatch ? "Envoyer un message" : "Liker"}
 								>
@@ -245,7 +278,7 @@ export default function MatchingModal({
 					)}
 
 					{/* Interests */}
-					{user.interests.length > 0 && (
+					{user.interests?.length > 0 && (
 						<Stack spacing="md">
 							<Typography variant="body" className="font-semibold">
 								Centres d'intérêt

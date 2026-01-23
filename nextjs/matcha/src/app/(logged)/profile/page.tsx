@@ -17,8 +17,6 @@ export default function ProfilePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const userId = searchParams.get("id");
-  const { selectedMatchUserId, closeMatchModal } = useBrowsingContext(); // still available if later reused for match modal logic
-
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
